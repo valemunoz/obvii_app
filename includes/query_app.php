@@ -2,7 +2,6 @@
 include("funciones.php");
 $estado_sesion=estado_sesion();
 $data_server= explode("?",$_SERVER['HTTP_REFERER']);
-//if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
 if (isset($_SERVER['HTTP_ORIGIN'])) {  
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");  
     header('Access-Control-Allow-Credentials: true');  
@@ -17,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))  
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");  
 }  
-if(1==1)
+if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
 {
 if($_REQUEST['tipo']==1) //check estado sesion
 {
@@ -35,7 +34,8 @@ if($_REQUEST['tipo']==1) //check estado sesion
 		
 		?>
 		<script>
-		$("#bienvenido_div").html("Bienvenido : <?=$_SESSION['id_usuario']?>");		
+		$("#bienvenido_div").html("Bienvenido : <?=$_SESSION['id_usuario']?>");
+		
 		loadFav();
 		</script>
 		<?php

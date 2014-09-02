@@ -5,9 +5,9 @@ var PAIS_LON=-70.656235;
 var PAIS_LAT=-33.458943;
 var OBVII_PAIS="chile";
 
-var path_query="app/query.php";
-var path_query2="app/query_app.php";
-var path_info="app/info.php";
+var path_query="includes/query.php";
+var path_query2="includes/query_app.php";
+var path_info="includes/info.php";
 
 function cambiar(nom_mod)
 {
@@ -106,8 +106,8 @@ function loadEditar(id_lugar)
 			theme: 'a',
 			html: ""
 		});
-	$("#contenido_sesion").load("registro_edicion.php", 
-			{id:id_lugar} 
+	$("#contenido_sesion").load(path_query2, 
+			{tipo:5,id:id_lugar} 
 				,function(){	
 					$.mobile.loading( 'hide');
 					$('#contenido_sesion').trigger('create');

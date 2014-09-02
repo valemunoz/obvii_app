@@ -16,8 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))  
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");  
 }  
-//if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
-if(1==1)
+if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
+
 {
 	
 	$cliente=getCliente(" and id_cliente=".$_SESSION['id_cliente']."");
