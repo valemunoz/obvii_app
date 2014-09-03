@@ -132,48 +132,7 @@
     	  
  		</div> 		
  		
- 		<script>
- 			function loadMenu()
- 			{
- 				$("#output").load(path_query2, 
-				{tipo:2} 
-					,function(){
-						 
-						
-						
-						
-					}
-				);
- 			}
- 				
- 			function inicio()
- 			{
- 				$("#output").load(path_query2, 
-				{tipo:1} 
-					,function(){
-						loadMenu();	
-						
-						//$.mobile.loading( 'hide');
-					}
-				);
- 				/*<?PHP
- 				if($estado_sesion!=0) 				
- 				{
- 					?>
- 					cambiar("mod_sesion");
- 					<?php
- 				}else
- 				{
- 					?>
- 					loadFav();
- 					<?php
- 				}
- 				
- 					?>*/
- 				
- 			}
 
- 			</script>
  			<div id=output></div>
     </body>
 </html>

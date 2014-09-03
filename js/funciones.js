@@ -8,7 +8,45 @@ var OBVII_PAIS="chile";
 var path_query="includes/query.php";
 var path_query2="includes/query_app.php";
 var path_info="includes/info.php";
-
+ 			function loadMenu()
+ 			{
+ 				$("#output").load(path_query2, 
+				{tipo:2} 
+					,function(){
+						 
+						
+						
+						
+					}
+				);
+ 			}
+ 				
+ 			function inicio()
+ 			{
+ 				$("#output").load(path_query2, 
+				{tipo:1} 
+					,function(){
+						loadMenu();	
+						
+						//$.mobile.loading( 'hide');
+					}
+				);
+ 				/*<?PHP
+ 				if($estado_sesion!=0) 				
+ 				{
+ 					?>
+ 					cambiar("mod_sesion");
+ 					<?php
+ 				}else
+ 				{
+ 					?>
+ 					loadFav();
+ 					<?php
+ 				}
+ 				
+ 					?>*/
+ 				
+ 			}
 function cambiar(nom_mod)
 {
 	//$( ":mobile-pagecontainer" ).pagecontainer( "load", pageUrl, { showLoadMsg: false } );
@@ -326,8 +364,8 @@ function validaMarcacion()
   		var lng = pos.coords.longitude;
   		var accu=pos.coords.accuracy.toFixed(2);
   		
-  		OBVII_LON=lat;
-  		OBVII_LAT=lng;
+  		OBVII_LON=lng;
+  		OBVII_LAT=lat;
   		OBVII_ACCU=accu;
   	
 			$.mobile.loading( 'hide');
@@ -347,7 +385,7 @@ function validaMarcacion()
 		);
 		
 			
-			},noLocation);
+			},noLocation,{timeout:6000});
 		
 		
 		
@@ -466,6 +504,7 @@ function marcar(id_lugar,comenta,marca)
 			comenta=1;  
 		mensaje("<div id='coment_form' name='coment_form'><input type='button' onclick='marcarLugar("+id_lugar+","+comenta+");' class=bottom_coment value='Entrada'><br><input type='button' onclick='marcarSalida("+id_lugar+");' class=bottom_coment value='Salida'></div>",'Seleccione una opci&oacute;n','myPopup');
 	}
+	
 }
 
 function marcarSalida(id_lugar)
@@ -482,9 +521,10 @@ function marcarSalida(id_lugar)
   		var lng = pos.coords.longitude;
   		var accu=pos.coords.accuracy.toFixed(2);
   		
-  		OBVII_LON=lat;
-  		OBVII_LAT=lng;
+  		OBVII_LON=lng;
+  		OBVII_LAT=lat;
   		OBVII_ACCU=accu;
+  		
   	
 			$.mobile.loading( 'hide');
 			$.mobile.loading( 'show', {
@@ -503,7 +543,7 @@ function marcarSalida(id_lugar)
 			);
 		
 			
-			},noLocation);
+			},noLocation,{timeout:6000});
 }
 function marcarLugar(id_lugar,comenta)
 {
@@ -526,8 +566,8 @@ function marcarLugar(id_lugar,comenta)
   		var lng = pos.coords.longitude;
   		var accu=pos.coords.accuracy.toFixed(2);
   		
-  		OBVII_LON=lat;
-  		OBVII_LAT=lng;
+  		OBVII_LON=lng;
+  		OBVII_LAT=lat;
   		OBVII_ACCU=accu;
   	
 			$.mobile.loading( 'hide');
@@ -547,7 +587,7 @@ function marcarLugar(id_lugar,comenta)
 			);
 		
 			
-			},noLocation);
+			},noLocation,{timeout:6000});
 		
 	}
 	
@@ -556,7 +596,7 @@ function marcarLugar(id_lugar,comenta)
   function noLocation(err)
 {
 	$.mobile.loading( 'hide');
-	mensaje("Se produjo un error en la lectura de su posici&oacute;n. Esto se puede suceder al no darle permisos al sistema para obtener su ubicacion actual.<br>Por favor revise su configuracion e intentelo nuevamente",'ERROR','myPopup');
+	mensaje("Se produjo un error en la lectura de su posici&oacute;n.<br>Esto se puede suceder al no darle permisos al sistema para obtener su ubicacion actual.<br>Por favor revise su configuracion e intentelo nuevamente",'ERROR','myPopup');
 	
 }
 function marcarLugarCom(id_lugar)
@@ -596,7 +636,7 @@ function marcarLugarCom(id_lugar)
 		);
 		
 			
-			},noLocation);
+			},noLocation,{timeout:6000});
 	
 			
 }
@@ -717,6 +757,8 @@ function sendLitsaMail(id_lug,id_base)
 function verMapa()
 {
 	//cambiar("mod_mapa");
+	$("#mypanel").panel( "close" );
+	
 		$.mobile.loading( 'show', {
 				text: 'Cargando Mapa',
 				textVisible: true,
@@ -726,12 +768,27 @@ function verMapa()
 			$("#contenido_sesion").load(path_query, 
 			{tipo:18} 
 				,function(){	
-					
+					$.mobile.loading( 'hide');
 					init(PAIS_LON,PAIS_LAT,10);
+					//loadCentroMapa();
+					$("#info_pres").html("Para Actualizar su ubicaci&oacute;n actual, haga click aqu&iacute; <img onclick='loadCentroMapa();' src='images/current.png' class=curretn>");
+					if(OBVII_LON!=0)
+					{
+						$("#info_pres").html("Ultima ubicaci&oacute;n registrada con una presici&oacute;n de : "+OBVII_ACCU+"  <img onclick='loadCentroMapa();' src='images/current.png' class=curretn>");
+						moverCentro(OBVII_LAT,OBVII_LON,15);
+						//point5
+						addMarcadores(OBVII_LON,OBVII_LAT,"Ultima ubicaci&oacute;n registrada","images/point.png",40,40);
+					}
 					
 				}
 			);
-		$.mobile.loading( 'show', {
+		
+			
+}
+
+function loadCentroMapa()
+{
+	$.mobile.loading( 'show', {
 				text: 'Obteniendo ubicacion actual',
 				textVisible: true,
 				theme: 'a',
@@ -746,11 +803,10 @@ function verMapa()
   		OBVII_LON=lng;
   		OBVII_LAT=lat;
   		OBVII_ACCU=accu;
-			$("#info_pres").html("La precision de su GPS es de "+OBVII_ACCU+". Si desea mejorarla conectese a una red Wi-Fi.");
+			$("#info_pres").html("La precision de su GPS es de "+OBVII_ACCU+". Si desea mejorarla conectese a una red Wi-Fi.  <img onclick='loadCentroMapa();' src='images/current.png' class=curretn>");
 			moverCentro(OBVII_LAT,OBVII_LON,15);
 			//point5
-			addMarcadores(OBVII_LON,OBVII_LAT,"Ubicacion Actual","images/point.png",40,40);
+			addMarcadores(OBVII_LON,OBVII_LAT,"Ubicaci&oacute;n Actual","images/point.png",40,40);
 			$.mobile.loading( 'hide');
-			},noLocation);
-			
+			},noLocation,{timeout:6000});
 }
