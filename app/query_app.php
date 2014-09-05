@@ -50,18 +50,18 @@ if($_REQUEST['tipo']==1) //check estado sesion
 				$(".ui-page-active .maintenance_tabs").empty();
 				var bar='<div data-role="navbar" id=list_nav class="maintenance_tabs">';
 				bar +='<ul id="myNavbar">';
-				bar +='<li ><a  href="javascript:loadFav();"><img src="images/fav2.png"></a></li>';
-				bar +='<li ><a  href="javascript:loadHome();"><img src="images/icon-servicios.png"></a></li>';
-				bar +='<li ><a  href="javascript:loadAsis();"><img src="images/ticket-32.png"></a></li>';
-				bar +='<li><a href="javascript:loadHistorial();"><img src="images/historial.png"></a></li>';
-				bar +='<li><a href="javascript:loadInfo();"><img src="images/icon-info.png"></a></li>';
+				bar +='<li ><a  href="javascript:checkInternet();loadFav();"><img src="images/fav2.png"></a></li>';
+				bar +='<li ><a  href="javascript:checkInternet();loadHome();"><img src="images/icon-servicios.png"></a></li>';
+				bar +='<li ><a  href="javascript:checkInternet();loadAsis();"><img src="images/ticket-32.png"></a></li>';
+				bar +='<li><a href="javascript:checkInternet();loadHistorial();"><img src="images/historial.png"></a></li>';
+				bar +='<li><a href="javascript:checkInternet();loadInfo();"><img src="images/icon-info.png"></a></li>';
 				bar +='</ul>';
 				bar +='</div>';
 				
   			$(".ui-page-active .maintenance_tabs").append(bar).trigger('create');
 				</script>
 
-			
+		
 			<?php
 		}else
 		{
@@ -70,11 +70,11 @@ if($_REQUEST['tipo']==1) //check estado sesion
 				$(".ui-page-active .maintenance_tabs").empty();
 				var bar='<div data-role="navbar" id=list_nav class="maintenance_tabs">';
 				bar +='<ul id="myNavbar">';
-				bar +='<li ><a  href="javascript:loadFav();"><img src="images/fav2.png"></a></li>';
-				bar +='<li ><a  href="javascript:loadHome();"><img src="images/icon-servicios.png"></a></li>';
+				bar +='<li ><a  href="javascript:checkInternet();loadFav();"><img src="images/fav2.png"></a></li>';
+				bar +='<li ><a  href="javascript:checkInternet();loadHome();"><img src="images/icon-servicios.png"></a></li>';
 				
-				bar +='<li><a href="javascript:loadHistorial();"><img src="images/historial.png"></a></li>';
-				bar +='<li><a href="javascript:loadInfo();"><img src="images/icon-info.png"></a></li>';
+				bar +='<li><a href="javascript:checkInternet();loadHistorial();"><img src="images/historial.png"></a></li>';
+				bar +='<li><a href="javascript:checkInternet();loadInfo();"><img src="images/icon-info.png"></a></li>';
 				bar +='</ul>';
 				bar +='</div>';
 				
@@ -260,7 +260,114 @@ if($lugares[0][13]=='t')
 						?>
 					</p>
 <?php
-}
+}elseif($estado_sesion==0 and $_REQUEST['tipo']==6)
+	{
+		
+		$fecha=date("Ymd");
+		try
+		{
+
+			$lugares=getLugares(" and estado=0 and id_cliente=".$_SESSION["id_cliente"]." order by nombre");
+			
+			if(count($lugares)>0)
+			{
+					foreach($lugares as $lug)
+					{
+						$nombre=$lug[1];
+						$fav=getFavoritos(" and estado=0 and id_usuario  ilike '".$_SESSION["id_usuario"]."' and id_lugar=".$lug[0]."");
+						$favo=0;
+						if(count($fav)>0)
+						{
+						  $favo=1;
+						}
+
+					?>
+						
+						<script>
+							//alert('<?=$lug[0]?>');
+							addLugarBDLocal('<?=$lug[0]?>','<?=$nombre?>','<?=$lug[6]?> #<?=$lug[7]?>, <?=$lug[8]?>','<?=$favo?>','<?=date("Y-m-d")?>','<?=$lug[12]?>','<?=$lug[13]?>');
+						</Script>	
+						
+				  <?php
+					
+					}
+				
+			}
+		}catch (Exception $e) 
+		{
+			
+		}
+	
+ 
+	}elseif($estado_sesion==0 and $_REQUEST['tipo']==7)
+	{
+		$cliente=getCliente(" and id_cliente=".$_SESSION["id_cliente"]."");
+		$mail_envio=$cliente[0][3];
+		
+		$ids=explode("|",$_REQUEST['ide']);
+		$lat=explode("|",$_REQUEST['lat']);
+		$lon=explode("|",$_REQUEST['lon']);
+		
+		foreach($ids as $i => $id)
+		{
+			$lug=getLugares(" and id_lugar=".$id."");
+			if(trim($lug[0][10])!="")
+			{
+				$mail_envio=$lug[0][10];
+			}
+			?>
+			<script>
+				alert('<?=$mail_envio?>');
+				</Script>
+			<?php
+			/*
+			try
+			{
+				$registros=new SoapClient("".PATH_WS_OBVII."".WS_MARCACION."");
+			 $res= $registros->registrarEvento($_SESSION['id_usuario_obvii'], ''.date("Ymd").'', ''.date("His").'', ''.$_REQUEST['lat'].'',''.$_REQUEST['lon'].'',''.$_REQUEST['accu'].'',''.$_REQUEST['nombre'].'','9988776644','478000012',''.$_REQUEST['coment'].'','8888999922',''.$mail_envio.'');
+			 
+			 if($res>0)
+			 {
+			 	$data=array();
+			 	$data[]=$_SESSION["id_usuario"];
+			 	$data[]=$_SESSION["id_usuario_obvii"];
+			 	$data[]=1;
+			 	$data[]=0;
+			 	$data[]=$_REQUEST['lat'];
+			 	$data[]=$_REQUEST['lon'];
+			 	$data[]=$_REQUEST['accu'];
+			 	$data[]=$_REQUEST['coment'];
+			 	$data[]=$_REQUEST['marca'];
+			 	$data[]=$_REQUEST['nom'];
+			 	$data[]=$_SESSION["id_cliente"];
+			 	$data[]="".$_REQUEST['calle']." #".$_REQUEST['numero'].", ".$_REQUEST['com']." ";
+			 	addMarcacion($data);
+			 	?>
+			 	<script>
+					$.mobile.loading( 'hide');
+					loadHome();
+					mensaje("Marcaci&oacute;n Realizada",'MENSAJE','myPopup');
+				</script>
+				<?php
+			 	}else
+				{
+					?>
+				<script>
+					mensaje("Problemas de conexi&oacute;n, por favor int&eacute;ntelo nuevamente.","ERROR","myPopup_ses");
+				</script>
+				<?php
+				}
+					
+			} catch (Exception $e) 
+			{
+				?>
+				<script>
+					mensaje("Problemas de conexi&oacute;n, por favor int&eacute;ntelo nuevamente.","ERROR","myPopup_ses");
+				</script>
+				<?php
+			}*/
+		}
+	}
 }else
 {
 	

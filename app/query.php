@@ -54,9 +54,17 @@ if(1==1)
     			$cliente=getCliente(" and id_cliente=".$id_cliente."");
 					if($cliente[0][2]==0)
 					{				
-    				inicioSesion(strtolower($_REQUEST['mail']),$res,$id_cliente,$cliente[0][5]);
+    				inicioSesion(strtolower($_REQUEST['mail']),$res,$id_cliente,$cliente[5]);
+    				
     				?>
 						<script>
+							NOMBRE_USER = "<?=$_REQUEST['mail']?>";
+        			MAIL_USER = "<?=$_REQUEST['mail']?>";
+        			ID_USER = "<?=$cliente[0]?>";
+        			ID_OBVII_USER = "<?=$res?>";
+        			est_user = "<?=$cliente[5]?>";
+							addUsuarioBDLocal(ID_USER,NOMBRE_USER,MAIL_USER,est_user,ID_OBVII_USER);
+							
 							window.location.href="index.html";
 						</script>
 						<?php
