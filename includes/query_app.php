@@ -90,7 +90,10 @@ if($_REQUEST['tipo']==1) //check estado sesion
 	$marcaciones=getMarcaciones(" and fecha_registro >= '".$fecha."' and id_usuario ilike '%".$_SESSION["id_usuario"]."%' and id_usuario_obvii=".$_SESSION["id_usuario_obvii"]." order by fecha_registro desc");
 	//print_R($marcaciones);
 	?>
-	<h4>Historial de Asistencia</h4>
+	
+	<div class="ui-bar ui-bar-a" id=barra_sup style="text-align:center;">
+					Historial de Asistencia
+					</div>
 	<ul data-role="listview"  data-theme="b"  data-filter="true" data-filter-placeholder="Buscar" data-inset="false" id="list_registros">	
 				
 	

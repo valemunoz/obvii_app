@@ -281,10 +281,15 @@ function updateLugarObvii($qr,$id_lugar)
 function addMarcacion($data)
 {
 	$dbPg=pgSql_db();
+	$fecha=getFechaLibre(DIF_HORA);
+	if(trim($data[12])!="")
+	{
+		$fecha=trim($data[12]);
+	}
   $sql="INSERT INTO obvii_marcacion(
              id_usuario, id_usuario_obvii, fecha_registro, tipo, 
             id_lugar, lat, lon, presicion,comentario,tipo_marcacion,nombre_lugar,id_cliente,direccion_libre)
-    VALUES ('".$data[0]."', '".$data[1]."','".getFechaLibre(DIF_HORA)."' , '".$data[2]."', 
+    VALUES ('".$data[0]."', '".$data[1]."','".$fecha."' , '".$data[2]."', 
             '".$data[3]."', '".$data[4]."', '".$data[5]."', '".$data[6]."', '".$data[7]."', '".$data[8]."', '".$data[9]."', '".$data[10]."','".$data[11]."');";
    $rsCalle = pg_query($dbPg, $sql);
 }

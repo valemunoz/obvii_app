@@ -91,7 +91,11 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
 	{
 		?>
 		
-		<h4>Marcador de Asistencia</h4>
+		
+		
+	<div class="ui-bar ui-bar-a" id=barra_sup style="text-align:center;">
+					 Marcador de Asistencia
+					</div>
 		<input type="button" onclick="loadNuevo();" value="Marcaci&oacute;n Libre">
 		<?php
 		$fecha=date("Ymd");
@@ -503,7 +507,10 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
 	{
 		?>
 		
-		<h4>Marcaciones Favoritas</h4>
+		
+			<div class="ui-bar ui-bar-a" id=barra_sup style="text-align:center;">
+					 Marcaciones Favoritas
+					</div>
 		<?php
 		$fecha=date("Ymd");
 		try
@@ -671,8 +678,10 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
 		$usuarios=getUsuariosInterno(" and estado=0 and id_lugar=".$marcacion[0][5]." order by nombre");
 		?>
 		
-		<h4>Revisi&oacute;n <?=strtoupper($marcacion[0][11])?></h4>
-		  
+		
+		  	<div class="ui-bar ui-bar-a" id=barra_sup style="text-align:center;">
+					 Revisi&oacute;n <?=strtoupper($marcacion[0][11])?>
+					</div>
 		<?php
 	   if(count($usuarios)==0 and count($marcacion)>0)
 	   {

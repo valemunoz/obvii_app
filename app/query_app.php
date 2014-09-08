@@ -50,11 +50,11 @@ if($_REQUEST['tipo']==1) //check estado sesion
 				$(".ui-page-active .maintenance_tabs").empty();
 				var bar='<div data-role="navbar" id=list_nav class="maintenance_tabs">';
 				bar +='<ul id="myNavbar">';
-				bar +='<li ><a  href="javascript:checkInternet();loadFav();"><img src="images/fav2.png"></a></li>';
-				bar +='<li ><a  href="javascript:checkInternet();loadHome();"><img src="images/icon-servicios.png"></a></li>';
-				bar +='<li ><a  href="javascript:checkInternet();loadAsis();"><img src="images/ticket-32.png"></a></li>';
-				bar +='<li><a href="javascript:checkInternet();loadHistorial();"><img src="images/historial.png"></a></li>';
-				bar +='<li><a href="javascript:checkInternet();loadInfo();"><img src="images/icon-info.png"></a></li>';
+				bar +='<li ><a  href="javascript:checkInternet(0);loadFav();"><img src="images/fav2.png"></a></li>';
+				bar +='<li ><a  href="javascript:checkInternet(0);loadHome();"><img src="images/icon-servicios.png"></a></li>';
+				bar +='<li ><a  href="javascript:checkInternet(0);loadAsis();"><img src="images/ticket-32.png"></a></li>';
+				bar +='<li><a href="javascript:checkInternet(0);loadHistorial();"><img src="images/historial.png"></a></li>';
+				bar +='<li><a href="javascript:checkInternet(1);loadInfo();"><img src="images/icon-info.png"></a></li>';
 				bar +='</ul>';
 				bar +='</div>';
 				
@@ -70,11 +70,11 @@ if($_REQUEST['tipo']==1) //check estado sesion
 				$(".ui-page-active .maintenance_tabs").empty();
 				var bar='<div data-role="navbar" id=list_nav class="maintenance_tabs">';
 				bar +='<ul id="myNavbar">';
-				bar +='<li ><a  href="javascript:checkInternet();loadFav();"><img src="images/fav2.png"></a></li>';
-				bar +='<li ><a  href="javascript:checkInternet();loadHome();"><img src="images/icon-servicios.png"></a></li>';
+				bar +='<li ><a  href="javascript:checkInternet(0);loadFav();"><img src="images/fav2.png"></a></li>';
+				bar +='<li ><a  href="javascript:checkInternet(0);loadHome();"><img src="images/icon-servicios.png"></a></li>';
 				
-				bar +='<li><a href="javascript:checkInternet();loadHistorial();"><img src="images/historial.png"></a></li>';
-				bar +='<li><a href="javascript:checkInternet();loadInfo();"><img src="images/icon-info.png"></a></li>';
+				bar +='<li><a href="javascript:checkInternet(0);loadHistorial();"><img src="images/historial.png"></a></li>';
+				bar +='<li><a href="javascript:checkInternet(1);loadInfo();"><img src="images/icon-info.png"></a></li>';
 				bar +='</ul>';
 				bar +='</div>';
 				
@@ -307,65 +307,85 @@ if($lugares[0][13]=='t')
 		$ids=explode("|",$_REQUEST['ide']);
 		$lat=explode("|",$_REQUEST['lat']);
 		$lon=explode("|",$_REQUEST['lon']);
-		
+		$fec=explode("|",$_REQUEST['fecha']);
+		$descrip=explode("|",$_REQUEST['decrip']);
+		$tipo=explode("|",$_REQUEST['tip']);
+		$nombre=explode("|",$_REQUEST['nombre']);
+		$dir=explode("|",$_REQUEST['direc']);
+		$accu=0;
 		foreach($ids as $i => $id)
 		{
-			$lug=getLugares(" and id_lugar=".$id."");
-			if(trim($lug[0][10])!="")
+			if(trim($id)!="")
 			{
-				$mail_envio=$lug[0][10];
-			}
-			?>
-			<script>
-				alert('<?=$mail_envio?>');
-				</Script>
-			<?php
-			/*
-			try
-			{
-				$registros=new SoapClient("".PATH_WS_OBVII."".WS_MARCACION."");
-			 $res= $registros->registrarEvento($_SESSION['id_usuario_obvii'], ''.date("Ymd").'', ''.date("His").'', ''.$_REQUEST['lat'].'',''.$_REQUEST['lon'].'',''.$_REQUEST['accu'].'',''.$_REQUEST['nombre'].'','9988776644','478000012',''.$_REQUEST['coment'].'','8888999922',''.$mail_envio.'');
-			 
-			 if($res>0)
-			 {
-			 	$data=array();
-			 	$data[]=$_SESSION["id_usuario"];
-			 	$data[]=$_SESSION["id_usuario_obvii"];
-			 	$data[]=1;
-			 	$data[]=0;
-			 	$data[]=$_REQUEST['lat'];
-			 	$data[]=$_REQUEST['lon'];
-			 	$data[]=$_REQUEST['accu'];
-			 	$data[]=$_REQUEST['coment'];
-			 	$data[]=$_REQUEST['marca'];
-			 	$data[]=$_REQUEST['nom'];
-			 	$data[]=$_SESSION["id_cliente"];
-			 	$data[]="".$_REQUEST['calle']." #".$_REQUEST['numero'].", ".$_REQUEST['com']." ";
-			 	addMarcacion($data);
-			 	?>
-			 	<script>
-					$.mobile.loading( 'hide');
-					loadHome();
-					mensaje("Marcaci&oacute;n Realizada",'MENSAJE','myPopup');
-				</script>
-				<?php
-			 	}else
+				$lug=getLugares(" and id_lugar=".$id."");
+				if(trim($lug[0][10])!="")
 				{
-					?>
-				<script>
-					mensaje("Problemas de conexi&oacute;n, por favor int&eacute;ntelo nuevamente.","ERROR","myPopup_ses");
-				</script>
-				<?php
+					$mail_envio=$lug[0][10];
 				}
-					
-			} catch (Exception $e) 
-			{
-				?>
-				<script>
-					mensaje("Problemas de conexi&oacute;n, por favor int&eacute;ntelo nuevamente.","ERROR","myPopup_ses");
-				</script>
-				<?php
-			}*/
+				if($id!=0)
+				{
+					try
+					{
+						$registros=new SoapClient("".PATH_WS_OBVII."".WS_MARCACION."");
+					 	$res= $registros->registrarEvento($_SESSION['id_usuario_obvii'], ''.substr($fec,0,10).'', ''.trim(substr($fec,11)).'', ''.$lat[$i].'',''.$lon[$i].'',''.$accu.'',''.$lug[0][1].'','9988776644','478000012',''.$descrip[$i].'','8888999922',''.$mail_envio.'');
+					 
+					 if($res>0)
+					 {
+					 	$data=array();
+					 	$data[]=$_SESSION["id_usuario"];
+					 	$data[]=$_SESSION["id_usuario_obvii"];
+					 	$data[]=0;
+					 	$data[]=$id;
+					 	$data[]=$lat[$i];
+					 	$data[]=$lon[$i];
+					 	$data[]=0;
+					 	$data[]=$descrip[$i];
+					 	$data[]=$tipo[$i];
+					 	$data[]=$lug[0][1];
+					 	$data[]=$_SESSION["id_cliente"];
+					 	$data[]="".$lug[0][6]." #".$lug[0][7].", ".$lug[0][8]." ";
+					 	$data[]=$fec[$i];
+					 	addMarcacion($data);
+	      	
+					 	}else
+						{
+							?>
+						<script>
+							sync_marca=false;
+							
+						</script>
+						<?php
+						}
+							
+					} catch (Exception $e) 
+					{
+						?>
+						<script>
+							sync_marca=false;
+							//mensaje("Problemas de conexi&oacute;n, por favor int&eacute;ntelo nuevamente.","ERROR","myPopup_ses");
+						</script>
+						<?php
+					}
+				}else
+				{
+					$data=array();
+				 	$data[]=$_SESSION["id_usuario"];
+				 	$data[]=$_SESSION["id_usuario_obvii"];
+				 	$data[]=1;
+				 	$data[]=0;
+				 	$data[]=$lat[$i];
+				 	$data[]=$lon[$i];
+				 	$data[]=0;
+				 	$data[]=$descrip[$i];
+				 	$data[]=$tipo[$i];
+				 	$data[]=$nombre[$i];
+				 	$data[]=$_SESSION["id_cliente"];
+				 	$data[]=$dir[$i];
+				 	$data[]=$fec[$i];
+				 	addMarcacion($data);
+				 
+				}
+			}
 		}
 	}
 }else
