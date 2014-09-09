@@ -22,6 +22,7 @@ if(1==1)
 	
 	$cliente=getCliente(" and id_cliente=".$_SESSION['id_cliente']."");
 	//print_r($_SESSION);
+	$tipo_cli=$cliente[0][5];
 	if($cliente[0][2]!=0)
 	{				
 		cerrar_sesion();
@@ -54,7 +55,7 @@ if(1==1)
     			$cliente=getCliente(" and id_cliente=".$id_cliente."");
 					if($cliente[0][2]==0)
 					{				
-    				inicioSesion(strtolower($_REQUEST['mail']),$res,$id_cliente,$cliente[5]);
+    				inicioSesion(strtolower($_REQUEST['mail']),$res,$id_cliente,$tipo_cli);
     				
     				?>
 						<script>
@@ -62,8 +63,8 @@ if(1==1)
         			MAIL_USER = "<?=$_REQUEST['mail']?>";
         			ID_USER = "<?=$cliente[0]?>";
         			ID_OBVII_USER = "<?=$res?>";
-        			est_user = "<?=$cliente[5]?>";
-							addUsuarioBDLocal(ID_USER,NOMBRE_USER,MAIL_USER,est_user,ID_OBVII_USER);
+        			ID_TIPO_USUARIO = "<?=$cliente[5]?>";
+							addUsuarioBDLocal(ID_USER,NOMBRE_USER,MAIL_USER,0,ID_OBVII_USER,1);
 							
 							window.location.href="index.html";
 						</script>

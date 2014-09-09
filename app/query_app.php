@@ -47,6 +47,7 @@ if($_REQUEST['tipo']==1) //check estado sesion
 			{
 			?>
 			<script>
+				
 				$(".ui-page-active .maintenance_tabs").empty();
 				var bar='<div data-role="navbar" id=list_nav class="maintenance_tabs">';
 				bar +='<ul id="myNavbar">';
@@ -67,6 +68,7 @@ if($_REQUEST['tipo']==1) //check estado sesion
 		{
 			?>
 			<script>
+				
 				$(".ui-page-active .maintenance_tabs").empty();
 				var bar='<div data-role="navbar" id=list_nav class="maintenance_tabs">';
 				bar +='<ul id="myNavbar">';
