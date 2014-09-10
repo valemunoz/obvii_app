@@ -2,6 +2,10 @@
 include("funciones.php");
 $data_server= explode("?",$_SERVER['HTTP_REFERER']);
 $estado_sesion=estado_sesion();
+require_once("Mobile_Detect.php");
+$detect = new Mobile_Detect;
+$deviceType = ($detect->isMobile() ? ($detect->isTablet() ? 'tablet' : 'phone') : 'computer');
+
 if (isset($_SERVER['HTTP_ORIGIN'])) {  
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");  
     header('Access-Control-Allow-Credentials: true');  
@@ -140,11 +144,11 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
 							$clase="txt_mini4";
 						}
 						$nombre=$lug[1];
-						$largo=20;
-						 if($_SESSION['tipo_usuario']=="computer")
+						$largo=10;
+						 if($deviceType=="computer")
 						 {
 						 	$largo=100;
-						 }elseif($_SESSION['tipo_usuario']=="tablet")
+						 }elseif($deviceType=="tablet")
 						 {
 						 	$largo=40;	
 						 }
@@ -546,11 +550,11 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
 							$clase="txt_mini4";
 						}
 					$nombre=$lug[0][1];
-					$largo=20;
-					 if($_SESSION['tipo_usuario']=="computer")
+					$largo=10;
+					 if($deviceType=="computer")
 					 {
 					 	$largo=100;
-					 }elseif($_SESSION['tipo_usuario']=="tablet")
+					 }elseif($deviceType=="tablet")
 					 {
 					 	$largo=40;	
 					 }

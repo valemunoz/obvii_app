@@ -2,6 +2,9 @@
 include("funciones.php");
 $data_server= explode("?",$_SERVER['HTTP_REFERER']);
 $estado_sesion=estado_sesion();
+require_once("Mobile_Detect.php");
+$detect = new Mobile_Detect;
+$deviceType = ($detect->isMobile() ? ($detect->isTablet() ? 'tablet' : 'phone') : 'computer');
 if (isset($_SERVER['HTTP_ORIGIN'])) {  
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");  
     header('Access-Control-Allow-Credentials: true');  
@@ -65,8 +68,18 @@ if(1==1)
         			ID_OBVII_USER = "<?=$res?>";
         			ID_TIPO_USUARIO = "<?=$cliente[5]?>";
 							addUsuarioBDLocal(ID_USER,NOMBRE_USER,MAIL_USER,0,ID_OBVII_USER,1);
+							$.mobile.changePage('index.html');
+							$("#bienvenido_div").html("Bienvenido : <?=$_SESSION['id_usuario']?>");	
 							
-							window.location.href="index.html";
+  						
+									loadMenu();	
+									loadFav();
+	  						loadLugaresON();
+	  						$("#ll_mapa").show();
+							$("#ll_off").show(); 
+							$("#ll_cerrar").show(); 	
+							
+							//window.location.href="index.html";
 						</script>
 						<?php
     			}else
@@ -100,7 +113,10 @@ if(1==1)
 	{
 		?>
 		
-		<h4>Marcador de Asistencia</h4>
+		
+			<div class="ui-bar ui-bar-a" id=barra_sup style="text-align:center;">
+					 Marcador de Asistencia
+	</div>
 		<input type="button" onclick="loadNuevo();" value="Marcaci&oacute;n Libre">
 		<?php
 		$fecha=date("Ymd");
@@ -145,11 +161,11 @@ if(1==1)
 							$clase="txt_mini4";
 						}
 						$nombre=$lug[1];
-						$largo=20;
-						 if($_SESSION['tipo_usuario']=="computer")
+						$largo=10;
+						 if($deviceType=="computer")
 						 {
 						 	$largo=100;
-						 }elseif($_SESSION['tipo_usuario']=="tablet")
+						 }elseif($deviceType=="tablet")
 						 {
 						 	$largo=40;	
 						 }
@@ -224,7 +240,8 @@ if(1==1)
     	if ($res==1) {
         ?>
 			<script>
-				cambiar("mod_sesion");
+				//cambiar("mod_sesion");
+				inicio_ses();
 			</script>
 			<?php
     	}else
@@ -512,7 +529,10 @@ if(1==1)
 	{
 		?>
 		
-		<h4>Marcaciones Favoritas</h4>
+		
+					<div class="ui-bar ui-bar-a" id=barra_sup style="text-align:center;">
+					 Marcaciones Favoritas
+	</div>
 		<?php
 		$fecha=date("Ymd");
 		try
@@ -548,11 +568,11 @@ if(1==1)
 							$clase="txt_mini4";
 						}
 					$nombre=$lug[0][1];
-					$largo=20;
-					 if($_SESSION['tipo_usuario']=="computer")
+					$largo=10;
+					 if($deviceType=="computer")
 					 {
 					 	$largo=100;
-					 }elseif($_SESSION['tipo_usuario']=="tablet")
+					 }elseif($deviceType=="tablet")
 					 {
 					 	$largo=40;	
 					 }
@@ -680,7 +700,10 @@ if(1==1)
 		$usuarios=getUsuariosInterno(" and estado=0 and id_lugar=".$marcacion[0][5]." order by nombre");
 		?>
 		
-		<h4>Revisi&oacute;n <?=strtoupper($marcacion[0][11])?></h4>
+		
+					<div class="ui-bar ui-bar-a" id=barra_sup style="text-align:center;">
+					 Revisi&oacute;n <?=strtoupper($marcacion[0][11])?>
+	</div>
 		  
 		<?php
 	   if(count($usuarios)==0 and count($marcacion)>0)

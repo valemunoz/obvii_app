@@ -2,6 +2,9 @@
 include("funciones.php");
 $estado_sesion=estado_sesion();
 $data_server= explode("?",$_SERVER['HTTP_REFERER']);
+require_once("Mobile_Detect.php");
+$detect = new Mobile_Detect;
+$deviceType = ($detect->isMobile() ? ($detect->isTablet() ? 'tablet' : 'phone') : 'computer');
 //if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
 if (isset($_SERVER['HTTP_ORIGIN'])) {  
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");  
@@ -27,16 +30,24 @@ if($_REQUEST['tipo']==1) //check estado sesion
 	{
 		?>
 		<script>
-		cambiar("mod_sesion");
+		//cambiar("mod_sesion");
+		inicio_ses();
 		</script>
 		<?php
 	}else
 	{
-		
 		?>
 		<script>
-		$("#bienvenido_div").html("Bienvenido : <?=$_SESSION['id_usuario']?>");		
+			loadMenu();	
 		loadFav();
+		
+	  loadLugaresON();	
+		$("#bienvenido_div").html("Bienvenido : <?=$_SESSION['id_usuario']?>");	
+		
+  	$("#ll_mapa").show();
+		$("#ll_off").show(); 
+		$("#ll_cerrar").show(); 	
+		
 		</script>
 		<?php
 		
@@ -92,7 +103,10 @@ if($_REQUEST['tipo']==1) //check estado sesion
 	$marcaciones=getMarcaciones(" and fecha_registro >= '".$fecha."' and id_usuario ilike '%".$_SESSION["id_usuario"]."%' and id_usuario_obvii=".$_SESSION["id_usuario_obvii"]." order by fecha_registro desc");
 	//print_R($marcaciones);
 	?>
-	<h4>Historial de Asistencia</h4>
+	
+	<div class="ui-bar ui-bar-a" id=barra_sup style="text-align:center;">
+					 Historial de Asistencia
+	</div>
 	<ul data-role="listview"  data-theme="b"  data-filter="true" data-filter-placeholder="Buscar" data-inset="false" id="list_registros">	
 				
 	
@@ -126,11 +140,11 @@ if($_REQUEST['tipo']==1) //check estado sesion
 		   $esp="marca_esp";
 		   $nombre=ucwords($marca[11]);
 		 }
-		 $largo=20;
-		 if($_SESSION['tipo_usuario']=="computer")
+		 $largo=10;
+		 if($deviceType=="computer")
 		 {
 		 	$largo=100;
-		 }elseif($_SESSION['tipo_usuario']=="tablet")
+		 }elseif($deviceType=="tablet")
 		 {
 		 	$largo=40;	
 		 }
@@ -143,8 +157,7 @@ if($_REQUEST['tipo']==1) //check estado sesion
 		 	while($paso)
 		 	{ 		
 		 	 $nombre2=substr($nom_resto, 0,$largo);	
-		 	 $nom=substr($nom_resto, $largo);
-		 	 
+		 	 $nom=substr($nom_resto, $largo);		 	 
 		 	 $nombre_final .="<br>".$nombre2;
 		 		if(trim($nom)!="")
 		 		{
@@ -159,7 +172,7 @@ if($_REQUEST['tipo']==1) //check estado sesion
 		}
 	?>
 	
-		<li class=<?=$esp?>><?=$icono?><span class=titulo2><?=$nombre?></span><p class="ui-li-aside"><span class=<?=$clase?>><?=$txt_hora?></span></p></li>
+		<li class=<?=$esp?>><?=$icono?><span class=titulo2><?=$nombre?></span><p class="ui-li-aside"><span class=<?=$clase?>><?=$txt_hora?>></span></p></li>
 	
 				
 	<?php
@@ -191,10 +204,12 @@ if($_REQUEST['tipo']==1) //check estado sesion
 						<select name="slider1" id="slider1" data-role="slider" data-theme="b">
     					<option value="0" selected>Entrada</option>
     					<option value="1">Salida</option>
+    				</select>
 							
 					</p>          
 					<p id="form_login">
 						<input type="button" onclick="validaMarcacion();" value="Marcar">
+						<br><br>
 					</p>
 
 	<?php

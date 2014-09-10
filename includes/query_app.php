@@ -2,6 +2,10 @@
 include("funciones.php");
 $estado_sesion=estado_sesion();
 $data_server= explode("?",$_SERVER['HTTP_REFERER']);
+require_once("Mobile_Detect.php");
+$detect = new Mobile_Detect;
+$deviceType = ($detect->isMobile() ? ($detect->isTablet() ? 'tablet' : 'phone') : 'computer');
+
 if (isset($_SERVER['HTTP_ORIGIN'])) {  
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");  
     header('Access-Control-Allow-Credentials: true');  
@@ -127,11 +131,12 @@ if($_REQUEST['tipo']==1) //check estado sesion
 		   $esp="marca_esp";
 		   $nombre=ucwords($marca[11]);
 		 }
-		 $largo=20;
-		 if($_SESSION['tipo_usuario']=="computer")
+		 $largo=10;
+		 
+		 if($deviceType=="computer")
 		 {
 		 	$largo=100;
-		 }elseif($_SESSION['tipo_usuario']=="tablet")
+		 }elseif($deviceType=="tablet")
 		 {
 		 	$largo=40;	
 		 }

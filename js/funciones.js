@@ -3,6 +3,7 @@ var OBVII_LAT=0;
 var OBVII_ACCU=0;
 var PAIS_LON=-70.656235;
 var PAIS_LAT=-33.458943;
+var PAIS_ZOOM=10;
 var OBVII_PAIS="chile";
 
 var path_query="includes/query.php";
@@ -769,16 +770,16 @@ function verMapa()
 			{tipo:18} 
 				,function(){	
 					$.mobile.loading( 'hide');
-					init(PAIS_LON,PAIS_LAT,10);
+					init(PAIS_LON,PAIS_LAT,PAIS_ZOOM);
 					//loadCentroMapa();
 					$("#info_pres").html("Para Actualizar su ubicaci&oacute;n actual, haga click aqu&iacute; <img onclick='loadCentroMapa();' src='images/current.png' class=curretn>");
-					if(OBVII_LON!=0)
+					/*if(OBVII_LON!=0)
 					{
 						$("#info_pres").html("Ultima ubicaci&oacute;n registrada con una presici&oacute;n de : "+OBVII_ACCU+"  <img onclick='loadCentroMapa();' src='images/current.png' class=curretn>");
 						moverCentro(OBVII_LAT,OBVII_LON,15);
 						//point5
 						addMarcadores(OBVII_LON,OBVII_LAT,"Ultima ubicaci&oacute;n registrada","images/point.png",40,40);
-					}
+					}*/
 					
 				}
 			);
@@ -809,4 +810,15 @@ function loadCentroMapa()
 			addMarcadores(OBVII_LON,OBVII_LAT,"Ubicaci&oacute;n Actual","images/point.png",40,40);
 			$.mobile.loading( 'hide');
 			},noLocation,{timeout:6000});
+}
+function moveOn()
+{
+	var centro =map.getCenter().transform(
+        new OpenLayers.Projection("EPSG:900913"), // de WGS 1984
+        new OpenLayers.Projection("EPSG:4326") // a Proyección Esférica Mercator
+      );
+      PAIS_LON=centro.lon;
+      PAIS_LAT=centro.lat;
+      PAIS_ZOOM=map.getZoom();
+      //alert(centro.lon);
 }
