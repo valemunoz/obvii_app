@@ -12,6 +12,7 @@ function filtrar_em()
 	
 	var nombre=$.trim(document.getElementById("nom_em").value);
 	var estado=$.trim(document.getElementById("em_estado").value);
+	$("#result2").html("<img src=img/load.gif>");
 	$("#result2").load("query.php", 
 						{tipo:3, nombre:nombre,estado:estado} 
 							,function(){
@@ -276,6 +277,7 @@ function filtrar_us()
 	var mail=$.trim(document.getElementById("nom_em").value);
 	var estado=$.trim(document.getElementById("em_estado").value);
 	var nombre=$.trim(document.getElementById("nom_fil").value);
+	$("#result2").html("<img src=img/load.gif>");
 	$("#result2").load("qr_usuarios.php", 
 						{tipo:1, nombre:nombre,estado:estado,mail:mail} 
 							,function(){
@@ -394,6 +396,7 @@ function filtrar_usInterno()
 	var estado=$.trim(document.getElementById("em_estado").value);
 	var nombre=$.trim(document.getElementById("nom_fil").value);
 	var lugar=$.trim(document.getElementById("lug_us").value);
+	$("#result2").html("<img src=img/load.gif>");
 	$("#result2").load("qr_usuariosinternos.php", 
 						{tipo:1, nombre:nombre,estado:estado,mail:mail,lugar:lugar} 
 							,function(){
@@ -519,6 +522,7 @@ function filtrar_marcaciones()
 	var lugar=$.trim(document.getElementById("lug_us").value);
 	var desde=$.trim(document.getElementById("desde").value);
 	var hasta=$.trim(document.getElementById("hasta").value);
+	$("#result2").html("<img src=img/load.gif>");
 	$("#result2").load("qr_marcas.php", 
 						{tipo:1,mail:mail,lugar:lugar,fec_ini:desde,fec_ter:hasta} 
 							,function(){

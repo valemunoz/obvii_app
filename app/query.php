@@ -56,6 +56,7 @@ if(1==1)
     		}
     		
     			$cliente=getCliente(" and id_cliente=".$id_cliente."");
+    			$tipo_cli=$cliente[0][5];
 					if($cliente[0][2]==0)
 					{				
     				inicioSesion(strtolower($_REQUEST['mail']),$res,$id_cliente,$tipo_cli);

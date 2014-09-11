@@ -156,7 +156,7 @@ include("header.php");
 						foreach($lugares as $lug)
 						{
 							?>
-							<option value="<?=$lug[0]?>"><?=ucwords($lug[1])?></option>
+							<option value="<?=$lug[0]?>"><?=ucwords(substr($lug[1],0,15))?></option>
 							<?php
 						}
 						?>

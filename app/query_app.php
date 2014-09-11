@@ -172,7 +172,7 @@ if($_REQUEST['tipo']==1) //check estado sesion
 		}
 	?>
 	
-		<li class=<?=$esp?>><?=$icono?><span class=titulo2><?=$nombre?></span><p class="ui-li-aside"><span class=<?=$clase?>><?=$txt_hora?>></span></p></li>
+		<li class=<?=$esp?>><?=$icono?><span class=titulo2><?=$nombre?></span><p class="ui-li-aside"><span class=<?=$clase?>><?=$txt_hora?></span></p></li>
 	
 				
 	<?php
