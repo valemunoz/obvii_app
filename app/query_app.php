@@ -42,7 +42,7 @@ if($_REQUEST['tipo']==1) //check estado sesion
 		loadFav();
 		
 	  loadLugaresON();	
-		$("#bienvenido_div").html("Bienvenido : <?=$_SESSION['id_usuario']?>");	
+		$("#bienvenido_div").html("Bienvenido : <?=$_SESSION['id_usuario']?> <span id=id_sync_wel></span>");	
 		
   	$("#ll_mapa").show();
 		$("#ll_off").show(); 

@@ -14,7 +14,7 @@ var path_info="includes/info.php";
  				$("#output").load(path_query2, 
 				{tipo:2} 
 					,function(){
-						 
+						 $.mobile.loading( 'hide');
 						
 						
 						
@@ -24,6 +24,12 @@ var path_info="includes/info.php";
  				
  			function inicio()
  			{
+ 				$.mobile.loading( 'show', {
+			text: 'Cargando...',
+			textVisible: true,
+			theme: 'a',
+			html: ""
+		});
  				$("#output").load(path_query2, 
 				{tipo:1} 
 					,function(){

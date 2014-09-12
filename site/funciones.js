@@ -442,13 +442,74 @@ function saveUsuarioInt()
 		$( "#msg_error_add" ).html(msg);
 	}else
 	{
-		$("#output").load("qr_usuariosinternos.php", 
-							{tipo:5, estado:estado,lugar:lugar,nombre:nombre,tipo_lista:tipo_lista,desc:descripcion} 
-								,function(){
-									CloseModalMapa();
+	/*Imagen*/
+	try{
+		 var fileExtension = "";
+		 //obtenemos un array con los datos del archivo
+        var file = $("#i_file")[0].files[0];
+        //obtenemos el nombre del archivo
+        var fileName = file.name;
+        //obtenemos la extensión del archivo
+        fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
+        //obtenemos el tamaño del archivo
+        var fileSize = (file.size/1024);
+        //obtenemos el tipo de archivo image/png ejemplo
+        var fileType = file.type;
+        //mensaje con la información del archivo
+        //alert("<span class='info'>Archivo para subir: "+fileName+", peso total: "+fileSize+" bytes.</span>");
+		/**/
+		valida=false;
+		if(fileSize <= 2048 && (fileExtension=='JPG' || fileExtension=='JPEG'))
+		{
+			valida=true;
+		}
+	}catch(err) 
+	{
+		
+	}
+		if(valida)
+		{
+						var formData = new FormData($(".formulario")[0]);
+						$.ajax({
+        		    url: 'qr_usuariosinternos.php?tipo=5&estado='+estado+'&lugar='+lugar+'&nombre='+nombre+'&tipo_lista='+tipo_lista+'&desc='+descripcion+'',  
+        		    type: 'POST',
+        		    // Form data
+        		    //datos del formulario
+        		    data: formData,
+        		    //necesario para subir archivos via ajax
+        		    cache: false,
+        		    contentType: false,
+        		    processData: false,
+        		    //mientras enviamos el archivo
+        		    beforeSend: function(){
+        		       //loadEspera("Subiendo..");
+        		       $("#msg_error_add").html("<img src=img/load.gif>");
+        		    },
+        		    //una vez finalizado correctamente
+        		    success: function(data){
+        		       CloseModalMapa();
 										filtrar_usInterno();
-								}
-		);
+        		      
+        		    },
+        		    //si ha ocurrido un error
+        		    error: function(){
+        		       alert("Error al subir la imagen, por favor intentelo nuevamente");
+        		       
+        		    }
+        		});
+        		
+			
+			/*$("#output").load("qr_usuariosinternos.php", 
+								{tipo:5, estado:estado,lugar:lugar,nombre:nombre,tipo_lista:tipo_lista,desc:descripcion} 
+									,function(){
+										CloseModalMapa();
+										filtrar_usInterno();
+									}
+			);*/
+		}else
+			{
+				$( "#msg_error_add" ).html("La im&aacute;gen no puede superar 2 Megas<br> La im&aacute;gen debe ser de formato JPG");
+			}
 	}
 	
 }

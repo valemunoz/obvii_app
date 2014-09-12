@@ -70,7 +70,7 @@ if(1==1)
         			ID_TIPO_USUARIO = "<?=$cliente[5]?>";
 							addUsuarioBDLocal(ID_USER,NOMBRE_USER,MAIL_USER,0,ID_OBVII_USER,1);
 							$.mobile.changePage('index.html');
-							$("#bienvenido_div").html("Bienvenido : <?=$_SESSION['id_usuario']?>");	
+							$("#bienvenido_div").html("Bienvenido : <?=$_SESSION['id_usuario']?> <span id=id_sync_wel></span>");	
 							
   						
 									loadMenu();	
@@ -499,7 +499,7 @@ if(1==1)
 		 				 ?>
 			<script>
 				$.mobile.loading( 'hide');
-				loadHome();
+				//loadHome();
 				mensaje("Marcaci&oacute;n realizada",'MENSAJE','myPopup');
 			</script>
 			<?php
@@ -672,7 +672,7 @@ if(1==1)
 		 	?>
 		 	<script>
 				$.mobile.loading( 'hide');
-				loadHome();
+				//loadHome();
 				mensaje("Marcaci&oacute;n Realizada",'MENSAJE','myPopup');
 			</script>
 			<?php

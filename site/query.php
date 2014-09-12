@@ -22,6 +22,9 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 					if($cliente[0][2]==0)
 					{
 						inicioSesion_web($_REQUEST['mail'],$_REQUEST['mail'],$usuario[4],$res,$cliente[0][4],$cliente[0][5]);
+						$_SESSION['web_lugar']="";
+						$_SESSION['web_opcion']="";
+						
 						updateUsuario("id_usuario_obvii=".$res.", clave='".$clave."'",$usuario[0]);
 						?>
 							<script>

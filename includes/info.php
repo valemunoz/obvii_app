@@ -8,9 +8,12 @@
 						
 					</p>      
 					
+    	    <div class="ui-bar ui-bar-a" id=barra_sup style="text-align:center;">
+					 Informaci&oacute;n
+					</div>
     	    <p id="form_interior">					
 						
-						<span class=texto_interior>Todos los derechos reservados a Architeq.cl <br>Cualquier inquietud comun&iacute;cate v&iacute;a contacto@architeq.cl</span>
+						<span class=texto_interior>Cualquier inquietud comun&iacute;cate v&iacute;a contacto@architeq.cl<br>Todos los derechos reservados a Architeq.cl</span>
 						
 					</p>          
 					

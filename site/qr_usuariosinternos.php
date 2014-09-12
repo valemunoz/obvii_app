@@ -145,7 +145,19 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 	}elseif($_REQUEST['tipo']==4 and $estado_sesion==0)//nuevo usuario
 	{
 		$lugares=getLugares(" and id_cliente=".$_SESSION['id_cliente_web']." order by nombre");
+						
+						
+		$checB="";
+		$checA="";
+		if($_SESSION['web_opcion']==2)
+		{
+			$checB="checked";	
+		}else
+		{
+			$checA="checked";	
+		}
 			?>
+			<form enctype="multipart/form-data" class="formulario">
 			<table border=1 id="table_resul" class="bordered">
 				<tr><td>Nombre</td><td><input id="nom_us" name="nom_us" type="text" value=""></td></tr>		
 			<tr><td>Estado</td>
@@ -157,23 +169,31 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 							
 						</select>		
 				</td></tr>
-				<tr><td>Tipo Lista</td><td><input type="radio" id="lug" name="group2" value="1" checked> Personas <input type="radio" id="lug2" name="group2" value="2"> Otro</td></tr>		
+				<tr><td>Tipo Lista</td><td><input type="radio" id="lug" name="group2" value="1" <?=$checA?>> Personas <input type="radio" id="lug2" name="group2" value="2" <?=$checB?>> Otro</td></tr>		
 				<tr><td>Lugar</td>
 				<td>
 						<select id=tipo_us name=tipo_us>
 							<?php
 							foreach($lugares as $lug)
 							{
+								$check="";
+								
+								if($_SESSION['web_lugar']==$lug[0])
+								{
+									$check="selected";
+								}
 								?>
-								<option value=<?=$lug[0]?>><?=ucwords($lug[1])?></option>
+								<option value='<?=$lug[0]?>' <?=$check?>><?=ucwords($lug[1])?></option>
 								<?php
 							}
 							?>
 						</select>		
 				</td></tr>
+				<tr id="opc_list"><td>Imagen</td><td><input type="file" name="i_file" id="i_file" value=""></td></tr>
 				<tr id="opc_list"><td>Descripci&oacute;n</td><td><textarea name="descript" id="descript" rows="4" cols="50"></textarea></td></tr>
 				<tr><td></td><td><input type="button" onclick="saveUsuarioInt();" value="Registrar"></td></tr>
 			</table>
+		</form>
 			<div id="msg_error_add" class="msg_error"></div>
 				<?php
 	}elseif($_REQUEST['tipo']==5 and $estado_sesion==0)//Nuevo usuario
@@ -184,8 +204,56 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 		$data[]=$_REQUEST['lugar'];		
 		$data[]=$_REQUEST["tipo_lista"];
 		$data[]=$_REQUEST["desc"];
+		$_SESSION['web_lugar']=$_REQUEST['lugar'];
+		$_SESSION['web_opcion']=$_REQUEST["tipo_lista"];
 		
 		addUsuarioInt($data);
+		
+		$us=getUsuariosInterno(" and nombre='".$_REQUEST['nombre']."' order by id_usuario_interno desc limit 1");
+		
+			//comprobamos que sea una petición ajax
+	if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') 
+	{
+	 
+	    //obtenemos el archivo a subir
+	    $file = $_FILES['i_file']['name'];
+	    
+
+	    //comprobamos si existe un directorio para subir el archivo
+	    //si no es así, lo creamos
+	    if(!is_dir("img_cli/")) 
+	        mkdir("img_cli/", 0777);
+	     
+	    //comprobamos si el archivo ha subido
+	    $name_file=explode(".",$file);
+	    $nom_archivo=$us[0][0]."_ejemplo".$name_file[1];
+	    if ($file && move_uploaded_file($_FILES['i_file']['tmp_name'],"img_cli/".$nom_archivo.".".$name_file[1]))
+	    {
+	    	sleep(2);
+	    	// El archivo
+				$nombre_archivo = "img_cli/".$nom_archivo.".".$name_file[1];
+				$porcentaje = 0.2;
+				
+				// Tipo de contenido
+				header('Content-Type: image/jpeg');
+				
+				// Obtener nuevas dimensiones
+				list($ancho, $alto) = getimagesize($nombre_archivo);
+				$nuevo_ancho = $ancho * $porcentaje;
+				$nuevo_alto = $alto * $porcentaje;
+				
+				// Redimensionar
+				$imagen_p = imagecreatetruecolor($nuevo_ancho, $nuevo_alto);
+				$imagen = imagecreatefromjpeg($nombre_archivo);
+				imagecopyresampled($imagen_p, $imagen, 0, 0, 0, 0, $nuevo_ancho, $nuevo_alto, $ancho, $alto);
+				imagejpeg($imagen_p, "img_cli/".$nom_archivo.".".$name_file[1], 50);
+	    }
+	    $name_file=explode(".",$file2);
+	
+	    
+	}else{
+	    throw new Exception("Error Processing Request", 1);    
+	}
 		
 	}elseif($_REQUEST['tipo']==6 and $estado_sesion==0)//update estado usuario
 	{
