@@ -62,11 +62,11 @@ if($_REQUEST['tipo']==1) //check estado sesion
 				$(".ui-page-active .maintenance_tabs").empty();
 				var bar='<div data-role="navbar" id=list_nav class="maintenance_tabs">';
 				bar +='<ul id="myNavbar">';
-				bar +='<li ><a  href="javascript:checkInternet(0);loadFav();"><img src="images/fav2.png"></a></li>';
-				bar +='<li ><a  href="javascript:checkInternet(0);loadHome();"><img src="images/icon-servicios.png"></a></li>';
-				bar +='<li ><a  href="javascript:checkInternet(0);loadAsis();"><img src="images/ticket-32.png"></a></li>';
-				bar +='<li><a href="javascript:checkInternet(0);loadHistorial();"><img src="images/historial.png"></a></li>';
-				bar +='<li><a href="javascript:checkInternet(1);loadInfo();"><img src="images/icon-info.png"></a></li>';
+				bar +='<li ><a  href="javascript:loadFav();"><img src="images/fav2.png"></a></li>';
+				bar +='<li ><a  href="javascript:loadHome();"><img src="images/icon-servicios.png"></a></li>';
+				bar +='<li ><a  href="javascript:loadAsis();"><img src="images/ticket-32.png"></a></li>';
+				bar +='<li><a href="javascript:loadHistorial();"><img src="images/historial.png"></a></li>';
+				bar +='<li><a href="javascript:loadInfo();"><img src="images/icon-info.png"></a></li>';
 				bar +='</ul>';
 				bar +='</div>';
 				
@@ -83,11 +83,11 @@ if($_REQUEST['tipo']==1) //check estado sesion
 				$(".ui-page-active .maintenance_tabs").empty();
 				var bar='<div data-role="navbar" id=list_nav class="maintenance_tabs">';
 				bar +='<ul id="myNavbar">';
-				bar +='<li ><a  href="javascript:checkInternet(0);loadFav();"><img src="images/fav2.png"></a></li>';
-				bar +='<li ><a  href="javascript:checkInternet(0);loadHome();"><img src="images/icon-servicios.png"></a></li>';
+				bar +='<li ><a  href="javascript:loadFav();"><img src="images/fav2.png"></a></li>';
+				bar +='<li ><a  href="javascript:loadHome();"><img src="images/icon-servicios.png"></a></li>';
 				
-				bar +='<li><a href="javascript:checkInternet(0);loadHistorial();"><img src="images/historial.png"></a></li>';
-				bar +='<li><a href="javascript:checkInternet(1);loadInfo();"><img src="images/icon-info.png"></a></li>';
+				bar +='<li><a href="javascript:loadHistorial();"><img src="images/historial.png"></a></li>';
+				bar +='<li><a href="javascript:loadInfo();"><img src="images/icon-info.png"></a></li>';
 				bar +='</ul>';
 				bar +='</div>';
 				
