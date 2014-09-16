@@ -226,9 +226,9 @@ function addLugarObvii($data)
 	$dbPg=pgSql_db();	
 	$sql="INSERT INTO obvii_lugares(
              nombre, fecha_registro, estado, latitud, longitud, 
-            calle, numero_municipal, comuna, geom, id_usuario, mail_post,comentario,marcacion,id_cliente,mail_lista)
+            calle, numero_municipal, comuna, geom, id_usuario, mail_post,comentario,marcacion,id_cliente,mail_lista,orden)
     VALUES ('".$data[0]."', '".getFechaLibre(DIF_HORA)."', 0, '".$data[1]."' , '".$data[2]."', 
-            '".$data[3]."', '".$data[4]."', '".$data[5]."', ST_GeomFromText('POINT(".$data[2]." ".$data[1].")',2276), '".$data[6]."', '".$data[7]."' , '".$data[8]."', '".$data[9]."','".$data[10]."','".$data[11]."');";            
+            '".$data[3]."', '".$data[4]."', '".$data[5]."', ST_GeomFromText('POINT(".$data[2]." ".$data[1].")',2276), '".$data[6]."', '".$data[7]."' , '".$data[8]."', '".$data[9]."','".$data[10]."','".$data[11]."','".$data[12]."');";            
   //echo "<br>".$sql;
   $rsCalle = pg_query($dbPg, $sql);	
 }
@@ -238,7 +238,7 @@ function getLugares($qr)
 	
   $sql2 = "SELECT id_lugar, nombre, fecha_registro, estado, latitud, longitud, 
        calle, numero_municipal, comuna, geom, mail_post, id_usuario, 
-       comentario,marcacion,mail_lista FROM obvii_lugares where 1=1";		
+       comentario,marcacion,mail_lista,orden FROM obvii_lugares where 1=1";		
   if($qr!="")
   {
   	$sql2 .=$qr;
@@ -264,6 +264,7 @@ function getLugares($qr)
 			$data[]=$row2[12];
 			$data[]=$row2[13];
 			$data[]=$row2[14];
+			$data[]=$row2[15];
 			$datos[]=$data;
 		}
 		pg_close($dbPg);
@@ -709,7 +710,7 @@ function getUsuariosInterno($qr)
 	
 	$dbPg=pgSql_db();
 	
-  $sql2 = "SELECT id_usuario_interno, nombre, estado, id_lugar, fecha_registro,tipo,descripcion FROM obvii_usuarios_internos where 1=1";		
+  $sql2 = "SELECT id_usuario_interno, nombre, estado, id_lugar, fecha_registro,tipo,descripcion,archivo FROM obvii_usuarios_internos where 1=1";		
   if($qr!="")
   {
   	$sql2 .=$qr;
@@ -727,6 +728,7 @@ function getUsuariosInterno($qr)
 				$data[]=$row2[4];
 				$data[]=$row2[5];
 				$data[]=$row2[6];
+				$data[]=$row2[7];
 
 				$datos[]=$data;
 		}
@@ -738,8 +740,8 @@ function addUsuarioInt($data)
 	$dbPg=pgSql_db();
 	
   $sql2 = "INSERT INTO obvii_usuarios_internos(
-            nombre, estado, id_lugar, fecha_registro,tipo,descripcion)
-    VALUES ('".$data[0]."', '".$data[1]."', '".$data[2]."', '".date("Y-m-d H:i:s")."','".$data[3]."','".$data[4]."')";		
+            nombre, estado, id_lugar, fecha_registro,tipo,descripcion,archivo)
+    VALUES ('".$data[0]."', '".$data[1]."', '".$data[2]."', '".date("Y-m-d H:i:s")."','".$data[3]."','".$data[4]."','".$data[5]."')";		
  
   $rs2 = pg_query($dbPg, $sql2);
 

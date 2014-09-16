@@ -219,21 +219,17 @@ if($_REQUEST['tipo']==1) //check estado sesion
 $lugares=getLugares(" and id_lugar=".$_REQUEST['id']."");
 if($lugares[0][12]=='t')
 {
-	$check2="selected";
-	$check1="";
+	$comen="SI";
 }else
 {
-	$check2="";
-	$check1="selected";
+	$comen="NO";
 }
 if($lugares[0][13]=='t')
 {
-	$check_s2="selected";
-	$check_s1="";
+	$marca="Entrada/Salida";
 }else
 {
-	$check_s2="";
-	$check_s1="selected";
+	$marca="Entrada";
 }
 
 ?>
@@ -249,16 +245,10 @@ if($lugares[0][13]=='t')
 						<label for="text-basic">Correo Electronico</label>
 						<span class=titulo_basico><?=$lugares[0][10]?></span>
 						<label for="text-basic">Comentario?</label>
-						<select name="slider2" id="slider2" data-role="slider" data-theme="b">
-    					<option value="off" <?=$check1?>>No</option>
-    					<option value="on" <?=$check2?>>Si</option>
-						</select> <span class=texto_interior>Esta opci&oacute;n activa una casilla de comentario cada vez que se ejecute una acci&oacute;n con el lugar registrado.</span>
+						<span class=titulo_basico><?=$comen?></span> <br><span class=texto_interior>Esta opci&oacute;n activa una casilla de comentario cada vez que se ejecute una acci&oacute;n con el lugar registrado.</span>
 							<br><br>
 							<label for="text-basic">Entrada y Salida??</label>
-						<select name="slider1" id="slider1" data-role="slider" data-theme="b">
-    					<option value="off" <?=$check_s1?>>No</option>
-    					<option value="on" <?=$check_s2?>>Si</option>
-						</select> <span class=texto_interior>Esta opci&oacute;n activa la opci&oacute;n de marcar una salida para este lugar.</span>
+						<span class=titulo_basico><?=$marca?></span> <br><span class=texto_interior>Esta opci&oacute;n activa la opci&oacute;n de marcar una salida para este lugar.</span>
 					</p>          
 					<p id="form_login">
 						<?php

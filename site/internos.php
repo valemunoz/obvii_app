@@ -183,7 +183,7 @@ include("header.php");
 				</td>
 				
 			<td><input type="text" id='nom_em' name='nom_em'></td>
-			<td><input type="button" onclick="filtrar_usInterno();" value="Filtrar"></td>
+			<td><input type="button" onclick="filtrar_usInterno('');" value="Filtrar"></td>
 		</tr>	
 	</table>
 	

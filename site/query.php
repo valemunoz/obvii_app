@@ -148,6 +148,14 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 		{
 			$check_ent2="selected";
 		}
+		$check="checked";
+		$check2="";
+		if($empresa[0][15]=="nombre" or $empresa[0][15]=="")
+		{
+			$check2="checked";
+			$check="";
+			
+		}
 		?>
 		<table border=1 id="table_resul" class="bordered">
 			
@@ -169,6 +177,13 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
     					<option value="off" <?=$check_ent?>>No</option>
     					<option value="on" <?=$check_ent?>>Si</option>
 						</select></td></tr>
+						<tr><td>Orden Listado</td><td><input type="radio" id="opc_1" name="group2" value="id_usuario_interno" <?=$check?>> Ingreso
+							<input type="radio" id="opc_2" name="group2" value="nombre" <?=$check2?>> Nombre
+						</td></tr>
+						
+						
+			
+			
 			<tr><td>Calle</td><td><input type="text" id="calle_em" name="calle_em" value="<?=$empresa[0][6]?>"></td></tr>
 			<tr><td>Numero</td><td><input type="text" id="num_em" name="num_em" value="<?=$empresa[0][7]?>"></td></tr>
 			
@@ -269,10 +284,7 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 		}
 	}elseif($_REQUEST['tipo']==6 and $estado_sesion==0)//update Empresa
 	{
-		
-
-		
-		updateLugarObvii("mail_lista='".$_REQUEST['mail2']."',mail_post='".$_REQUEST['mail']."', comentario='".$_REQUEST['coment']."', marcacion='".$_REQUEST['marca']."',nombre='".$_REQUEST['nombre']."', calle='".$_REQUEST['calle']."', numero_municipal='".$_REQUEST['numero']."', comuna='".$_REQUEST['comuna']."',  latitud='".$_REQUEST['latitud']."',  longitud='".$_REQUEST['longitud']."', geom=ST_GeomFromText('POINT(".$_REQUEST['longitud']." ".$_REQUEST['latitud'].")',2276)",$_REQUEST['empresa']);
+		updateLugarObvii("orden='".$_REQUEST['order']."', mail_lista='".$_REQUEST['mail2']."',mail_post='".$_REQUEST['mail']."', comentario='".$_REQUEST['coment']."', marcacion='".$_REQUEST['marca']."',nombre='".$_REQUEST['nombre']."', calle='".$_REQUEST['calle']."', numero_municipal='".$_REQUEST['numero']."', comuna='".$_REQUEST['comuna']."',  latitud='".$_REQUEST['latitud']."',  longitud='".$_REQUEST['longitud']."', geom=ST_GeomFromText('POINT(".$_REQUEST['longitud']." ".$_REQUEST['latitud'].")',2276)",$_REQUEST['empresa']);
 	}elseif($_REQUEST['tipo']==7 and $estado_sesion==0)//update Empresa
 	{
 		updateLugarObvii("estado=".$_REQUEST['estado']." ",$_REQUEST['empresa']);
@@ -301,6 +313,9 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
     					<option value="off">No</option>
     					<option value="on">Si</option>
 						</select></td></tr>
+						<tr><td>Orden Listado</td><td><input type="radio" id="opc_1" name="group2" value="id_usuario_interno"> Ingreso
+							<input type="radio" id="opc_2" name="group2" value="nombre" checked> Nombre
+						</td></tr>
 				<tr><td>Calle</td><td><input type="text" id="calle_em" name="calle_em" value=""></td></tr>
 				<tr><td>Numero</td><td><input type="text" id="num_em" name="num_em" value=""></td></tr>				
 				<tr><td>Comuna</td><td>
@@ -317,6 +332,7 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 			3: Selecciona "Ver Mapa" para confirmar la posicion del lugar<br>
 			4: Registra el lugar
 		</div>
+		<br><br>
 		
 				<?php
 	 
@@ -337,6 +353,8 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 		$data[]=$_REQUEST['salida'];
 		$data[]=$_SESSION['id_cliente_web'];
 		$data[]=$_REQUEST['mail2'];
+		$data[]=$_REQUEST['order'];
+		
 		addLugarObvii($data);
 	}
 }

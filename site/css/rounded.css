@@ -220,7 +220,7 @@ table {
 }
 .msg_error
 {
-	font-size:10px;
+	font-size:9px;
 	border-radius:5px;	
 	border:1px #E9E9E9 solid;
 }
@@ -264,4 +264,14 @@ table {
 .tabla_fila
 {
 	background-color:#D2D2D2;
+}
+
+#grilla_mapa
+{
+	height:450px !important;
+	
+}
+.div_short
+{
+	width:40%;
 }

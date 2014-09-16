@@ -731,44 +731,65 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
   				{
   					$img=$img2;
   				}
-  				$msg=trim(ucwords(str_replace("\n","<br>",$us[6])));
-  				if(trim($us[6])=="")
+  				if(trim($us[6])=="" and trim($us[7])=="")
   				{
   					$msg="No hay descripci&oacute;n disponible";
-  				}
-  			?>
-  			 <li onclick="mensaje('<?=$msg?>','Descripci&oacute;n','myPopup');">
-    	    <img src="<?=$img?>">
-    	    <h3><?=ucwords($us[1])?></h3>
-    	    <?php
-    	    if(count($marca)>0)
-  				{
-  					?>
-  					<div data-role="controlgroup" class="ui-li-aside" data-type="horizontal" data-mini="true">
-    					
-    					
-    					 <a href="javascript:cancelaMarcaInt(<?=$marca[0][0]?>);"  data-role="button" data-icon="delete" data-iconpos="notext">Icon only</a>
-						</div>
-  					<?php
   				}else
   				{
-  					?>
-  					<div data-role="controlgroup" class="ui-li-aside" data-type="horizontal" data-mini="true">
-    					
-    					<a href="javascript:marcaInt('true',<?=$us[0]?>,<?=$marcacion[0][5]?>,<?=$marcacion[0][0]?>);" data-role="button"  data-icon="check" data-iconpos="notext">SI</a>
-    					<!--a href="javascript:marcaInt('false',<?=$us[0]?>,<?=$marcacion[0][5]?>,<?=$marcacion[0][0]?>);" data-role="button">No</a-->    
-    					
-						</div>
-  					<?php
+  					$msg=trim(ucwords(str_replace("\n","<br>",$us[6])));
   				}
-    	    ?>       
-    	    	
-    	</li>
+  				
+  				if(trim($us[7])!="")
+  				{
+  					$msg .="<br><div style=text-align:center><input type=image width=400px src=".PATH_SITE_WEB."/img_cli/".$us[7]."></div>";
+  				}
+  				
+  				 
+  				 $largo=strlen($us[1]);
+  				 
+					 if($deviceType=="computer")
+					 {
+					 	$nombre=substr($us[1],0,100);
+					 	if($largo > 100)
+					 	  $nombre .="...";
+					 }elseif($deviceType=="tablet")
+					 {
+					 	$nombre=substr($us[1],0,40);
+					 	if($largo > 40)
+					 	  $nombre .="...";
+					 }else
+					 {
+					 		$nombre=substr($us[1],0,20);
+					 		if($largo > 20)
+					 	  	$nombre .="...";
+						}
+					 
+					 
+					 
+  			?>
+  			<li><a href="javascript:mensaje('<?=$msg?>','Descripci&oacute;n','myPopup');">
+        <img src="<?=$img?>">
+        <h2><?=ucwords($nombre)?></h2>
+        </a>
+        <?php
+    	    if(count($marca)>0)
+  				{
+  			?>
+        		<a href="javascript:cancelaMarcaInt(<?=$marca[0][0]?>);" data-rel="popup" data-icon="delete" data-position-to="window" data-transition="pop"></a>
+        <?php
+				}else
+				{
+					?>
+					<a href="javascript:marcaInt('true',<?=$us[0]?>,<?=$marcacion[0][5]?>,<?=$marcacion[0][0]?>);" data-rel="popup" data-icon="check" data-position-to="window" data-transition="pop"></a>
+					<?php
+				}        
+        ?>
+    		</li>
 					<?php
 				}
 					?>		
 								
-			 </li>
+			
   			
   		</ul>
     <?php		
