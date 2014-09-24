@@ -52,6 +52,7 @@ var path_info="includes/info.php";
  				}
  				
  					?>*/
+ 					
  				
  			}
 function cambiar(nom_mod)

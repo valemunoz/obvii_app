@@ -92,11 +92,21 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 			$check1="";
 			$check2="selected";
 		}
+		
+		$check3="checked";
+		$check="";
+		if($usuario[9]=='t')
+		{
+			$check3="";
+			$check="checked";
+		}
 		?>
 		<table border=1 id="table_resul" class="bordered">
 			<tr><td>Nombre</td><td><input id="nom_us" name="nom_us" type="text" value="<?=$usuario[7]?>"></td></tr>	
 			<tr><td>Mail</td><td><input id="mail_us" name="mail_us" type="text" value="<?=$usuario[1]?>"></td></tr>		
 			<tr><td>Clave</td><td><input id="clave" name="clave" type="text" value="<?=$usuario[6]?>"></td></tr>		
+			<tr><td>Dispositivo</td><td><input id="dis_us" name="dis_us" type="text" value="<?=$usuario[8]?>"></td></tr>		
+			<tr><td>Acceso Web</td><td><input type="radio"  id="web_si" name="group2" <?=$check?>>SI <input type="radio"  id="web_no" name="group2" <?=$check3?>>NO</td></tr>		
 			<tr><td>Tipo Usuario</td>
 				<td>
 						<select id=tipo_us name=tipo_us>
@@ -111,14 +121,16 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 			<?php
 	}elseif($_REQUEST['tipo']==3 and $estado_sesion==0)//update usuario
 	{
-		updateUsuario("mail='".$_REQUEST['mail']."', tipo_usuario=".$_REQUEST['tipo_us'].", nombre='".$_REQUEST['nom']."', clave='".$_REQUEST['clave']."'",decrypt($_REQUEST['id'],ENCRIPTACION));
+		updateUsuario("web_device='".$_REQUEST["web_us"]."',id_device='".$_REQUEST["dis_us"]."', mail='".$_REQUEST['mail']."', tipo_usuario=".$_REQUEST['tipo_us'].", nombre='".$_REQUEST['nom']."', clave='".$_REQUEST['clave']."'",decrypt($_REQUEST['id'],ENCRIPTACION));
 	}elseif($_REQUEST['tipo']==4 and $estado_sesion==0)//nuevo usuario
 	{
 			?>
 			<table border=1 id="table_resul" class="bordered">
 				<tr><td>Nombre</td><td><input id="nom_us" name="nom_us" type="text" value=""></td></tr>		
 				<tr><td>Mail</td><td><input id="mail_us" name="mail_us" type="text" value=""></td></tr>		
-				<tr><td>Clave</td><td><input id="key_us" name="key_us" type="text" value=""></td></tr>		
+				<tr><td>Clave</td><td><input id="key_us" name="key_us" type="text" value=""></td></tr>
+				<tr><td>Dispositivo</td><td><input id="dis_us" name="dis_us" type="text" value=""></td></tr>		
+				<tr><td>Acceso Web</td><td><input type="radio"  id="web_si" name="group2" checked>SI <input type="radio"  id="web_no" name="group2">NO</td></tr>				
 				<tr><td>Tipo Usuario</td>
 				<td>
 						<select id=tipo_us name=tipo_us>
@@ -138,6 +150,8 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 		$data[]=$_REQUEST['tipo_us'];
 		$data[]=$_REQUEST['clave'];
 		$data[]=$_REQUEST['nombre'];
+		$data[]=$_REQUEST["dis_us"];
+		$data[]=$_REQUEST["web_us"];
 		try
 		{
 	  	$usuarios=new SoapClient("".PATH_WS_OBVII."".WS_REGISTROUSUARIO."");

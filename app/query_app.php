@@ -19,7 +19,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
   
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))  
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");  
-}  
+}
+ $fech=getFechaLibre(DIF_HORA);
+?>
+<script>
+	
+	var dateNube = new Date('<?=substr($fech, 0,10)?> <?=substr($fech, 10)?>');
+	var ub="<?=$fech?>";
+	updateNubeUser(ub);
+	
+	</script>
+<?php  
 if(1==1)
 {
 if($_REQUEST['tipo']==1) //check estado sesion
@@ -319,6 +329,8 @@ if($lugares[0][13]=='t')
 		$tipo=explode("|",$_REQUEST['tip']);
 		$nombre=explode("|",$_REQUEST['nombre']);
 		$dir=explode("|",$_REQUEST['direc']);
+		$nube=explode("|",$_REQUEST['nub_marca']);
+		$local=explode("|",$_REQUEST['loc_marca']);
 		$accu=0;
 		foreach($ids as $i => $id)
 		{
@@ -334,6 +346,11 @@ if($lugares[0][13]=='t')
 					try
 					{
 						$registros=new SoapClient("".PATH_WS_OBVII."".WS_MARCACION."");
+						if($lat[$i]==0 or $lon[$i]==0)
+						{
+							$lat[$i]=-33.000;
+							$lon[$i]=-70.000;
+						}
 					 	$res= $registros->registrarEvento($_SESSION['id_usuario_obvii'], ''.substr($fec,0,10).'', ''.trim(substr($fec,11)).'', ''.$lat[$i].'',''.$lon[$i].'',''.$accu.'',''.$lug[0][1].'','9988776644','478000012',''.$descrip[$i].'','8888999922',''.$mail_envio.'');
 					 
 					 if($res>0)
@@ -352,6 +369,11 @@ if($lugares[0][13]=='t')
 					 	$data[]=$_SESSION["id_cliente"];
 					 	$data[]="".$lug[0][6]." #".$lug[0][7].", ".$lug[0][8]." ";
 					 	$data[]=$fec[$i];
+					 	$data[]=$nube[$i];
+					 	$data[]=$local[$i];
+					 	$data[]='true';
+					 	
+					 	
 					 	addMarcacion($data);
 	      	
 					 	}else
@@ -373,7 +395,7 @@ if($lugares[0][13]=='t')
 						</script>
 						<?php
 					}
-				}else
+				}else //marca libre
 				{
 					$data=array();
 				 	$data[]=$_SESSION["id_usuario"];
@@ -389,8 +411,11 @@ if($lugares[0][13]=='t')
 				 	$data[]=$_SESSION["id_cliente"];
 				 	$data[]=$dir[$i];
 				 	$data[]=$fec[$i];
+				 $data[]=$nube[$i];
+					 	$data[]=$local[$i];
+				 	$data[]='true';
 				 	addMarcacion($data);
-				 
+				  
 				}
 			}
 		}

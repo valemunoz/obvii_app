@@ -300,7 +300,7 @@ function getMarcaciones($qr)
 	$dbPg=pgSql_db();
 	
   $sql2 = "SELECT id_marcacion, id_usuario, id_usuario_obvii, fecha_registro, tipo, 
-       id_lugar, lat, lon, presicion, comentario, tipo_marcacion,nombre_lugar,direccion_libre 
+       id_lugar, lat, lon, presicion, comentario, tipo_marcacion,nombre_lugar,direccion_libre,fecha_nube, fecha_local,sync
   FROM obvii_marcacion where 1=1";		
   if($qr!="")
   {
@@ -325,6 +325,9 @@ function getMarcaciones($qr)
 			$data[]=$row2[10];
 			$data[]=$row2[11];
 			$data[]=$row2[12];
+			$data[]=$row2[13];
+			$data[]=$row2[14];
+			$data[]=$row2[15];
 
 			$datos[]=$data;
 		}
@@ -359,7 +362,7 @@ function getUsuario($qr)
 	
 	$dbPg=pgSql_db();
 	
-  $sql2 = "SELECT id_usuario,mail,fecha_registro,estado,id_cliente,tipo_usuario,clave,nombre from obvii_usuario where 1=1";		
+  $sql2 = "SELECT id_usuario,mail,fecha_registro,estado,id_cliente,tipo_usuario,clave,nombre,id_device,web_device from obvii_usuario where 1=1";		
   if($qr!="")
   {
   	$sql2 .=$qr;
@@ -378,6 +381,9 @@ function getUsuario($qr)
 				$data[]=$row2[5];
 				$data[]=$row2[6];
 				$data[]=$row2[7];
+				
+				$data[]=$row2[8];
+				$data[]=$row2[9];
 		}
 		return $data;
 }
@@ -386,7 +392,7 @@ function getUsuarios($qr)
 	
 	$dbPg=pgSql_db();
 	
-  $sql2 = "SELECT id_usuario,mail,fecha_registro,estado,id_cliente,tipo_usuario,clave,nombre from obvii_usuario where 1=1";		
+  $sql2 = "SELECT id_usuario,mail,fecha_registro,estado,id_cliente,tipo_usuario,clave,nombre,id_device,web_device from obvii_usuario where 1=1";		
   if($qr!="")
   {
   	$sql2 .=$qr;
@@ -405,6 +411,8 @@ function getUsuarios($qr)
 				$data[]=$row2[5];
 				$data[]=$row2[6];
 				$data[]=$row2[7];
+				$data[]=$row2[8];
+				$data[]=$row2[9];
 				$datos[]=$data;
 		}
 		return $datos;
@@ -517,9 +525,9 @@ function addUsuario($data)
 	
  $sql2 = "INSERT INTO obvii_usuario(
              mail, fecha_registro, estado, id_cliente, tipo_usuario, 
-            clave,nombre)
+            clave,nombre,id_device,web_device)
     VALUES ('".$data[0]."', '".getFechaLibre(DIF_HORA)."', 0, '".$data[1]."', '".$data[2]."', 
-            '".$data[3]."','".$data[4]."');";		
+            '".$data[3]."','".$data[4]."','".$data[5]."','".$data[6]."');";		
   
   $rs2 = pg_query($dbPg, $sql2);
 }

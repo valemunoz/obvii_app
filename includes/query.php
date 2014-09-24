@@ -49,6 +49,7 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
     	{
     		$cliente=getUsuario(" and mail like '".trim(strtolower($_REQUEST['mail']))."' and estado=0");
     		$id_cliente=1;
+    		$acceso_web=$cliente[9];
     		if(count($cliente)>0)
     		{
     			$id_cliente=$cliente[4];
@@ -56,7 +57,7 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
     		}
     		
     			$cliente=getCliente(" and id_cliente=".$id_cliente."");
-					if($cliente[0][2]==0)
+					if($cliente[0][2]==0 and $acceso_web=='t')
 					{				
     				inicioSesion(strtolower($_REQUEST['mail']),$res,$id_cliente,$cliente[0][5]);
     				?>

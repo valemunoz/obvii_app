@@ -20,6 +20,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");  
 }  
 //if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
+$fech=getFechaLibre(DIF_HORA);
+?>
+<script>
+	var dateNube = new Date('<?=substr($fech, 0,10)?> <?=substr($fech, 10)?>');
+	var ub="<?=$fech?>";
+	updateNubeUser(ub);
+	</script>
+<?php  
 if(1==1)
 {
 	
@@ -48,6 +56,7 @@ if(1==1)
     	if ($res >0) 
     	{
     		$cliente=getUsuario(" and mail like '".trim(strtolower($_REQUEST['mail']))."' and estado=0");
+    		$uuid=$cliente[8];
     		$id_cliente=1;
     		if(count($cliente)>0)
     		{
@@ -57,7 +66,7 @@ if(1==1)
     		
     			$cliente=getCliente(" and id_cliente=".$id_cliente."");
     			$tipo_cli=$cliente[0][5];
-					if($cliente[0][2]==0)
+					if($cliente[0][2]==0 and $_REQUEST['uuid']==$uuid)
 					{				
     				inicioSesion(strtolower($_REQUEST['mail']),$res,$id_cliente,$tipo_cli);
     				
@@ -68,7 +77,8 @@ if(1==1)
         			ID_USER = "<?=$cliente[0]?>";
         			ID_OBVII_USER = "<?=$res?>";
         			ID_TIPO_USUARIO = "<?=$cliente[5]?>";
-							addUsuarioBDLocal(ID_USER,NOMBRE_USER,MAIL_USER,0,ID_OBVII_USER,1);
+        			CLAVE_USUARIO="<?=$_REQUEST['clave']?>";
+							addUsuarioBDLocal(ID_USER,NOMBRE_USER,MAIL_USER,0,ID_OBVII_USER,1,CLAVE_USUARIO);
 							$.mobile.changePage('index.html');
 							$("#bienvenido_div").html("Bienvenido : <?=$_SESSION['id_usuario']?> <span id=id_sync_wel></span>");	
 							
@@ -85,9 +95,14 @@ if(1==1)
 						<?php
     			}else
     			{
+    				$msg="";
+    				if($_REQUEST['uuid']!=$uuid)
+    				{
+    					$msg=".Este dispositivo no esta activado.";
+    				}
     				?>
 				<script>
-					mensaje("Acceso no autorizado","ERROR","myPopup_ses");
+					mensaje("Acceso no autorizado <?=$msg?>","ERROR","myPopup_ses");
 				</script>
 				<?php
     			}
@@ -484,6 +499,10 @@ if(1==1)
 		 	$data[]=$lugares[0][1];
 		 	$data[]=$_SESSION["id_cliente"];
 		 	$data[]="";
+		 	$data[]="";
+		 	$data[]=getFechaLibre(DIF_HORA);
+		 	$data[]=getFechaLibre(DIF_HORA);
+		 	$data[]='false';
 		 	addMarcacion($data);
 		 	if($_SESSION["tipo_cli"]==1)
 		 	{
@@ -668,6 +687,10 @@ if(1==1)
 		 	$data[]=$_REQUEST['nom'];
 		 	$data[]=$_SESSION["id_cliente"];
 		 	$data[]="".$_REQUEST['calle']." #".$_REQUEST['numero'].", ".$_REQUEST['com']." ";
+		 	$data[]="";
+		 	$data[]=getFechaLibre(DIF_HORA);
+		 	$data[]=getFechaLibre(DIF_HORA);
+		 	$data[]='false';
 		 	addMarcacion($data);
 		 	?>
 		 	<script>

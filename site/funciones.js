@@ -322,7 +322,12 @@ function updateUsuario(id_usuario)
 	var mail=$.trim(document.getElementById("mail_us").value);
 	var nombre=$.trim(document.getElementById("nom_us").value);	
 	var clave=$.trim(document.getElementById("clave").value);	
-		
+		var dis_us=$.trim(document.getElementById("dis_us").value);
+		var web_us=false;
+		if(document.getElementById("web_si").checked)
+		{
+			web_us=true;
+		}
 		var tipo=$.trim(document.getElementById("tipo_us").value);
 		
 	var msg="";
@@ -341,7 +346,7 @@ function updateUsuario(id_usuario)
 	}else
 	{
 		$("#output").load("qr_usuarios.php", 
-							{tipo:3, mail:mail,tipo_us:tipo,nom:nombre,id:id_usuario,clave:clave} 
+							{tipo:3, mail:mail,tipo_us:tipo,nom:nombre,id:id_usuario,clave:clave,dis_us:dis_us,web_us:web_us} 
 								,function(){
 									CloseModalReg();
 										filtrar_us();
@@ -366,7 +371,12 @@ function saveUsuario()
 {
 	var mail=$.trim(document.getElementById("mail_us").value);
 	var nombre=$.trim(document.getElementById("nom_us").value);
-		
+		var dis_us=$.trim(document.getElementById("dis_us").value);
+		var web_us=false;
+		if(document.getElementById("web_si").checked)
+		{
+			web_us=true;
+		}
 		var key_us=$.trim(document.getElementById("key_us").value);
 		var tipo=$.trim(document.getElementById("tipo_us").value);
 		
@@ -390,7 +400,7 @@ function saveUsuario()
 	}else
 	{
 		$("#output").load("qr_usuarios.php", 
-							{tipo:5, mail:mail,tipo_us:tipo,clave:key_us,nombre:nombre} 
+							{tipo:5, mail:mail,tipo_us:tipo,clave:key_us,nombre:nombre,dis_us:dis_us,web_us:web_us} 
 								,function(){
 									CloseModalMapa();
 										filtrar_us();

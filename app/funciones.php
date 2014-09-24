@@ -289,9 +289,9 @@ function addMarcacion($data)
 	}
   $sql="INSERT INTO obvii_marcacion(
              id_usuario, id_usuario_obvii, fecha_registro, tipo, 
-            id_lugar, lat, lon, presicion,comentario,tipo_marcacion,nombre_lugar,id_cliente,direccion_libre)
+            id_lugar, lat, lon, presicion,comentario,tipo_marcacion,nombre_lugar,id_cliente,direccion_libre,fecha_nube,fecha_local,sync)
     VALUES ('".$data[0]."', '".$data[1]."','".$fecha."' , '".$data[2]."', 
-            '".$data[3]."', '".$data[4]."', '".$data[5]."', '".$data[6]."', '".$data[7]."', '".$data[8]."', '".$data[9]."', '".$data[10]."','".$data[11]."');";
+            '".$data[3]."', '".$data[4]."', '".$data[5]."', '".$data[6]."', '".$data[7]."', '".$data[8]."', '".$data[9]."', '".$data[10]."','".$data[11]."','".$data[13]."','".$data[14]."','".$data[15]."');";
    $rsCalle = pg_query($dbPg, $sql);
 }
 
@@ -359,7 +359,7 @@ function getUsuario($qr)
 	
 	$dbPg=pgSql_db();
 	
-  $sql2 = "SELECT id_usuario,mail,fecha_registro,estado,id_cliente,tipo_usuario,clave,nombre from obvii_usuario where 1=1";		
+  $sql2 = "SELECT id_usuario,mail,fecha_registro,estado,id_cliente,tipo_usuario,clave,nombre,id_device,web_device from obvii_usuario where 1=1";		
   if($qr!="")
   {
   	$sql2 .=$qr;
@@ -378,6 +378,9 @@ function getUsuario($qr)
 				$data[]=$row2[5];
 				$data[]=$row2[6];
 				$data[]=$row2[7];
+				
+				$data[]=$row2[8];
+				$data[]=$row2[9];
 		}
 		return $data;
 }

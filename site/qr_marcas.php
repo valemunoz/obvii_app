@@ -63,6 +63,11 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 			  {
 			  	$color="#A6D2FF";
 			  }
+			  
+			  if($us[3] < $us[14] or $us[3] < $us[13])
+			  {
+			  	$color="#FFFF00";
+			  }
 				?>
 				<tr style="background-color:<?=$color?>">
 					
@@ -112,6 +117,20 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 		 <tr><td>Usuario</td><td><?=ucwords($user[7])?></td></tr>
 		 <tr><td>Mail Usuario</td><td><?=ucwords($marca[0][1])?></td></tr>		
 			<tr><td>Fecha Marcaci&oacute;n</td><td><?=ucwords($marca[0][3])?></td></tr>		
+			<?php
+			if($marca[0][15]=='t')
+			{				
+				$color="";
+				if($marca[0][3] < $marca[0][14] or $marca[0][3]<$marca[0][13])
+				{
+					$color="alert_hora";
+				}
+				?>
+				<tr><td>Fecha Nube</td><td><?=ucwords($marca[0][13])?></td></tr>		
+				<tr class=<?=$color?>><td>Fecha Local</td><td><?=ucwords($marca[0][14])?></td></tr>		
+				<?php
+			}
+			?>
 			<tr><td>Comentario</td><td><?=ucwords($marca[0][9])?></td></tr>		
 			<tr><td>Tipo Marcaci&oacute;n</td><td><?=ucwords($tipo)?></td></tr>	
 			</table>
