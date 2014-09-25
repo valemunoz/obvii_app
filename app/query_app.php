@@ -446,6 +446,7 @@ if($lugares[0][13]=='t')
 			$data[]=$_REQUEST['uuid_user'];
 			$data[]=1;
 			$data[]=$usuario[0];
+			$data[]=$usuario[4];
 			addDispositivo($data);
 			?>
 			<script>

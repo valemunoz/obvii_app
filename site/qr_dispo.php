@@ -14,7 +14,7 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 		{
 			$query =" and estado=".$estado."";
 		}
-		$query .=" order by fecha_registro";
+		$query .=" and id_cliente=".$cliente." order by fecha_registro";
 		$dispo=getDispositivos($query);
 	  //print_r($dispo); //AQUI pendiente
 		?>
