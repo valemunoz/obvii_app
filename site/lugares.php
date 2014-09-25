@@ -137,8 +137,7 @@ $empresa=getCliente($_SESSION['id_cliente_web']);
 				</script>
 		</head>
 	<body>
-		<div class="img_left"><a target=BLANK_ href="http://www.chilemap.cl"><img src="../images/logo_places.png"></a></div>
-			<!--div class="img_right"><img src="img_cli/<?=$empresa[2]?>"></div-->
+<div class="img_left"><a target=BLANK_ href="http://www.architeq.cl"><img src="img/obvii-logo-blue.png"></a></div>
 			
 		<div id="contenido">
 			

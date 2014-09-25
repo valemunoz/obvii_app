@@ -799,4 +799,14 @@ function updateMarcaInt($qr,$id)
  $sql2 = "update obvii_marcacion_interna set ".$qr." where id_marca=".$id."";		
   $rs2 = pg_query($dbPg, $sql2);
 }
+function addDispositivo($data)
+{
+	$dbPg=pgSql_db();
+	
+ $sql2 = "INSERT INTO obvii_dispositivo(
+           id_device, fecha_registro, estado, id_usuario)
+    VALUES ('".$data[0]."', '".getFechaLibre(DIF_HORA)."', '".$data[1]."', '".$data[2]."');";		
+  $rs2 = pg_query($dbPg, $sql2);
+}
+
 ?>

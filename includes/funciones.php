@@ -804,4 +804,37 @@ function updateMarcaInt($qr,$id)
  $sql2 = "update obvii_marcacion_interna set ".$qr." where id_marca=".$id."";		
   $rs2 = pg_query($dbPg, $sql2);
 }
+
+function getDispositivos($qr)
+{
+	$dbPg=pgSql_db();
+	
+  $sql2 = "SELECT id_dispositivo, id_device, fecha_registro, estado, id_usuario FROM obvii_dispositivo where 1=1";		
+  if($qr!="")
+  {
+  	$sql2 .=$qr;
+  }
+ 	//echo $sql2;
+  $rs2 = pg_query($dbPg, $sql2);
+
+	while ($row2 = pg_fetch_row($rs2))
+		{
+			$data=array();
+			$data[]=$row2[0];
+				$data[]=$row2[1];
+				$data[]=$row2[2];
+				$data[]=$row2[3];
+				$data[]=$row2[4];
+				
+				$datos[]=$data;
+		}
+		return $datos;
+}
+function updateDispositivo($qr,$id)
+{
+	$dbPg=pgSql_db();
+	
+ $sql2 = "update obvii_dispositivo set ".$qr." where id_dispositivo=".$id."";		
+  $rs2 = pg_query($dbPg, $sql2);
+}
 ?>

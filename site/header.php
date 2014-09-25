@@ -1,6 +1,8 @@
 <fieldset>
 <legend>Men&uacute;</legend>
-
+<?php
+$disposs=getDispositivos(" and estado=1");
+?>
 <table id=table_filtro style="text-align:center;">
 
              <tr>
@@ -24,6 +26,11 @@
                <td >
                     <a href="javascript:window.location='asistencias.php'"><img src="img/report_check2.png" height=30px width=30px title="Marcaciones"></a>
                 </td>
+               <td >
+                    <a href="javascript:window.location='dispositivos.php'"><img src="img/device.png" height=30px width=30px title="Dispositivos"></a>(<?=count($disposs)?>)
+                </td>
+                 
+                
 
                 <td >
                     <a href="javascript:salir();"><img src="img/cancel.png" height=30px width=30px title="Cerrar Sesi&oacute;n"></a>

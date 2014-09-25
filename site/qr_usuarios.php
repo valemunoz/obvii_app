@@ -117,23 +117,44 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 			
 			<tr><td></td><td><input type="button" onclick="updateUsuario('<?=encrypt($id,ENCRIPTACION)?>');" value="Guardar"></td></tr>
 		</table>
-		<div id="msg_error_add" class="msg_error"></div>
+		<div id="msg_error_up" class="msg_error"></div>
 			<?php
 	}elseif($_REQUEST['tipo']==3 and $estado_sesion==0)//update usuario
 	{
-		updateUsuario("web_device='".$_REQUEST["web_us"]."',id_device='".$_REQUEST["dis_us"]."', mail='".$_REQUEST['mail']."', tipo_usuario=".$_REQUEST['tipo_us'].", nombre='".$_REQUEST['nom']."', clave='".$_REQUEST['clave']."'",decrypt($_REQUEST['id'],ENCRIPTACION));
+		$dispo=getUsuario(" and id_device ilike '".$_REQUEST["dis_us"]."'");		
+		$id_send=decrypt($_REQUEST['id'],ENCRIPTACION);
+		
+		
+		if(count($dispo)==0 or trim($id_send)==trim($dispo[0]) or trim($_REQUEST["dis_us"])=="")
+		{
+			updateUsuario("web_device='".$_REQUEST["web_us"]."',id_device='".$_REQUEST["dis_us"]."', mail='".$_REQUEST['mail']."', tipo_usuario=".$_REQUEST['tipo_us'].", nombre='".$_REQUEST['nom']."', clave='".$_REQUEST['clave']."'",decrypt($_REQUEST['id'],ENCRIPTACION));
+			?>
+			<script>
+				CloseModalReg();
+				filtrar_us();
+				</script>
+			<?php
+		}else
+		{
+			?>
+			<script>
+				$( "#msg_error_up" ).html("Dispositivo ingresado ya se encuntra registrado.");
+				</script>
+			<?php
+			
+		}
 	}elseif($_REQUEST['tipo']==4 and $estado_sesion==0)//nuevo usuario
 	{
 			?>
 			<table border=1 id="table_resul" class="bordered">
-				<tr><td>Nombre</td><td><input id="nom_us" name="nom_us" type="text" value=""></td></tr>		
-				<tr><td>Mail</td><td><input id="mail_us" name="mail_us" type="text" value=""></td></tr>		
-				<tr><td>Clave</td><td><input id="key_us" name="key_us" type="text" value=""></td></tr>
-				<tr><td>Dispositivo</td><td><input id="dis_us" name="dis_us" type="text" value=""></td></tr>		
-				<tr><td>Acceso Web</td><td><input type="radio"  id="web_si" name="group2" checked>SI <input type="radio"  id="web_no" name="group2">NO</td></tr>				
+				<tr><td>Nombre</td><td><input id="nom_usnew" name="nom_usnew" type="text" value=""></td></tr>		
+				<tr><td>Mail</td><td><input id="mail_usnew" name="mail_usnew" type="text" value=""></td></tr>		
+				<tr><td>Clave</td><td><input id="key_usnew" name="key_usnew" type="text" value=""></td></tr>
+				<tr><td>Dispositivo</td><td><input id="dis_usnew" name="dis_usnew" type="text" value=""></td></tr>		
+				<tr><td>Acceso Web</td><td><input type="radio"  id="web_sinew" name="group2" checked>SI <input type="radio"  id="web_nonew" name="group2">NO</td></tr>				
 				<tr><td>Tipo Usuario</td>
 				<td>
-						<select id=tipo_us name=tipo_us>
+						<select id=tipo_usnew name=tipo_usnew>
 							<option value=0>Normal</option>
 							<option value=1>Administrador</option>
 						</select>		
@@ -152,30 +173,49 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 		$data[]=$_REQUEST['nombre'];
 		$data[]=$_REQUEST["dis_us"];
 		$data[]=$_REQUEST["web_us"];
-		try
+		
+		$dispo=getUsuario(" and id_device ilike '".$_REQUEST["dis_us"]."'");
+		if(count($dispo)==0 or trim($_REQUEST["dis_us"])=="")
 		{
-	  	$usuarios=new SoapClient("".PATH_WS_OBVII."".WS_REGISTROUSUARIO."");
-    	$res= $usuarios->registrarUsuario($_REQUEST['mail'], $_REQUEST['nombre'], $_REQUEST['clave'],  '1', '0', '0', '1', '0', '0');
-    	if ($res==1) {
-      
-			addUsuario($data);
-    	}else
-    	{
-    		?>
-			<script>
-				alert("Usuario ya se encuentra registrado.");
-			</script>
-			<?php
-    	}
-    }catch (Exception $e) 
+			
+			try
+			{
+	  		$usuarios=new SoapClient("".PATH_WS_OBVII."".WS_REGISTROUSUARIO."");
+    		$res= $usuarios->registrarUsuario($_REQUEST['mail'], $_REQUEST['nombre'], $_REQUEST['clave'],  '1', '0', '0', '1', '0', '0');
+    		if ($res==1) {
+    	  
+				addUsuario($data);
+				
+				?>
+				<script>
+					CloseModalMapa();
+				  filtrar_us();
+				</script>
+				<?php
+    		}else
+    		{
+    			?>
+				<script>
+					alert("Usuario ya se encuentra registrado.");
+				</script>
+				<?php
+    		}
+    	}catch (Exception $e) 
+			{
+				?>
+				<script>
+					alert("Problemas de conexi&oacute;n, por favor int&eacute;ntelo nuevamente.");
+				</script>
+				<?php
+			}
+		}else
 		{
 			?>
 			<script>
-				alert("Problemas de conexi&oacute;n, por favor int&eacute;ntelo nuevamente.");
-			</script>
+				$( "#msg_error_add" ).html("Dispositivo ingresado ya se encuntra registrado.");
+				</script>
 			<?php
 		}
-		
 	}elseif($_REQUEST['tipo']==6 and $estado_sesion==0)//update estado usuario
 	{
 		updateUsuario("estado=".$_REQUEST['estado']."",decrypt($_REQUEST['id'],ENCRIPTACION));

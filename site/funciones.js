@@ -342,14 +342,13 @@ function updateUsuario(id_usuario)
 	if(!valida)
 	{
 		
-		$( "#msg_error_add" ).html(msg);
+		$( "#msg_error_up" ).html(msg);
 	}else
 	{
 		$("#output").load("qr_usuarios.php", 
 							{tipo:3, mail:mail,tipo_us:tipo,nom:nombre,id:id_usuario,clave:clave,dis_us:dis_us,web_us:web_us} 
 								,function(){
-									CloseModalReg();
-										filtrar_us();
+									
 								}
 		);
 	}
@@ -369,16 +368,16 @@ function nuevoUsuario()
 }
 function saveUsuario()
 {
-	var mail=$.trim(document.getElementById("mail_us").value);
-	var nombre=$.trim(document.getElementById("nom_us").value);
-		var dis_us=$.trim(document.getElementById("dis_us").value);
+	var mail=$.trim(document.getElementById("mail_usnew").value);
+	var nombre=$.trim(document.getElementById("nom_usnew").value);
+		var dis_us=$.trim(document.getElementById("dis_usnew").value);
 		var web_us=false;
-		if(document.getElementById("web_si").checked)
+		if(document.getElementById("web_sinew").checked)
 		{
 			web_us=true;
 		}
-		var key_us=$.trim(document.getElementById("key_us").value);
-		var tipo=$.trim(document.getElementById("tipo_us").value);
+		var key_us=$.trim(document.getElementById("key_usnew").value);
+		var tipo=$.trim(document.getElementById("tipo_usnew").value);
 		
 	var msg="";
 	var valida=true;
@@ -402,8 +401,7 @@ function saveUsuario()
 		$("#output").load("qr_usuarios.php", 
 							{tipo:5, mail:mail,tipo_us:tipo,clave:key_us,nombre:nombre,dis_us:dis_us,web_us:web_us} 
 								,function(){
-									CloseModalMapa();
-										filtrar_us();
+									
 								}
 		);
 	}
@@ -724,4 +722,41 @@ function activaDescrip()
 function desactivaDescrip()
 {
 	$("#opc_list").hide();
+}
+function filtrar_dispositivo()
+{
+	var estado=$.trim(document.getElementById("em_estado").value);
+	
+	
+	
+	$("#result2").html("<img src=img/load.gif>");
+	$("#result2").load("qr_dispo.php", 
+						{tipo:1,estado:estado} 
+							,function(){
+									
+							}
+	);
+}
+
+function activarDispo(id_dispo,estado)
+{
+	$("#result2").html("<img src=img/load.gif>");
+	$("#result2").load("qr_dispo.php", 
+						{tipo:3,id_dispo:id_dispo,estado:estado} 
+							,function(){
+									filtrar_dispositivo();
+							}
+	);
+}
+
+function detDispo(dispo)
+{
+	$("#grilla_def").load("qr_dispo.php", 
+						{tipo:2,dispo:dispo} 
+							,function(){
+								OpenModalReg();
+									
+							}
+	);
+	
 }

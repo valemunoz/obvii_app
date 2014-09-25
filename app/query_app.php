@@ -21,6 +21,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");  
 }
  $fech=getFechaLibre(DIF_HORA);
+ 
+ if($estado_sesion==0)
+ {
+ 	  $usuar=getUsuario(" and mail ilike '".$_SESSION["id_usuario"]."'");
+ 	  $id_device=$usuar[8];
+ 	  if(trim($id_device)=="")
+ 	  {
+ 	  	cerrar_sesion();
+ 	  	?>
+						<script>
+							deleteUser();
+							//window.location.href="index.html";
+							
+						</script>
+		<?php
+ 	  }
+
+ }
 ?>
 <script>
 	
@@ -418,6 +436,34 @@ if($lugares[0][13]=='t')
 				  
 				}
 			}
+		}
+	}elseif($_REQUEST['tipo']==8) //dispositivos
+	{
+		$usuario=getUsuario(" and mail like '".trim(strtolower($_REQUEST['mail']))."' and estado=0");
+		if(count($usuario)>0)
+		{
+			$data=array();
+			$data[]=$_REQUEST['uuid_user'];
+			$data[]=1;
+			$data[]=$usuario[0];
+			addDispositivo($data);
+			?>
+			<script>
+				$.mobile.loading( 'hide');
+				
+				mensaje("Solicitud enviada.",'Mensaje','myPopup_ses');	
+				</script>
+			<?php
+		}else
+		{
+			?>
+			<script>
+				
+				$.mobile.loading( 'hide');
+				mensaje("Usuario no valido.",'Error','myPopup_ses');	
+				</script>
+			<?php
+			
 		}
 	}
 }else

@@ -39,6 +39,7 @@ if(1==1)
 		cerrar_sesion();
 		?>
 						<script>
+							userOff();
 							
 							window.location.href="index.html";
 							
@@ -46,6 +47,23 @@ if(1==1)
 		<?php
 		
 	}
+	 if($estado_sesion==0)
+ {
+ 	  $usuar=getUsuario(" and mail ilike '".$_SESSION["id_usuario"]."'");
+ 	  $id_device=$usuar[8];
+ 	  if(trim($id_device)=="")
+ 	  {
+ 	  	cerrar_sesion();
+ 	  	?>
+						<script>
+							deleteUser();
+							//window.location.href="index.html";
+							
+						</script>
+		<?php
+ 	  }
+ 	  
+ }
 	if($_REQUEST['tipo']==1)
 	{
 		try
@@ -56,7 +74,13 @@ if(1==1)
     	if ($res >0) 
     	{
     		$cliente=getUsuario(" and mail like '".trim(strtolower($_REQUEST['mail']))."' and estado=0");
-    		$uuid=$cliente[8];
+    		$dispo=getUsuario(" and id_device ilike '%".$_REQUEST["uuid"]."%'");
+    		$uuid=trim($cliente[8]);
+    		if(count($dispo)>0 and $dispo[0]!=$cliente[0])
+    		{
+    			$uuid="false";
+    		}
+    		$id_us=trim($cliente[0]);
     		$id_cliente=1;
     		if(count($cliente)>0)
     		{
@@ -66,8 +90,12 @@ if(1==1)
     		
     			$cliente=getCliente(" and id_cliente=".$id_cliente."");
     			$tipo_cli=$cliente[0][5];
-					if($cliente[0][2]==0 and $_REQUEST['uuid']==$uuid)
+					if($cliente[0][2]==0 and ($_REQUEST['uuid']==$uuid or $uuid==""))
 					{				
+						if($uuid=="")
+						{
+							updateUsuario("id_device='".$_REQUEST['uuid']."'",$id_us);
+						}
     				inicioSesion(strtolower($_REQUEST['mail']),$res,$id_cliente,$tipo_cli);
     				
     				?>
@@ -98,7 +126,7 @@ if(1==1)
     				$msg="";
     				if($_REQUEST['uuid']!=$uuid)
     				{
-    					$msg=".Este dispositivo no esta activado.";
+    					$msg=".Este dispositivo no esta activado para el usuario.";
     				}
     				?>
 				<script>
