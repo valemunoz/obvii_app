@@ -4,7 +4,7 @@
 
 -- Dumped from database version 9.2.4
 -- Dumped by pg_dump version 9.2.4
--- Started on 2014-09-08 15:21:08
+-- Started on 2014-09-26 14:26:45
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -51,7 +51,7 @@ CREATE SEQUENCE obvii_administrador_id_usuario_admin_seq
 ALTER TABLE public.obvii_administrador_id_usuario_admin_seq OWNER TO postgres;
 
 --
--- TOC entry 3215 (class 0 OID 0)
+-- TOC entry 3221 (class 0 OID 0)
 -- Dependencies: 198
 -- Name: obvii_administrador_id_usuario_admin_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -77,7 +77,7 @@ CREATE TABLE obvii_cliente (
 ALTER TABLE public.obvii_cliente OWNER TO postgres;
 
 --
--- TOC entry 3216 (class 0 OID 0)
+-- TOC entry 3222 (class 0 OID 0)
 -- Dependencies: 193
 -- Name: COLUMN obvii_cliente.tipo; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -102,12 +102,63 @@ CREATE SEQUENCE obvii_cliente_id_cliente_seq
 ALTER TABLE public.obvii_cliente_id_cliente_seq OWNER TO postgres;
 
 --
--- TOC entry 3217 (class 0 OID 0)
+-- TOC entry 3223 (class 0 OID 0)
 -- Dependencies: 192
 -- Name: obvii_cliente_id_cliente_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE obvii_cliente_id_cliente_seq OWNED BY obvii_cliente.id_cliente;
+
+
+--
+-- TOC entry 209 (class 1259 OID 199982)
+-- Name: obvii_dispositivo; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE obvii_dispositivo (
+    id_dispositivo integer NOT NULL,
+    id_device character varying(500),
+    fecha_registro timestamp without time zone,
+    estado numeric,
+    id_usuario numeric,
+    id_cliente numeric
+);
+
+
+ALTER TABLE public.obvii_dispositivo OWNER TO postgres;
+
+--
+-- TOC entry 3224 (class 0 OID 0)
+-- Dependencies: 209
+-- Name: COLUMN obvii_dispositivo.estado; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN obvii_dispositivo.estado IS '0=revisado
+1=pendiente';
+
+
+--
+-- TOC entry 208 (class 1259 OID 199980)
+-- Name: obvii_dispositivo_id_dispositivo_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE obvii_dispositivo_id_dispositivo_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.obvii_dispositivo_id_dispositivo_seq OWNER TO postgres;
+
+--
+-- TOC entry 3225 (class 0 OID 0)
+-- Dependencies: 208
+-- Name: obvii_dispositivo_id_dispositivo_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE obvii_dispositivo_id_dispositivo_seq OWNED BY obvii_dispositivo.id_dispositivo;
 
 
 --
@@ -143,7 +194,7 @@ CREATE SEQUENCE obvii_favorito_id_favorito_seq
 ALTER TABLE public.obvii_favorito_id_favorito_seq OWNER TO postgres;
 
 --
--- TOC entry 3218 (class 0 OID 0)
+-- TOC entry 3226 (class 0 OID 0)
 -- Dependencies: 194
 -- Name: obvii_favorito_id_favorito_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -172,14 +223,15 @@ CREATE TABLE obvii_lugares (
     comentario boolean,
     marcacion boolean,
     id_cliente numeric,
-    mail_lista character varying(300)
+    mail_lista character varying(300),
+    orden character varying(100)
 );
 
 
 ALTER TABLE public.obvii_lugares OWNER TO postgres;
 
 --
--- TOC entry 3219 (class 0 OID 0)
+-- TOC entry 3227 (class 0 OID 0)
 -- Dependencies: 189
 -- Name: COLUMN obvii_lugares.estado; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -204,7 +256,7 @@ CREATE SEQUENCE obvii_lugares_id_lugar_seq
 ALTER TABLE public.obvii_lugares_id_lugar_seq OWNER TO postgres;
 
 --
--- TOC entry 3220 (class 0 OID 0)
+-- TOC entry 3228 (class 0 OID 0)
 -- Dependencies: 188
 -- Name: obvii_lugares_id_lugar_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -231,14 +283,17 @@ CREATE TABLE obvii_marcacion (
     tipo_marcacion numeric,
     nombre_lugar character varying(300),
     id_cliente numeric,
-    direccion_libre character varying(500)
+    direccion_libre character varying(500),
+    fecha_nube timestamp without time zone,
+    fecha_local timestamp without time zone,
+    sync boolean DEFAULT false
 );
 
 
 ALTER TABLE public.obvii_marcacion OWNER TO postgres;
 
 --
--- TOC entry 3221 (class 0 OID 0)
+-- TOC entry 3229 (class 0 OID 0)
 -- Dependencies: 191
 -- Name: COLUMN obvii_marcacion.tipo; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -249,7 +304,7 @@ COMMENT ON COLUMN obvii_marcacion.tipo IS '0 tipico
 
 
 --
--- TOC entry 3222 (class 0 OID 0)
+-- TOC entry 3230 (class 0 OID 0)
 -- Dependencies: 191
 -- Name: COLUMN obvii_marcacion.tipo_marcacion; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -274,7 +329,7 @@ CREATE SEQUENCE obvii_marcacion_id_marcacion_seq
 ALTER TABLE public.obvii_marcacion_id_marcacion_seq OWNER TO postgres;
 
 --
--- TOC entry 3223 (class 0 OID 0)
+-- TOC entry 3231 (class 0 OID 0)
 -- Dependencies: 190
 -- Name: obvii_marcacion_id_marcacion_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -316,7 +371,7 @@ CREATE SEQUENCE obvii_marcacion_interna_id_marca_seq
 ALTER TABLE public.obvii_marcacion_interna_id_marca_seq OWNER TO postgres;
 
 --
--- TOC entry 3224 (class 0 OID 0)
+-- TOC entry 3232 (class 0 OID 0)
 -- Dependencies: 204
 -- Name: obvii_marcacion_interna_id_marca_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -354,7 +409,7 @@ CREATE SEQUENCE obvii_pais_id_pais_seq
 ALTER TABLE public.obvii_pais_id_pais_seq OWNER TO postgres;
 
 --
--- TOC entry 3225 (class 0 OID 0)
+-- TOC entry 3233 (class 0 OID 0)
 -- Dependencies: 200
 -- Name: obvii_pais_id_pais_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -376,14 +431,16 @@ CREATE TABLE obvii_usuario (
     tipo_usuario numeric,
     clave character varying,
     nombre character varying(300),
-    id_usuario_obvii numeric
+    id_usuario_obvii numeric,
+    id_device character varying(500),
+    web_device boolean
 );
 
 
 ALTER TABLE public.obvii_usuario OWNER TO postgres;
 
 --
--- TOC entry 3226 (class 0 OID 0)
+-- TOC entry 3234 (class 0 OID 0)
 -- Dependencies: 197
 -- Name: COLUMN obvii_usuario.tipo_usuario; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -408,7 +465,7 @@ CREATE SEQUENCE obvii_usuario_id_usuario_seq
 ALTER TABLE public.obvii_usuario_id_usuario_seq OWNER TO postgres;
 
 --
--- TOC entry 3227 (class 0 OID 0)
+-- TOC entry 3235 (class 0 OID 0)
 -- Dependencies: 196
 -- Name: obvii_usuario_id_usuario_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -428,14 +485,15 @@ CREATE TABLE obvii_usuarios_internos (
     id_lugar numeric,
     fecha_registro timestamp without time zone,
     tipo numeric DEFAULT 1,
-    descripcion character varying(2000)
+    descripcion character varying(2000),
+    archivo character varying(300)
 );
 
 
 ALTER TABLE public.obvii_usuarios_internos OWNER TO postgres;
 
 --
--- TOC entry 3228 (class 0 OID 0)
+-- TOC entry 3236 (class 0 OID 0)
 -- Dependencies: 203
 -- Name: COLUMN obvii_usuarios_internos.tipo; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -460,7 +518,7 @@ CREATE SEQUENCE obvii_usuarios_internos_id_usuario_interno_seq
 ALTER TABLE public.obvii_usuarios_internos_id_usuario_interno_seq OWNER TO postgres;
 
 --
--- TOC entry 3229 (class 0 OID 0)
+-- TOC entry 3237 (class 0 OID 0)
 -- Dependencies: 202
 -- Name: obvii_usuarios_internos_id_usuario_interno_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -469,7 +527,7 @@ ALTER SEQUENCE obvii_usuarios_internos_id_usuario_interno_seq OWNED BY obvii_usu
 
 
 --
--- TOC entry 3169 (class 2604 OID 142640)
+-- TOC entry 3170 (class 2604 OID 142640)
 -- Name: id_usuario_admin; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -477,7 +535,7 @@ ALTER TABLE ONLY obvii_administrador ALTER COLUMN id_usuario_admin SET DEFAULT n
 
 
 --
--- TOC entry 3164 (class 2604 OID 142609)
+-- TOC entry 3165 (class 2604 OID 142609)
 -- Name: id_cliente; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -485,7 +543,15 @@ ALTER TABLE ONLY obvii_cliente ALTER COLUMN id_cliente SET DEFAULT nextval('obvi
 
 
 --
--- TOC entry 3167 (class 2604 OID 142617)
+-- TOC entry 3176 (class 2604 OID 199985)
+-- Name: id_dispositivo; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY obvii_dispositivo ALTER COLUMN id_dispositivo SET DEFAULT nextval('obvii_dispositivo_id_dispositivo_seq'::regclass);
+
+
+--
+-- TOC entry 3168 (class 2604 OID 142617)
 -- Name: id_favorito; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -509,7 +575,7 @@ ALTER TABLE ONLY obvii_marcacion ALTER COLUMN id_marcacion SET DEFAULT nextval('
 
 
 --
--- TOC entry 3174 (class 2604 OID 159036)
+-- TOC entry 3175 (class 2604 OID 159036)
 -- Name: id_marca; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -517,7 +583,7 @@ ALTER TABLE ONLY obvii_marcacion_interna ALTER COLUMN id_marca SET DEFAULT nextv
 
 
 --
--- TOC entry 3171 (class 2604 OID 150907)
+-- TOC entry 3172 (class 2604 OID 150907)
 -- Name: id_pais; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -525,7 +591,7 @@ ALTER TABLE ONLY obvii_pais ALTER COLUMN id_pais SET DEFAULT nextval('obvii_pais
 
 
 --
--- TOC entry 3168 (class 2604 OID 142628)
+-- TOC entry 3169 (class 2604 OID 142628)
 -- Name: id_usuario; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -533,14 +599,14 @@ ALTER TABLE ONLY obvii_usuario ALTER COLUMN id_usuario SET DEFAULT nextval('obvi
 
 
 --
--- TOC entry 3172 (class 2604 OID 159025)
+-- TOC entry 3173 (class 2604 OID 159025)
 -- Name: id_usuario_interno; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY obvii_usuarios_internos ALTER COLUMN id_usuario_interno SET DEFAULT nextval('obvii_usuarios_internos_id_usuario_interno_seq'::regclass);
 
 
--- Completed on 2014-09-08 15:21:08
+-- Completed on 2014-09-26 14:26:46
 
 --
 -- PostgreSQL database dump complete

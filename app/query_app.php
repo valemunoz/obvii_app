@@ -59,6 +59,7 @@ if($_REQUEST['tipo']==1) //check estado sesion
 		?>
 		<script>
 		//cambiar("mod_sesion");
+		alert("paso4");
 		inicio_ses();
 		</script>
 		<?php
