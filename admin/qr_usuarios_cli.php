@@ -159,6 +159,8 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_ADMIN))==PATH_SITE_ADMI
 		$data[]=$_REQUEST['tipo_us'];
 		$data[]=$_REQUEST['clave'];
 		$data[]=$_REQUEST['nombre'];
+		$data[]="";
+		$data[]="false";
 		try
 		{
 	  	$usuarios=new SoapClient("".PATH_WS_OBVII."".WS_REGISTROUSUARIO."");

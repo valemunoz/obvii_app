@@ -117,6 +117,8 @@ if(1==1)
 	  						$("#ll_mapa").show();
 							$("#ll_off").show(); 
 							$("#ll_cerrar").show(); 	
+							$("#ll_dip").hide(); 
+							$("#list_mail_marca").show(); 
 							
 							//window.location.href="index.html";
 						</script>

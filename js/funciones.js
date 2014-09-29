@@ -829,3 +829,21 @@ function moveOn()
       PAIS_ZOOM=map.getZoom();
       //alert(centro.lon);
 }
+
+function marcacionesMail(tipo_marca)
+{
+	
+	$.mobile.loading( 'show', {
+				text: 'Procesando informacion...',
+				textVisible: true,
+				theme: 'a',
+				html: ""
+			});
+			
+			$("#output").load(path_query2, 
+			{tipo:6, opc:tipo_marca} 
+				,function(){	
+					
+				}
+			);
+}

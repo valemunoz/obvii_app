@@ -59,7 +59,7 @@ if($_REQUEST['tipo']==1) //check estado sesion
 		?>
 		<script>
 		//cambiar("mod_sesion");
-		alert("paso4");
+		$("#ll_dip").show(); 
 		inicio_ses();
 		</script>
 		<?php
@@ -67,6 +67,7 @@ if($_REQUEST['tipo']==1) //check estado sesion
 	{
 		?>
 		<script>
+			$("#ll_dip").hide(); 
 			loadMenu();	
 		loadFav();
 		
@@ -76,6 +77,8 @@ if($_REQUEST['tipo']==1) //check estado sesion
   	$("#ll_mapa").show();
 		$("#ll_off").show(); 
 		$("#ll_cerrar").show(); 	
+		$("#list_mail_marca").show(); 	
+		
 		
 		</script>
 		<?php
@@ -467,7 +470,74 @@ if($lugares[0][13]=='t')
 			<?php
 			
 		}
+	}elseif($_REQUEST['tipo']==9) // marcaciones via mail
+{
+	$tipo=$_REQUEST['opc'];
+	if($tipo==1)//diario
+	{
+		$titulo="Del d&iacute;a";
+			$fecha=date("Y-m-d");
+			$marcaciones=getMarcaciones(" and fecha_registro >= '".$fecha."' and id_usuario ilike '%".$_SESSION["id_usuario"]."%' and id_usuario_obvii=".$_SESSION["id_usuario_obvii"]." order by fecha_registro");
+		
+	}elseif($tipo==2) // mes
+	{
+		$titulo="Ultimo mes";
+			$fecha=getFechaLibre(744); // 31 dias			
+			$marcaciones=getMarcaciones(" and fecha_registro >= '".$fecha."' and id_usuario ilike '%".$_SESSION["id_usuario"]."%' and id_usuario_obvii=".$_SESSION["id_usuario_obvii"]." order by fecha_registro");
+	}elseif($tipo==3) // ultimos 3 meses
+	{
+		$titulo="Ultimos 3 meses";
+			$fecha=getFechaLibre(2232); // 31 dias			
+			$marcaciones=getMarcaciones(" and fecha_registro >= '".$fecha."' and id_usuario ilike '%".$_SESSION["id_usuario"]."%' and id_usuario_obvii=".$_SESSION["id_usuario_obvii"]." order by fecha_registro");
+	}elseif($tipo==4) // todas
+	{
+			$titulo="Historial Completo";
+			$marcaciones=getMarcaciones(" and id_usuario ilike '%".$_SESSION["id_usuario"]."%' and id_usuario_obvii=".$_SESSION["id_usuario_obvii"]." order by fecha_registro");
 	}
+	
+	if(count($marcaciones)>0)
+	{
+		$html="Marcaciones solicitadas: ".$titulo."<br><br>";
+		$html .="<table>";
+		$html .="<tr>";
+		$html .="<td width=5%>ID</td>";
+		$html .="<td width=40%>NOMBRE</td>";
+		$html .="<td width=25%>FECHA</td>";
+		$html .="<td width=15%>TIPO</td>";
+		$html .="</tr>";
+		foreach($marcaciones as $i => $marca)
+		{
+			$tip="Entrada";
+			if($marca[10]==1)
+			  $tip="Salida";
+			$html .="<tr>";
+			$html .="<td>".$marca[0]."</td>";
+			$html .="<td>".ucwords($marca[11])."</td>";
+			$html .="<td>".$marca[3]."</td>";
+			$html .="<td>".$tip."</td>";
+			$html .="</tr>";	
+		}
+		$html .="</table>";
+		sendMail(trim($_SESSION["id_usuario"]),$html,"Marcaciones obvii");
+		?>
+		<script>
+			$.mobile.loading( 'hide');
+			mensaje("Marcaciones enviadas.",'MENSAJE','myPopup');
+			</Script>
+		<?php
+	}else
+	{
+		?>
+		<script>
+			
+			$.mobile.loading( 'hide');
+			mensaje("No hay marcaciones disponibles para enviar.",'MENSAJE','myPopup');
+			</Script>
+		<?php
+	}
+	
+	
+}
 }else
 {
 	

@@ -3,7 +3,7 @@ include("connec.php");
 define("PATH_SITE","http://localhost/github/obvii_app");
 define("PATH_SITE_WEB","http://localhost/github/obvii_app/site");
 define("PATH_SITE_ADMIN","http://localhost/github/obvii_app/admin");
-//define("PATH_SITE","http://locate.chilemap.cl/obvii_v2");
+//define("PATH_SITE","http://locate.chilemap.cl/obvii");
 //define("PATH_SITE_WEB","http://locate.chilemap.cl/obvii/site");
 //define("PATH_SITE_ADMIN","http://locate.chilemap.cl/obvii/admin");
 
@@ -16,7 +16,7 @@ define("WS_REGISTROUSUARIO","obvii_registro.wsdl");
 define("WS_MARCACION","obvii_eventos.wsdl");
 define("ENCRIPTACION","semilla");
 define("ENCRIPTACION2","manzana");
-define("DIF_HORA","4");
+define("DIF_HORA","3");
 
 function inicioSesion($mail,$id_user_obvii,$id_cliente,$tipo_cli)
 {
@@ -28,10 +28,18 @@ function inicioSesion($mail,$id_user_obvii,$id_cliente,$tipo_cli)
 	$_SESSION['fecha']=getFecha();
 	$_SESSION["mail_log"]=$mail;
   $_SESSION["tipo_cli"]=$tipo_cli;
+  $cliente=getCliente(" and id_cliente=".$id_cliente."");
+  $_SESSION["pais_cli"]=$cliente[0][4];
+  if(strtolower($_SESSION["pais_cli"])=="peru")
+  {
+  	define("DIF_HORA","4");
+  }
 }
 function cerrar_sesion()
 {
 	session_start();	
+	unset($_SESSION["pais_cli"]);
+	
 	unset($_SESSION["id_usuario"]); 
 	unset($_SESSION['fecha']);
 	unset($_SESSION['id_usuario_obvii']);
