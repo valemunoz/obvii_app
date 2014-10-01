@@ -122,7 +122,7 @@ function saveUsuario()
 {
 	var mail=$.trim(document.getElementById("mail_us").value);
 	var nombre=$.trim(document.getElementById("nom_us").value);
-		
+	var nn_us	=$.trim(document.getElementById("nn_us").value);
 		var key_us=$.trim(document.getElementById("key_us").value);
 	
 		
@@ -146,7 +146,7 @@ function saveUsuario()
 	}else
 	{
 		$("#output").load("qr_usuarios.php", 
-							{tipo:5, mail:mail,clave:key_us,nombre:nombre} 
+							{tipo:5, nn_us:nn_us,mail:mail,clave:key_us,nombre:nombre} 
 								,function(){
 									CloseModalMapa();
 										filtrar_us();
@@ -307,6 +307,7 @@ function updateUsuarioCli(id_usuario)
 {
 	
 	var mail=$.trim(document.getElementById("mail_us").value);
+	var nn_us	=$.trim(document.getElementById("nn_us_edit").value);
 	var nombre=$.trim(document.getElementById("nom_us").value);	
 	var clave=$.trim(document.getElementById("clave").value);	
 	var tipo_us=$.trim(document.getElementById("tipo_us").value);	
@@ -325,14 +326,13 @@ function updateUsuarioCli(id_usuario)
 	if(!valida)
 	{
 		
-		$( "#msg_error_add" ).html(msg);
+		$( "#msg_error_add2" ).html(msg);
 	}else
 	{
 		$("#output").load("qr_usuarios_cli.php", 
-							{tipo:3, mail:mail,nom:nombre,id:id_usuario,clave:clave,tipo_us:tipo_us} 
+							{tipo:3, nn_us:nn_us,mail:mail,nom:nombre,id:id_usuario,clave:clave,tipo_us:tipo_us} 
 								,function(){
-									CloseModalReg();
-										filtrar_clius();
+									
 								}
 		);
 	}
@@ -381,8 +381,7 @@ function saveUsuarioCli()
 		$("#output").load("qr_usuarios_cli.php", 
 							{tipo:5, mail:mail,clave:key_us,nombre:nombre,cliente:cliente,tipo_us:tipo_us} 
 								,function(){
-									CloseModalMapa();
-										filtrar_clius();
+									
 								}
 		);
 	}

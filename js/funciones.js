@@ -102,11 +102,11 @@ function inicioSesion()
 		msg +="Todos los campos son obligatorios.<br>";
 	  valida=false;
 	}
-	if(!validarEmail(mail))
+	/*if(!validarEmail(mail))
 	{
 		msg +="Correo electronico no valido.";
 		valida=false;
-	}
+	}*/
 	if(valida)
 	{
 		$.mobile.loading( 'show', {

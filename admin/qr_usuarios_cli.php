@@ -98,9 +98,15 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_ADMIN))==PATH_SITE_ADMI
 			$check1="";
 			$check2="selected";
 		}
+		$nick=$usuario[10];
+		if(trim($usuario[10])=="")
+		{
+			$nick=$usuario[1];
+		}
 		?>
 		<table border=1 id="table_resul" class="bordered">
 			<tr><td>Nombre</td><td><input id="nom_us" name="nom_us" type="text" value="<?=$usuario[7]?>"></td></tr>	
+			<tr style="display:none"><td>Nickname</td><td><input id="nn_us_edit" name="nn_us_edit" type="text" value="<?=$nick?>"></td></tr>		
 			<tr><td>Mail</td><td><input id="mail_us" name="mail_us" type="text" value="<?=$usuario[1]?>"></td></tr>		
 			<tr><td>Clave</td><td><input id="clave" name="clave" type="text" value="<?=$usuario[6]?>"></td></tr>		
 			<tr><td>Tipo Usuario</td>
@@ -113,11 +119,35 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_ADMIN))==PATH_SITE_ADMI
 			
 			<tr><td></td><td><input type="button" onclick="updateUsuarioCli('<?=encrypt($id,ENCRIPTACION)?>');" value="Guardar"></td></tr>
 		</table>
-		<div id="msg_error_add" class="msg_error"></div>
+		<div id="msg_error_add2" class="msg_error"></div>
 			<?php
 	}elseif($_REQUEST['tipo']==3 and $estado_sesion==0)//update usuario
 	{
-		updateUsuario("mail='".$_REQUEST['mail']."', tipo_usuario=".$_REQUEST['tipo_us'].", nombre='".$_REQUEST['nom']."', clave='".$_REQUEST['clave']."'",decrypt($_REQUEST['id'],ENCRIPTACION));
+		$nick=$_REQUEST["nn_us"];
+			if(trim($nick)=="" and strlen($nick) <=3)
+			{
+				$nick=trim(strtolower($_REQUEST['mail']));
+			}
+			$usuario=getUsuario(" and id_usuario=".decrypt($_REQUEST['id'],ENCRIPTACION)."");
+		$nick_response=getUsuario(" and nickname ilike '".$nick."' and id_cliente=".$usuario[4]."");
+		
+		if(count($nick_response)==0  or $usuario[10]=="" or $usuario[10]==$nick)
+		{
+			updateUsuario("nickname='".$nick."', mail='".$_REQUEST['mail']."', tipo_usuario=".$_REQUEST['tipo_us'].", nombre='".$_REQUEST['nom']."', clave='".$_REQUEST['clave']."'",decrypt($_REQUEST['id'],ENCRIPTACION));
+			?>
+			<script>
+				CloseModalReg();
+				filtrar_clius();
+				</script>
+			<?php
+		}else
+		{
+			?>
+			<script>
+				$( "#msg_error_add2" ).html("nickname ingresado ya se encuntra registrado.");
+				</script>
+			<?php
+		}
 	}elseif($_REQUEST['tipo']==4 and $estado_sesion==0)//nuevo usuario
 	{
 		$cliente=getCliente(" and estado=0 order by nombre");
@@ -138,6 +168,7 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_ADMIN))==PATH_SITE_ADMI
 				</select>
 					</td></tr>
 				<tr><td>Nombre</td><td><input id="nom_us" name="nom_us" type="text" value=""></td></tr>		
+				<tr style="display:none"><td>Nickname</td><td><input id="nn_us" name="nn_us" type="text"></td></tr>		
 				<tr><td>Mail</td><td><input id="mail_us" name="mail_us" type="text" value=""></td></tr>		
 				<tr><td>Clave</td><td><input id="key_us" name="key_us" type="text" value=""></td></tr>		
 				<tr><td>Tipo Usuario</td>
@@ -161,6 +192,16 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_ADMIN))==PATH_SITE_ADMI
 		$data[]=$_REQUEST['nombre'];
 		$data[]="";
 		$data[]="false";
+		$nick=$_REQUEST["nn_us"];
+			if(trim($nick)=="" and strlen($nick) <=3)
+			{
+				$nick=trim(strtolower($_REQUEST['mail']));
+			}
+		$nick_response=getUsuario(" and nickname ilike '".$nick."' and id_cliente=".$_REQUEST['cliente']."");
+		$usuario=getUsuario(" and id_usuario=".decrypt($_REQUEST['id'],ENCRIPTACION)."");
+		$data[]=$nick;
+	if(count($nick_response)==0)
+	{
 		try
 		{
 	  	$usuarios=new SoapClient("".PATH_WS_OBVII."".WS_REGISTROUSUARIO."");
@@ -168,6 +209,12 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_ADMIN))==PATH_SITE_ADMI
     	if ($res==1) {
       
 			addUsuario($data);
+			?>
+			<script>
+				CloseModalMapa();
+										filtrar_clius();
+				</Script>
+			<?php
     	}else
     	{
     		?>
@@ -184,6 +231,7 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_ADMIN))==PATH_SITE_ADMI
 			</script>
 			<?php
 		}
+	}
 		
 	}elseif($_REQUEST['tipo']==6 and $estado_sesion==0)//update estado usuario
 	{

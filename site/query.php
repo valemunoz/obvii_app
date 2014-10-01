@@ -55,6 +55,7 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 		cerrar_sesion_web();
 			?>
 		<script>
+			//alert("paso");
 			window.location="login.php";
 		</script>
 		<?php
@@ -150,6 +151,7 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 		}
 		$check="checked";
 		$check2="";
+		
 		if($empresa[0][15]=="nombre" or $empresa[0][15]=="")
 		{
 			$check2="checked";
@@ -166,6 +168,9 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 				{
 			?>
 					<tr><td>Mail Notificaci&oacute;n Lista</td><td><input type="text" id="mail2_em" name="mail2_em" value="<?=$empresa[0][14]?>"></td></tr>
+					<tr><td>Orden Listado</td><td><input type="radio" id="opc_1" name="group2" value="id_usuario_interno" <?=$check?>> Ingreso
+							<input type="radio" id="opc_2" name="group2" value="nombre" <?=$check2?>> Nombre
+					</td></tr>
 				<?php
 				}
 				?>	
@@ -177,13 +182,6 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
     					<option value="off" <?=$check_ent?>>No</option>
     					<option value="on" <?=$check_ent?>>Si</option>
 						</select></td></tr>
-						<tr><td>Orden Listado</td><td><input type="radio" id="opc_1" name="group2" value="id_usuario_interno" <?=$check?>> Ingreso
-							<input type="radio" id="opc_2" name="group2" value="nombre" <?=$check2?>> Nombre
-						</td></tr>
-						
-						
-			
-			
 			<tr><td>Calle</td><td><input type="text" id="calle_em" name="calle_em" value="<?=$empresa[0][6]?>"></td></tr>
 			<tr><td>Numero</td><td><input type="text" id="num_em" name="num_em" value="<?=$empresa[0][7]?>"></td></tr>
 			
@@ -302,6 +300,9 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 				{
 					?>
 					<tr><td>Mail Notificaci&oacute;n Lista</td><td><input type="text" id="mail2_em" name="mail2_em" value=""></td></tr>
+					<tr><td>Orden Listado</td><td><input type="radio" id="opc_1" name="group2" value="id_usuario_interno"> Ingreso
+							<input type="radio" id="opc_2" name="group2" value="nombre" checked> Nombre
+				  </td></tr>
 				<?php
 				}
 				?>	
@@ -313,9 +314,7 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
     					<option value="off">No</option>
     					<option value="on">Si</option>
 						</select></td></tr>
-						<tr><td>Orden Listado</td><td><input type="radio" id="opc_1" name="group2" value="id_usuario_interno"> Ingreso
-							<input type="radio" id="opc_2" name="group2" value="nombre" checked> Nombre
-						</td></tr>
+						
 				<tr><td>Calle</td><td><input type="text" id="calle_em" name="calle_em" value=""></td></tr>
 				<tr><td>Numero</td><td><input type="text" id="num_em" name="num_em" value=""></td></tr>				
 				<tr><td>Comuna</td><td>

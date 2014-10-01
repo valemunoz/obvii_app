@@ -85,6 +85,7 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 		$id=decrypt($_REQUEST['usuario'],ENCRIPTACION);
 		$usuario=getUsuario(" and id_usuario=".$id."");
 		
+		
 		$check1="selected";
 		$check12="";
 		if($usuario[5]==1)
@@ -100,9 +101,15 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 			$check3="";
 			$check="checked";
 		}
+		$nick=$usuario[10];
+		if(trim($usuario[10])=="")
+		{
+			$nick=$usuario[1];
+		}
 		?>
 		<table border=1 id="table_resul" class="bordered">
 			<tr><td>Nombre</td><td><input id="nom_us" name="nom_us" type="text" value="<?=$usuario[7]?>"></td></tr>	
+			<tr style="display:none"><td>Nickname</td><td><input id="nn_us" name="nn_us" type="text" value="<?=$nick?>"></td></tr>		
 			<tr><td>Mail</td><td><input id="mail_us" name="mail_us" type="text" value="<?=$usuario[1]?>"></td></tr>		
 			<tr><td>Clave</td><td><input id="clave" name="clave" type="text" value="<?=$usuario[6]?>"></td></tr>		
 			<tr><td>Dispositivo</td><td><input id="dis_us" name="dis_us" type="text" value="<?=$usuario[8]?>"></td></tr>		
@@ -123,11 +130,19 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 	{
 		$dispo=getUsuario(" and id_device ilike '".$_REQUEST["dis_us"]."'");		
 		$id_send=decrypt($_REQUEST['id'],ENCRIPTACION);
+		$nick=$_REQUEST["nn_us"];
+			if(trim($nick)=="" and strlen($nick) <=3)
+			{
+				$nick=trim(strtolower($_REQUEST['mail']));
+			}
+		$nick_response=getUsuario(" and nickname ilike '".$nick."' and id_cliente=".$_SESSION['id_cliente_web']."");
+		$usuario=getUsuario(" and id_usuario=".decrypt($_REQUEST['id'],ENCRIPTACION)."");
+		//print_r($nick_response);
 		
-		
-		if(count($dispo)==0 or trim($id_send)==trim($dispo[0]) or trim($_REQUEST["dis_us"])=="")
+		if((count($dispo)==0 or trim($id_send)==trim($dispo[0]) or trim($_REQUEST["dis_us"])=="") and (count($nick_response)==0  or $usuario[10]=="" or $usuario[10]==$nick))
 		{
-			updateUsuario("web_device='".$_REQUEST["web_us"]."',id_device='".$_REQUEST["dis_us"]."', mail='".$_REQUEST['mail']."', tipo_usuario=".$_REQUEST['tipo_us'].", nombre='".$_REQUEST['nom']."', clave='".$_REQUEST['clave']."'",decrypt($_REQUEST['id'],ENCRIPTACION));
+			
+			updateUsuario("nickname='".$nick."', web_device='".$_REQUEST["web_us"]."',id_device='".$_REQUEST["dis_us"]."', mail='".$_REQUEST['mail']."', tipo_usuario=".$_REQUEST['tipo_us'].", nombre='".$_REQUEST['nom']."', clave='".$_REQUEST['clave']."'",decrypt($_REQUEST['id'],ENCRIPTACION));
 			?>
 			<script>
 				CloseModalReg();
@@ -138,7 +153,7 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 		{
 			?>
 			<script>
-				$( "#msg_error_up" ).html("Dispositivo ingresado ya se encuntra registrado.");
+				$( "#msg_error_up" ).html("Dispositivo o nickname ingresado ya se encuntra registrado.");
 				</script>
 			<?php
 			
@@ -148,6 +163,7 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 			?>
 			<table border=1 id="table_resul" class="bordered">
 				<tr><td>Nombre</td><td><input id="nom_usnew" name="nom_usnew" type="text" value=""></td></tr>		
+				<tr style="display:none"><td>Nickname</td><td><input id="nn_usnew" name="nn_usnew" type="text" value=""></td></tr>		
 				<tr><td>Mail</td><td><input id="mail_usnew" name="mail_usnew" type="text" value=""></td></tr>		
 				<tr><td>Clave</td><td><input id="key_usnew" name="key_usnew" type="text" value=""></td></tr>
 				<tr><td>Dispositivo</td><td><input id="dis_usnew" name="dis_usnew" type="text" value=""></td></tr>		
@@ -173,9 +189,15 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 		$data[]=$_REQUEST['nombre'];
 		$data[]=$_REQUEST["dis_us"];
 		$data[]=$_REQUEST["web_us"];
-		
+		$nick=$_REQUEST["nn_us"];
+			if(trim($nick)=="" and strlen($nick) <=3)
+			{
+				$nick=trim(strtolower($_REQUEST['mail']));
+			}
+		$data[]=$nick;
+		$nick_response=getUsuario(" and nickname ilike '".$nick."' and id_cliente=".$_SESSION['id_cliente_web']."");
 		$dispo=getUsuario(" and id_device ilike '".$_REQUEST["dis_us"]."'");
-		if(count($dispo)==0 or trim($_REQUEST["dis_us"])=="")
+		if((count($dispo)==0 or trim($_REQUEST["dis_us"])=="") and count($nick_response)==0)
 		{
 			
 			try
@@ -210,11 +232,22 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 			}
 		}else
 		{
+			if(count($nick_response)>0)
+			{
+			?>
+			<script>
+				$( "#msg_error_add" ).html("Nickname ya registrado.");
+				</script>
+			<?php
+				
+			}else
+			{
 			?>
 			<script>
 				$( "#msg_error_add" ).html("Dispositivo ingresado ya se encuntra registrado.");
 				</script>
 			<?php
+			}
 		}
 	}elseif($_REQUEST['tipo']==6 and $estado_sesion==0)//update estado usuario
 	{

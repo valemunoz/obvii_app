@@ -42,14 +42,17 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
 	{
 		try
 		{
+			$cliente=getUsuario(" and nickname like '".trim(strtolower($_REQUEST['mail']))."' and estado=0");
 			$eventos=new SoapClient("".PATH_WS_OBVII."".WS_LOGIN."");
-			$res= $eventos->validarUsuario(trim(strtolower($_REQUEST['mail'])),trim($_REQUEST['clave']));
+			$res= $eventos->validarUsuario(trim(strtolower($cliente[1])),trim($_REQUEST['clave']));
 		  //if ($res==$_REQUEST['clave']) 
     	if ($res >0) 
     	{
-    		$cliente=getUsuario(" and mail like '".trim(strtolower($_REQUEST['mail']))."' and estado=0");
+    		
     		$id_cliente=1;
     		$acceso_web=$cliente[9];
+    		$nick=$cliente[10];
+    		$mail=$cliente[1];
     		if(count($cliente)>0)
     		{
     			$id_cliente=$cliente[4];
@@ -59,7 +62,7 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
     			$cliente=getCliente(" and id_cliente=".$id_cliente."");
 					if($cliente[0][2]==0 and $acceso_web=='t')
 					{				
-    				inicioSesion(strtolower($_REQUEST['mail']),$res,$id_cliente,$cliente[0][5]);
+    				inicioSesion(strtolower($mail),$res,$id_cliente,$cliente[0][5],$nick);
     				?>
 						<script>
 							window.location.href="index.html";
@@ -78,7 +81,7 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
     	}else{    	
     		?>
 				<script>
-					mensaje("Mail o Clave incorrectas","ERROR","myPopup_ses");
+					mensaje("Usuario o Clave incorrectas","ERROR","myPopup_ses");
 				</script>
 				<?php
     	}
@@ -466,7 +469,11 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
 		 	$data[]=$lugares[0][1];
 		 	$data[]=$_SESSION["id_cliente"];
 		 	$data[]="";
+		 	$fecha=getFechaLibre(DIF_HORA);
+		 	$data[]=$fecha;
 		 	addMarcacion($data);
+		 	
+		 	senMailMarcacion(1,$_REQUEST['lat'],$_REQUEST['lon'],$_REQUEST['tipo_marca'],$lugares[0][1],$fecha,$mail_post,$_REQUEST['coment']);
 		 	if($_SESSION["tipo_cli"]==1)
 		 	{
 		 				 ?>
@@ -650,7 +657,13 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
 		 	$data[]=$_REQUEST['nom'];
 		 	$data[]=$_SESSION["id_cliente"];
 		 	$data[]="".$_REQUEST['calle']." #".$_REQUEST['numero'].", ".$_REQUEST['com']." ";
+		 	$fecha=getFechaLibre(DIF_HORA);
+		 	$data[]=$fecha;
+		 	
 		 	addMarcacion($data);
+		 	$dir="".$_REQUEST['calle']." #".$_REQUEST['numero'].", ".$_REQUEST['com']."";
+		 	senMailMarcacion(2,$_REQUEST['lat'],$_REQUEST['lon'],$_REQUEST['marca'],$_REQUEST['nom'],$fecha,$mail_envio,$dir,$_REQUEST['coment']);
+		 
 		 	?>
 		 	<script>
 				$.mobile.loading( 'hide');

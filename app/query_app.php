@@ -397,6 +397,9 @@ if($lugares[0][13]=='t')
 					 	
 					 	
 					 	addMarcacion($data);
+					 	
+		 				senMailMarcacion(1,$lat[$i],$lon[$i],$tipo[$i],$lug[0][1],$fec[$i],$mail_envio,"",$descrip[$i]);
+		 
 	      	
 					 	}else
 						{
@@ -419,24 +422,47 @@ if($lugares[0][13]=='t')
 					}
 				}else //marca libre
 				{
-					$data=array();
-				 	$data[]=$_SESSION["id_usuario"];
-				 	$data[]=$_SESSION["id_usuario_obvii"];
-				 	$data[]=1;
-				 	$data[]=0;
-				 	$data[]=$lat[$i];
-				 	$data[]=$lon[$i];
-				 	$data[]=0;
-				 	$data[]=$descrip[$i];
-				 	$data[]=$tipo[$i];
-				 	$data[]=$nombre[$i];
-				 	$data[]=$_SESSION["id_cliente"];
-				 	$data[]=$dir[$i];
-				 	$data[]=$fec[$i];
-				 $data[]=$nube[$i];
-					 	$data[]=$local[$i];
-				 	$data[]='true';
-				 	addMarcacion($data);
+					try
+					{
+						$registros=new SoapClient("".PATH_WS_OBVII."".WS_MARCACION."");
+						if($lat[$i]==0 or $lon[$i]==0)
+						{
+							$lat[$i]=-33.000;
+							$lon[$i]=-70.000;
+						}
+					 	$res= $registros->registrarEvento($_SESSION['id_usuario_obvii'], ''.substr($fec,0,10).'', ''.trim(substr($fec,11)).'', ''.$lat[$i].'',''.$lon[$i].'',''.$accu.'',''.$nube[$i].'','9988776644','478000012',''.$descrip[$i].'','8888999922',''.$mail_envio.'');
+					 
+					 if($res>0)
+					 {
+							$data=array();
+				 			$data[]=$_SESSION["id_usuario"];
+				 			$data[]=$_SESSION["id_usuario_obvii"];
+				 			$data[]=1;
+				 			$data[]=0;
+				 			$data[]=$lat[$i];
+				 			$data[]=$lon[$i];
+				 			$data[]=0;
+				 			$data[]=$descrip[$i];
+				 			$data[]=$tipo[$i];
+				 			$data[]=$nombre[$i];
+				 			$data[]=$_SESSION["id_cliente"];
+				 			$data[]=$dir[$i];
+				 			$data[]=$fec[$i];
+				 			$data[]=$nube[$i];
+					 		$data[]=$local[$i];
+				 			$data[]='true';
+				 			addMarcacion($data);
+				 			senMailMarcacion(2,$lat[$i],$lon[$i],$tipo[$i],$nombre[$i],$fec[$i],$mail_envio,$dir[$i],$descrip[$i]);
+				 		}
+				 	} catch (Exception $e) 
+					{
+						?>
+						<script>
+							sync_marca=false;
+							mensaje("Problemas de conexi&oacute;n, por favor int&eacute;ntelo nuevamente.","ERROR","myPopup_ses");
+						</script>
+						<?php
+					}
 				  
 				}
 			}

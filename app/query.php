@@ -68,14 +68,17 @@ if(1==1)
 	{
 		try
 		{
+			$cliente=getUsuario(" and nickname like '".trim(strtolower($_REQUEST['mail']))."' and estado=0");
 			$eventos=new SoapClient("".PATH_WS_OBVII."".WS_LOGIN."");
-			$res= $eventos->validarUsuario(trim(strtolower($_REQUEST['mail'])),trim($_REQUEST['clave']));
+			$res= $eventos->validarUsuario(trim(strtolower($cliente[1])),trim($_REQUEST['clave']));
 		  //if ($res==$_REQUEST['clave']) 
     	if ($res >0) 
     	{
-    		$cliente=getUsuario(" and mail like '".trim(strtolower($_REQUEST['mail']))."' and estado=0");
+    		
     		$dispo=getUsuario(" and id_device ilike '%".$_REQUEST["uuid"]."%'");
     		$uuid=trim($cliente[8]);
+    		$nick=trim($cliente[10]);
+    		$mail=$cliente[1];
     		if(count($dispo)>0 and $dispo[0]!=$cliente[0])
     		{
     			$uuid="false";
@@ -96,12 +99,13 @@ if(1==1)
 						{
 							updateUsuario("id_device='".$_REQUEST['uuid']."'",$id_us);
 						}
-    				inicioSesion(strtolower($_REQUEST['mail']),$res,$id_cliente,$tipo_cli);
+						
+    				inicioSesion(strtolower($mail),$res,$id_cliente,$tipo_cli,$nick);
     				
     				?>
 						<script>
-							NOMBRE_USER = "<?=$_REQUEST['mail']?>";
-        			MAIL_USER = "<?=$_REQUEST['mail']?>";
+							NOMBRE_USER = "<?=$nick?>";
+        			MAIL_USER = "<?=$mail?>";
         			ID_USER = "<?=$cliente[0]?>";
         			ID_OBVII_USER = "<?=$res?>";
         			ID_TIPO_USUARIO = "<?=$cliente[5]?>";
@@ -141,7 +145,7 @@ if(1==1)
     	}else{    	
     		?>
 				<script>
-					mensaje("Mail o Clave incorrectas","ERROR","myPopup_ses");
+					mensaje("Usuario o Clave incorrectas","ERROR","myPopup_ses");
 				</script>
 				<?php
     	}
@@ -530,10 +534,14 @@ if(1==1)
 		 	$data[]=$_SESSION["id_cliente"];
 		 	$data[]="";
 		 	$data[]="";
-		 	$data[]=getFechaLibre(DIF_HORA);
-		 	$data[]=getFechaLibre(DIF_HORA);
+		 	$fecha=getFechaLibre(DIF_HORA);
+		 	$data[]=$fecha;
+		 	$data[]=$fecha;
 		 	$data[]='false';
 		 	addMarcacion($data);
+		 
+		 	senMailMarcacion(1,$_REQUEST['lat'],$_REQUEST['lon'],$_REQUEST['tipo_marca'],$lugares[0][1],$fecha,$mail_post,"",$_REQUEST['coment']);
+		 
 		 	if($_SESSION["tipo_cli"]==1)
 		 	{
 		 				 ?>
@@ -718,10 +726,14 @@ if(1==1)
 		 	$data[]=$_SESSION["id_cliente"];
 		 	$data[]="".$_REQUEST['calle']." #".$_REQUEST['numero'].", ".$_REQUEST['com']." ";
 		 	$data[]="";
-		 	$data[]=getFechaLibre(DIF_HORA);
-		 	$data[]=getFechaLibre(DIF_HORA);
+		 	$fecha=getFechaLibre(DIF_HORA);
+		 	$data[]=$fecha;
+		 	$data[]=$fecha;
 		 	$data[]='false';
 		 	addMarcacion($data);
+		 	$dir="".$_REQUEST['calle']." #".$_REQUEST['numero'].", ".$_REQUEST['com']."";
+		 	senMailMarcacion(2,$_REQUEST['lat'],$_REQUEST['lon'],$_REQUEST['marca'],$_REQUEST['nom'],$fecha,$mail_envio,$dir,$_REQUEST['coment']);
+		 
 		 	?>
 		 	<script>
 				$.mobile.loading( 'hide');

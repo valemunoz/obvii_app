@@ -20,11 +20,12 @@ define("DIF_HORA","3");
 
 
 
-function inicioSesion($mail,$id_user_obvii,$id_cliente,$tipo_cli)
+function inicioSesion($mail,$id_user_obvii,$id_cliente,$tipo_cli,$nick)
 {
 	session_start();	
 	//session_register('usuario');	
 	$_SESSION["id_usuario"] = $mail;
+	$_SESSION["nickname"] = $nick;
 	$_SESSION["id_cliente"] = $id_cliente;
 	$_SESSION["id_usuario_obvii"] = $id_user_obvii;
 	$_SESSION['fecha']=getFecha();
@@ -374,7 +375,7 @@ function getUsuario($qr)
 	
 	$dbPg=pgSql_db();
 	
-  $sql2 = "SELECT id_usuario,mail,fecha_registro,estado,id_cliente,tipo_usuario,clave,nombre,id_device,web_device from obvii_usuario where 1=1";		
+  $sql2 = "SELECT id_usuario,mail,fecha_registro,estado,id_cliente,tipo_usuario,clave,nombre,id_device,web_device,nickname from obvii_usuario where 1=1";		
   if($qr!="")
   {
   	$sql2 .=$qr;
@@ -396,6 +397,7 @@ function getUsuario($qr)
 				
 				$data[]=$row2[8];
 				$data[]=$row2[9];
+				$data[]=$row2[10];
 		}
 		return $data;
 }
@@ -404,7 +406,7 @@ function getUsuarios($qr)
 	
 	$dbPg=pgSql_db();
 	
-  $sql2 = "SELECT id_usuario,mail,fecha_registro,estado,id_cliente,tipo_usuario,clave,nombre,id_device,web_device from obvii_usuario where 1=1";		
+  $sql2 = "SELECT id_usuario,mail,fecha_registro,estado,id_cliente,tipo_usuario,clave,nombre,id_device,web_device,nickname from obvii_usuario where 1=1";		
   if($qr!="")
   {
   	$sql2 .=$qr;
@@ -425,6 +427,7 @@ function getUsuarios($qr)
 				$data[]=$row2[7];
 				$data[]=$row2[8];
 				$data[]=$row2[9];
+				$data[]=$row2[10];
 				$datos[]=$data;
 		}
 		return $datos;
@@ -537,9 +540,9 @@ function addUsuario($data)
 	
  $sql2 = "INSERT INTO obvii_usuario(
              mail, fecha_registro, estado, id_cliente, tipo_usuario, 
-            clave,nombre,id_device,web_device)
+            clave,nombre,id_device,web_device,nickname)
     VALUES ('".$data[0]."', '".getFechaLibre(DIF_HORA)."', 0, '".$data[1]."', '".$data[2]."', 
-            '".$data[3]."','".$data[4]."','".$data[5]."','".$data[6]."');";		
+            '".$data[3]."','".$data[4]."','".$data[5]."','".$data[6]."','".$data[7]."');";		
   
   $rs2 = pg_query($dbPg, $sql2);
 }
@@ -848,5 +851,160 @@ function updateDispositivo($qr,$id)
 	
  $sql2 = "update obvii_dispositivo set ".$qr." where id_dispositivo=".$id."";		
   $rs2 = pg_query($dbPg, $sql2);
+}
+
+function getDireccionGoogleLATLON($lat,$lon)
+{
+	$delay = 0;
+	
+	$base_url="http://maps.googleapis.com/maps/api/geocode/xml?";
+  $geocode_pending = true;
+  while ($geocode_pending) {
+    
+    $address=trim($direccion);
+    //$request_url = $base_url . "&address=" . urlencode($address)."+chile&oe=utf-8&sensor=false";
+    $request_url=$base_url."latlng=".$lat.",".$lon."&sensor=false";
+    $xml = simplexml_load_file($request_url) or die("url not loading");    
+    //print_r($xml);
+    $status = $xml->status;
+    if (strcmp($status, "OK") == 0) {
+      // Successful geocode
+      $geocode_pending = false;
+      
+      $total_r=$xml->result;
+      
+      $len_place=$xml;
+      $i=1;
+      foreach($len_place->result as $len)
+      {
+      	$direc = $len->formatted_address;
+      	$tipo = $len->type;
+      	//echo "total:".count($len->address_component);
+      	for($i=0;$i<count($len->address_component);$i++)
+      	{
+      		$type=$len->address_component[$i]->type;
+      		$type2=$len->address_component[$i]->type[0];
+      		if(strtolower(trim($type))=="street_number")
+      		{
+      			$numero_municipal=$len->address_component[$i]->long_name;
+      		}elseif(strtolower(trim($type))=="route")
+      		{
+      			$calle=$len->address_component[$i]->long_name;
+      			$abrevia_calle=$len->address_component[$i]->short_name;
+      		}elseif(strtolower(trim($type2))=="locality")
+      		{
+      			$ciudad=$len->address_component[$i]->long_name;
+      			$abrevia_ciudad=$len->address_component[$i]->short_name;
+      		}elseif(strtolower(trim($type2))=="administrative_area_level_3")
+      		{
+      			$comuna=$len->address_component[$i]->long_name;
+      			$abrevia_comuna=$len->address_component[$i]->short_name;
+      		}elseif(strtolower(trim($type2))=="administrative_area_level_1")
+      		{
+      			$region=$len->address_component[$i]->long_name;
+      			$abrevia_region=$len->address_component[$i]->short_name;
+      		}elseif(strtolower(trim($type2))=="country")
+      		{
+      			$pais=$len->address_component[$i]->long_name;
+      			$abrevia_pais=$len->address_component[$i]->short_name;
+      		}
+      		
+      		
+      	}
+      	//geometrias
+      	$latitud=$len->geometry->location->lat;
+      	$longitud=$len->geometry->location->lng;
+      	$tipo_gis=$len->geometry->location_type;
+      	
+      	$dire=Array();
+				$dire[]=$tipo;
+				$dire[]=$direc;
+				$dire[]=$numero_municipal;
+				$dire[]=$calle;
+				$dire[]=$comuna;
+				$dire[]=$ciudad;
+				$dire[]=$region;
+				$dire[]=$latitud;
+				$dire[]=$longitud;
+				$dire[]=$tipo_gis;
+				if(strtolower($tipo)=="street_address")
+				{
+      		$direccion_arr[]=$dire;
+      	}
+				$i++;
+    	}      
+    } 
+    usleep($delay);
+  }
+ 
+	return $direccion_arr;
+}
+function getEmpresaRadio($lat,$lon,$radio)//retorna distancia en metros
+{
+	$dbPg=pgSql_db();		
+	
+	$sql="select id_lugar,nombre,ST_Distance(
+  ST_GeographyFromText('POINT(".$lon." ".$lat.")'), 
+  ST_GeographyFromText(st_AsText(geom))
+  ) as radio, calle, numero_municipal, comuna from obvii_lugares where id_cliente=".$_SESSION["id_cliente"]." and ST_Distance(
+  ST_GeographyFromText('POINT(".$lon." ".$lat.")'), 
+  ST_GeographyFromText(st_AsText(geom))
+  ) <= ".$radio." order by radio";
+	
+	$rsCalle = pg_query($dbPg, $sql);	
+	//echo $sql;
+	while ($rowCalle = pg_fetch_row($rsCalle))
+	{		
+	
+		$direc=Array();
+		$direc[]=$rowCalle[0];
+		$direc[]=$rowCalle[1];		
+		$direc[]=round($rowCalle[2],2);//distancia en metros		
+		$direc[]=$rowCalle[3];		
+		$direc[]=$rowCalle[4];		
+		$direc[]=$rowCalle[5];		
+		$direcciones[]=$direc;
+		
+		
+	}	
+	pg_close($dbPg);
+  return $direcciones;
+}
+
+function senMailMarcacion($tipo,$lat,$lon,$tipo_marca,$nom,$fecha,$mail_post,$direcLibre,$comentario)
+{
+	//mail
+		 	$direc=getDireccionGoogleLATLON($lat,$lon);
+		 	$user=getUsuario(" and mail = '".$_SESSION["id_usuario"]."' and id_usuario_obvii=".$_SESSION['id_usuario_obvii']."");
+		 	$empresa=getEmpresaRadio($lat,$lon,500);
+		 	$marca="Entrada";
+		 	if($tipo_marca==1)
+		 	{
+		 		$marca="Salida";
+		 	}
+		 	$titulo="Marcacion en Obvii";
+		 	$html="Asistencia Obvii";
+		 	$html .="<br>Usuario: ".$user[7];
+		 	$html .="<br>E-mail: ".$user[1];
+		 	$html .="<br>Fecha: ".$fecha;
+		 	$html .="<br>Lugar de marcacion: ".$nom;
+		 	$html .="<br>Tipo de marcacion: ".$marca;
+		 	if(trim($comentario)!="")
+		 	{
+		 		$html .="<br>Comentario: ".$comentario;	
+		 	}
+		 	if($tipo==2)
+		 	{
+		 		$titulo="Marcacion en Obvii(Libre)";
+		 		$html .="<br>Direccion ingresada: ".$direcLibre;
+		 	}
+		 	$html .="<br>Direccion aproximada de marcacion: ".$direc[0][1];
+		 	$html .="<br>Empresa Cercana a la marcaci&oacute;: ".$empresa[0][1].", ".$empresa[0][3]." #".$empresa[0][4].",".$empresa[0][5].". Distancia mts:".$empresa[0][2]."";
+		 	sendMail($_SESSION["id_usuario"],$html,$titulo);
+		 	if($mail_post!="")
+		 	{
+		 		sendMail($mail_post,$html,$titulo);
+		 	}
+		 	/*Fin mail*/
 }
 ?>

@@ -17,6 +17,7 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 		{
 			$order=$_REQUEST['order'];	
 		}
+		
 		if(trim($estado)!="" and $estado!=10)
 		{
 			$query .=" and estado=".$estado.""	;
@@ -58,8 +59,9 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 			<?php
 			foreach($usuarios as $i=> $us)
 			{
-				$detalle_lugar=getLugares(" and id_lugar=".$us[3]."");
-			  
+				$detalle_lugar=getLugares(" and id_lugar=".$us[3]." and id_cliente=".$cliente."");
+			  if(count($detalle_lugar)>0)
+			  {
 				?>
 				<tr>
 					
@@ -87,6 +89,7 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 						</Td>
 				</tr>
 				<?php
+				}
 			}
 			?>
 			</table>

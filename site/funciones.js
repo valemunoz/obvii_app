@@ -135,6 +135,7 @@ function updateEmpresa(empresa)
 		var nombre=$.trim(document.getElementById("nombre_em").value);
 		
 		var mail=$.trim(document.getElementById("mail_em").value);
+		
 		try
 		{
 			var mail2=$.trim(document.getElementById("mail2_em").value);
@@ -210,7 +211,7 @@ function upEstadoEmpresa(estado,empresa)
 }
 function salir()
 				{
-					$("#contenido").load("query.php", 
+					$("#output").load("query.php", 
 						{tipo:2} 
 							,function(){	
 							}
@@ -320,6 +321,7 @@ function loadUsuario(id_usuario)
 function updateUsuario(id_usuario)
 {
 	var mail=$.trim(document.getElementById("mail_us").value);
+	var nn_us=$.trim(document.getElementById("nn_us").value);
 	var nombre=$.trim(document.getElementById("nom_us").value);	
 	var clave=$.trim(document.getElementById("clave").value);	
 		var dis_us=$.trim(document.getElementById("dis_us").value);
@@ -346,7 +348,7 @@ function updateUsuario(id_usuario)
 	}else
 	{
 		$("#output").load("qr_usuarios.php", 
-							{tipo:3, mail:mail,tipo_us:tipo,nom:nombre,id:id_usuario,clave:clave,dis_us:dis_us,web_us:web_us} 
+							{tipo:3,nn_us:nn_us, mail:mail,tipo_us:tipo,nom:nombre,id:id_usuario,clave:clave,dis_us:dis_us,web_us:web_us} 
 								,function(){
 									
 								}
@@ -369,6 +371,7 @@ function nuevoUsuario()
 function saveUsuario()
 {
 	var mail=$.trim(document.getElementById("mail_usnew").value);
+	var nn_us=$.trim(document.getElementById("nn_usnew").value);
 	var nombre=$.trim(document.getElementById("nom_usnew").value);
 		var dis_us=$.trim(document.getElementById("dis_usnew").value);
 		var web_us=false;
@@ -399,7 +402,7 @@ function saveUsuario()
 	}else
 	{
 		$("#output").load("qr_usuarios.php", 
-							{tipo:5, mail:mail,tipo_us:tipo,clave:key_us,nombre:nombre,dis_us:dis_us,web_us:web_us} 
+							{tipo:5, mail:mail,tipo_us:tipo,clave:key_us,nombre:nombre,dis_us:dis_us,web_us:web_us,nn_us:nn_us} 
 								,function(){
 									
 								}

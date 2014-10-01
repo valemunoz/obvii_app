@@ -433,7 +433,8 @@ CREATE TABLE obvii_usuario (
     nombre character varying(300),
     id_usuario_obvii numeric,
     id_device character varying(500),
-    web_device boolean
+    web_device boolean,
+    nickname character varying(300)
 );
 
 
