@@ -9,19 +9,20 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 		$clave=$_REQUEST['clave'];
 				try
 		{
+			$usuario=getUsuario(" and nickname ilike '".$_REQUEST['mail']."' and tipo_usuario=1");
 			$eventos=new SoapClient("".PATH_WS_OBVII."".WS_LOGIN."");
-			$res= $eventos->validarUsuario(trim(strtolower($_REQUEST['mail'])),$clave);
+			$res= $eventos->validarUsuario(trim(strtolower($usuario[1])),$clave);
 		  //if ($res==$_REQUEST['clave']) 
     	if ($res >0) 
     	{
-    		$usuario=getUsuario(" and mail ilike '".$_REQUEST['mail']."' and tipo_usuario=1");
+    		
     		
 				if(count($usuario)>0)
 				{
 					$cliente=getCliente(" and id_cliente=".$usuario[4]."");
 					if($cliente[0][2]==0)
 					{
-						inicioSesion_web($_REQUEST['mail'],$_REQUEST['mail'],$usuario[4],$res,$cliente[0][4],$cliente[0][5]);
+						inicioSesion_web($usuario[1],$usuario[1],$usuario[4],$res,$cliente[0][4],$cliente[0][5]);
 						$_SESSION['web_lugar']="";
 						$_SESSION['web_opcion']="";
 						
@@ -36,9 +37,12 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 						echo "Acceso no autorizado";
 					}
 						
+				}else
+				{
+					echo "Usuario o Clave incorrectas";
 				}
     	}else{    	
-					echo "Mail o Clave incorrectas";
+					echo "Usuario o Clave incorrectas";
 
 
     	}

@@ -71,7 +71,7 @@ if($_REQUEST['tipo']==1) //check estado sesion
 			loadMenu();	
 		loadFav();
 		
-	  loadLugaresON();	
+	  	
 		$("#bienvenido_div").html("Bienvenido : <?=$_SESSION['id_usuario']?> <span id=id_sync_wel></span>");	
 		
   	$("#ll_mapa").show();
@@ -481,7 +481,7 @@ if($lugares[0][13]=='t')
 			?>
 			<script>
 				$.mobile.loading( 'hide');
-				
+				navigator.notification.beep(1);
 				mensaje("Solicitud enviada.",'Mensaje','myPopup_ses');	
 				</script>
 			<?php

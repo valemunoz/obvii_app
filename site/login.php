@@ -41,11 +41,11 @@ cerrar_sesion_web();
 		valida=false;
 		msg="<strong>Todos los campos son obligatorios.</strong><br>";
 	}
-	if(!validarEmail(mail))
+	/*if(!validarEmail(mail))
 	{		
 		msg=""+msg+" <strong>E-mail debe tener formato correcto.</strong><br>";
 		valida=false;
-	}
+	}*/
 	if(!valida)
 	{
 		
