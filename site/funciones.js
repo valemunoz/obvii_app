@@ -763,3 +763,21 @@ function detDispo(dispo)
 	);
 	
 }
+function loadCsv(nom_file)
+{
+	var mail=$.trim(document.getElementById("nom_em").value);
+	
+	
+	var lugar=$.trim(document.getElementById("lug_us").value);
+	var desde=$.trim(document.getElementById("desde").value);
+	var hasta=$.trim(document.getElementById("hasta").value);
+	$("#result2").html("<img src=img/load.gif>");
+	$("#result2").load("qr_marcas.php", 
+						{tipo:4,mail:mail,lugar:lugar,fec_ini:desde,fec_ter:hasta,nomfile:nom_file} 
+							,function(){
+								filtrar_marcaciones();
+								window.open('csv/'+nom_file,'','width=600,height=400,left=50,top=50,toolbar=yes');
+									
+							}
+	);
+}

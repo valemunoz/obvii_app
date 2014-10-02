@@ -1007,4 +1007,37 @@ function senMailMarcacion($tipo,$lat,$lon,$tipo_marca,$nom,$fecha,$mail_post,$di
 		 	}
 		 	/*Fin mail*/
 }
+
+function getDistancia($lat,$lon, $latf,$lonf)//retorna distancia en metros
+{
+	$dbPg=pgSql_db();		
+	
+	$sql="select ST_Distance(
+  ST_GeographyFromText('POINT(".$lon." ".$lat.")'), 
+  ST_GeographyFromText('POINT(".$lonf." ".$latf.")')
+  ) as radio";
+	$dist=0;
+	$rsCalle = pg_query($dbPg, $sql);	
+	//echo $sql;
+	while ($rowCalle = pg_fetch_row($rsCalle))
+	{		
+		$dist=$rowCalle[0];
+	}	
+	pg_close($dbPg);
+  return $dist;
+}
+
+function createCsv($productos,$nom_file,$nom_campos)
+{
+	$out = fopen('../site/csv/'.$nom_file.'', 'w');
+	fputcsv($out, $nom_campos,';');
+	//print_r($productos);
+	foreach($productos as $key => $prod)
+	{
+					
+		fputcsv($out, array(''.utf8_decode($prod[0]).'', ''.utf8_decode($prod[1]).'',''.$prod[2].'',''.$prod[3].'',''.$prod[4].''),';');
+	}
+	fclose($out);
+	
+}
 ?>

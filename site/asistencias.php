@@ -167,7 +167,7 @@ include("header.php");
 			<td><input type="text" id='nom_em' name='nom_em'></td>
 			<td><input type="text" class="input_filtro" autocomplete=off id="desde" name="desde" maxlength="50" class="txtFecha"/></td>
 		<td><input type="text" class="input_filtro" autocomplete=off id="hasta" name="hasta" maxlength="50" class="txtFecha"/></td>
-			<td><input type="button" onclick="filtrar_marcaciones();" value="Filtrar"></td>
+			<td><input type="button" onclick="filtrar_marcaciones();" value="Filtrar"> <img src="img/excel.png" onclick="javascriop:loadCsv('<?=$_SESSION["id_usuario_web_obvii"].".csv"?>');" class=mano title="Descargar csv con resultados"></td>
 		</tr>	
 	</table>
 	

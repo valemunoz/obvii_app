@@ -102,6 +102,9 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 		{
 			$tip_mar="Libre";	
 		}
+		$direc_aprox=getDireccionGoogleLATLON($marca[0][6],$marca[0][7]);
+		$lugar=getLugares(" and id_lugar=".$marca[0][5]."");
+		$distancia_aprox=getDistancia($marca[0][6],$marca[0][7], $lugar[0][4],$lugar[0][5]);
 		?>
 		<table border=1 id="table_resul" class="bordered">
 		 <tr><td>Lugar</td><td><?=ucwords($marca[0][11])?></td></tr>	
@@ -116,6 +119,8 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 		 	?>
 		 <tr><td>Usuario</td><td><?=ucwords($user[7])?></td></tr>
 		 <tr><td>Mail Usuario</td><td><?=ucwords($marca[0][1])?></td></tr>		
+		 <tr><td>Lugar Cercano de Marcaci&oacute;n</td><td><?=$direc_aprox[0][1]?></td></tr>	
+		 <tr><td>Distancia Aproximada</td><td><?=round($distancia_aprox/1000,2)?> KMs</td></tr>	
 			<tr><td>Fecha Marcaci&oacute;n</td><td><?=ucwords($marca[0][3])?></td></tr>		
 			<?php
 			if($marca[0][15]=='t')
@@ -133,6 +138,7 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 			?>
 			<tr><td>Comentario</td><td><?=ucwords($marca[0][9])?></td></tr>		
 			<tr><td>Tipo Marcaci&oacute;n</td><td><?=ucwords($tipo)?></td></tr>	
+			
 			</table>
 			<?php
 			if($_SESSION['tip_cli_web']==1)
@@ -208,6 +214,68 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 				
 		$html .='</table>';
 		sendMail($_SESSION["usuario_web"],$html,"Lista asistencia");
+	}elseif($_REQUEST['tipo']==4 and $estado_sesion==0) //csv
+	{
+		$cliente=$_SESSION['id_cliente_web'];
+		
+		$mail=$_REQUEST['mail'];
+		
+		$lugar=$_REQUEST['lugar'];
+		
+		$fecha_inicio=$_REQUEST['fec_ini'];
+		$fecha_termino=$_REQUEST['fec_ter'];
+
+    $query = " and id_cliente=".$cliente."";
+    if(trim($fecha_inicio) !="")
+    {
+    	$query .=" and fecha_registro >= '".$fecha_inicio."'"	;
+    }
+    if(trim($fecha_termino) !="")
+    {
+    	$query .=" and fecha_registro <= '".$fecha_termino." 23:59:59'"	;
+    }
+		if(trim($mail)!="")
+		{
+			$query .=" and id_usuario ilike '%".$mail."%'"	;
+		}	
+		
+		if(trim($lugar)>0)
+		{
+			$query .=" and id_lugar = ".$lugar.""	;
+		}	
+		$query .=" order by fecha_registro desc";
+		
+		$usuarios=getMarcaciones($query);
+		//print_r($usuarios);
+		
+		$data_csv_arr=array();
+			foreach($usuarios as $i=> $us)
+			{
+				$detalle_lugar=getLugares(" and id_lugar=".$us[5]."");
+			  $user=getUsuario(" and mail ilike '".$us[1]."'");
+			  $entSal="entrada";
+			  if($us[10]==1)
+			  {
+			  	$entSal="Salida";
+			  }
+			  //$direc_aprox=getDireccionGoogleLATLON($usuarios[0][6],$usuarios[0][7]);
+				
+				$distancia_aprox=getDistancia($usuarios[0][6],$usuarios[0][7], $detalle_lugar[0][4],$detalle_lugar[0][5]);
+			  $data_csv=array();
+			  $data_csv[]=$user[7];
+			  $data_csv[]=$us[11];
+			  $data_csv[]=$entSal;
+			  $data_csv[]=$us[3];
+			  //$data_csv[]=$direc_aprox[0][1];
+			  $data_csv[]=round($distancia_aprox/1000,2)."Kms";
+			  $data_csv_arr[]=$data_csv;
+			  
+				
+			}
+			$campos=array('Usuario','Lugar','Entrada/Salida', 'Fecha', 'Distancia del lugar');
+			createCsv($data_csv_arr,$_REQUEST['nomfile'],$campos);
+			
+			
 	}
 }
 
