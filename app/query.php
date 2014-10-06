@@ -101,6 +101,9 @@ if(1==1)
 						}
 						
     				inicioSesion(strtolower($mail),$res,$id_cliente,$tipo_cli,$nick);
+    				if($id_cliente!= CLI_DEMO)
+    				{
+    					$_SESSION["demo_us"]=false;
     				
     				?>
 						<script>
@@ -127,6 +130,16 @@ if(1==1)
 							//window.location.href="index.html";
 						</script>
 						<?php
+					}else
+					{
+						?>
+						<script>
+							
+							deleteUser();
+							
+							</Script>
+						<?php
+					}
     			}else
     			{
     				$msg="";

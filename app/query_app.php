@@ -37,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 						</script>
 		<?php
  	  }
+ 	  
 
  }
 ?>
@@ -48,8 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 	
 	</script>
 <?php  
-if(1==1)
-{
+
 if($_REQUEST['tipo']==1) //check estado sesion
 {
 	
@@ -82,6 +82,16 @@ if($_REQUEST['tipo']==1) //check estado sesion
 		
 		</script>
 		<?php
+		if($_SESSION["demo_us"])
+ 	  {
+ 	  	?>
+ 	  	<script>
+ 	  		USER_DEMO=true;
+ 	  		mensaje('Su usuario es de tipo Demo, el uso del sistema sera limitado. Si desea un upgrade de su cuenta env&iacute;e un mail a contacto@architeq.cl','Demo','myPopup');
+ 	  		</Script>
+ 	  	<?php
+ 	  	
+ 	  }
 		
 	}
 }elseif($_REQUEST['tipo']==2)
@@ -272,10 +282,18 @@ if($lugares[0][13]=='t')
 						
 						<label for="text-basic">Nombre del Lugar</label>
 						<span class=titulo_basico><?=ucwords($lugares[0][1])?></span>
+						<?php
+						if(!$_SESSION["demo_us"])
+						{
+						?>
 						<label for="text-basic">Direcci&oacute;n</label>
 						<span class=titulo_basico><?=ucwords($lugares[0][6])?> #<?=$lugares[0][7]?>,<?=ucwords($lugares[0][8])?></span>
 						<label for="text-basic">Correo Electronico</label>
 						<span class=titulo_basico><?=$lugares[0][10]?></span>
+						<?php
+						}
+						?>
+						
 						<label for="text-basic">Comentario?</label>
 						<span class=titulo_basico><?=$comen?></span> <br><span class=texto_interior>Esta opci&oacute;n activa una casilla de comentario cada vez que se ejecute una acci&oacute;n con el lugar registrado.</span>
 							<br><br>
@@ -284,17 +302,36 @@ if($lugares[0][13]=='t')
 					</p>          
 					<p id="form_login">
 						<?php
-						$favorito=getFavoritos(" and id_usuario ilike '".$_SESSION["id_usuario"]."' and estado=0 and id_lugar=".$_REQUEST['id']."");
-						if(count($favorito)> 0)
+						
+						if(!$_SESSION["demo_us"])
 						{
-							?>
-							<input type="button" onclick="delFav(<?=$favorito[0][0]?>)" value="Eliminar Favoritos">
-							<?php
+					
+							$favorito=getFavoritos(" and id_usuario ilike '".$_SESSION["id_usuario"]."' and estado=0 and id_lugar=".$_REQUEST['id']."");
+							if(count($favorito)> 0)
+							{
+								?>
+								<input type="button" onclick="delFav(<?=$favorito[0][0]?>)" value="Eliminar Favoritos">
+								<?php
+							}else
+							{
+								?>
+								<input type="button" onclick="addFav(<?=$_REQUEST['id']?>)" value="Agregar Favoritos">
+								<?php
+							}
 						}else
 						{
+							$favorito=getFavoritos(" and id_usuario ilike '".$_SESSION["id_usuario"]."' and estado=0 and id_lugar=".$_REQUEST['id']."");
+							if(count($favorito)> 0)
+							{
 							?>
-							<input type="button" onclick="addFav(<?=$_REQUEST['id']?>)" value="Agregar Favoritos">
-							<?php
+								<input type="button" onclick="mensaje('Este servicio no esta disponible para su tipo de usuario.','Alerta','myPopup');" value="Eliminar Favoritos">
+								<?php
+							}else
+							{
+								?>
+								<input type="button" onclick="mensaje('Este servicio no esta disponible para su tipo de usuario.','Alerta','myPopup');" value="Agregar Favoritos">
+								<?php
+							}
 						}
 						?>
 					</p>
@@ -339,6 +376,8 @@ if($lugares[0][13]=='t')
 	
  
 	}elseif($estado_sesion==0 and $_REQUEST['tipo']==7)
+	{
+	if(!$_SESSION["demo_us"])
 	{
 		$cliente=getCliente(" and id_cliente=".$_SESSION["id_cliente"]."");
 		$mail_envio=$cliente[0][3];
@@ -467,6 +506,18 @@ if($lugares[0][13]=='t')
 				}
 			}
 		}
+		
+
+	}else
+	{
+			?>
+			<script>
+				
+				$.mobile.loading( 'hide');
+				mensaje("Este servicio no esta disponible para su tipo de usuario.",'Alerta','myPopup');
+				</Script>
+			<?php
+	}
 	}elseif($_REQUEST['tipo']==8) //dispositivos
 	{
 		$usuario=getUsuario(" and mail like '".trim(strtolower($_REQUEST['mail']))."' and estado=0");
@@ -498,74 +549,167 @@ if($lugares[0][13]=='t')
 		}
 	}elseif($_REQUEST['tipo']==9) // marcaciones via mail
 {
-	$tipo=$_REQUEST['opc'];
-	if($tipo==1)//diario
-	{
-		$titulo="Del d&iacute;a";
-			$fecha=date("Y-m-d");
-			$marcaciones=getMarcaciones(" and fecha_registro >= '".$fecha."' and id_usuario ilike '%".$_SESSION["id_usuario"]."%' and id_usuario_obvii=".$_SESSION["id_usuario_obvii"]." order by fecha_registro");
-		
-	}elseif($tipo==2) // mes
-	{
-		$titulo="Ultimo mes";
-			$fecha=getFechaLibre(744); // 31 dias			
-			$marcaciones=getMarcaciones(" and fecha_registro >= '".$fecha."' and id_usuario ilike '%".$_SESSION["id_usuario"]."%' and id_usuario_obvii=".$_SESSION["id_usuario_obvii"]." order by fecha_registro");
-	}elseif($tipo==3) // ultimos 3 meses
-	{
-		$titulo="Ultimos 3 meses";
-			$fecha=getFechaLibre(2232); // 31 dias			
-			$marcaciones=getMarcaciones(" and fecha_registro >= '".$fecha."' and id_usuario ilike '%".$_SESSION["id_usuario"]."%' and id_usuario_obvii=".$_SESSION["id_usuario_obvii"]." order by fecha_registro");
-	}elseif($tipo==4) // todas
-	{
-			$titulo="Historial Completo";
-			$marcaciones=getMarcaciones(" and id_usuario ilike '%".$_SESSION["id_usuario"]."%' and id_usuario_obvii=".$_SESSION["id_usuario_obvii"]." order by fecha_registro");
-	}
 	
-	if(count($marcaciones)>0)
-	{
-		$html="Marcaciones solicitadas: ".$titulo."<br><br>";
-		$html .="<table>";
-		$html .="<tr>";
-		$html .="<td width=5%>ID</td>";
-		$html .="<td width=40%>NOMBRE</td>";
-		$html .="<td width=25%>FECHA</td>";
-		$html .="<td width=15%>TIPO</td>";
-		$html .="</tr>";
-		foreach($marcaciones as $i => $marca)
+	
+		$tipo=$_REQUEST['opc'];
+		if($tipo==1)//diario
 		{
-			$tip="Entrada";
-			if($marca[10]==1)
-			  $tip="Salida";
-			$html .="<tr>";
-			$html .="<td>".$marca[0]."</td>";
-			$html .="<td>".ucwords($marca[11])."</td>";
-			$html .="<td>".$marca[3]."</td>";
-			$html .="<td>".$tip."</td>";
-			$html .="</tr>";	
+			$titulo="Del d&iacute;a";
+				$fecha=date("Y-m-d");
+				$marcaciones=getMarcaciones(" and fecha_registro >= '".$fecha."' and id_usuario ilike '%".$_SESSION["id_usuario"]."%' and id_usuario_obvii=".$_SESSION["id_usuario_obvii"]." order by fecha_registro");
+			
+		}elseif($tipo==2) // mes
+		{
+			$titulo="Ultimo mes";
+				$fecha=getFechaLibre(744); // 31 dias			
+				$marcaciones=getMarcaciones(" and fecha_registro >= '".$fecha."' and id_usuario ilike '%".$_SESSION["id_usuario"]."%' and id_usuario_obvii=".$_SESSION["id_usuario_obvii"]." order by fecha_registro");
+		}elseif($tipo==3) // ultimos 3 meses
+		{
+			$titulo="Ultimos 3 meses";
+				$fecha=getFechaLibre(2232); // 31 dias			
+				$marcaciones=getMarcaciones(" and fecha_registro >= '".$fecha."' and id_usuario ilike '%".$_SESSION["id_usuario"]."%' and id_usuario_obvii=".$_SESSION["id_usuario_obvii"]." order by fecha_registro");
+		}elseif($tipo==4) // todas
+		{
+				$titulo="Historial Completo";
+				$marcaciones=getMarcaciones(" and id_usuario ilike '%".$_SESSION["id_usuario"]."%' and id_usuario_obvii=".$_SESSION["id_usuario_obvii"]." order by fecha_registro");
 		}
-		$html .="</table>";
-		sendMail(trim($_SESSION["id_usuario"]),$html,"Marcaciones obvii");
-		?>
-		<script>
-			$.mobile.loading( 'hide');
-			mensaje("Marcaciones enviadas.",'MENSAJE','myPopup');
-			</Script>
-		<?php
+	
+		if(count($marcaciones)>0)
+		{
+			$html="Marcaciones solicitadas: ".$titulo."<br><br>";
+			$html .="<table>";
+			$html .="<tr>";
+			$html .="<td width=5%>ID</td>";
+			$html .="<td width=40%>NOMBRE</td>";
+			$html .="<td width=25%>FECHA</td>";
+			$html .="<td width=15%>TIPO</td>";
+			$html .="</tr>";
+			foreach($marcaciones as $i => $marca)
+			{
+				$tip="Entrada";
+				if($marca[10]==1)
+				  $tip="Salida";
+				$html .="<tr>";
+				$html .="<td>".$marca[0]."</td>";
+				$html .="<td>".ucwords($marca[11])."</td>";
+				$html .="<td>".$marca[3]."</td>";
+				$html .="<td>".$tip."</td>";
+				$html .="</tr>";	
+			}
+			$html .="</table>";
+			sendMail(trim($_SESSION["id_usuario"]),$html,"Marcaciones obvii");
+			?>
+			<script>
+				$.mobile.loading( 'hide');
+				mensaje("Marcaciones enviadas.",'MENSAJE','myPopup');
+				</Script>
+			<?php
+		}else
+		{
+			?>
+			<script>
+				
+				$.mobile.loading( 'hide');
+				mensaje("No hay marcaciones disponibles para enviar.",'MENSAJE','myPopup');
+				</Script>
+			<?php
+		}
+		
+		
+		
+	
+}elseif($_REQUEST['tipo']==10)
+{
+	$envio=true;
+	$mail=strtolower(trim($_REQUEST['mail']));
+	$msg="";
+	$usuario=getUsuario(" and mail ilike '".$mail."' and estado=0");
+	$dispositivo=getUsuario(" and id_device ilike '".$_REQUEST['device']."'");
+	if(count($usuario)>0 or count($dispositivo)>0)
+	{	
+		$envio=false;
+		$msg="Mail ya se encuentra registrado<br>";
+		if(count($dispositivo)>0)
+		{
+			$msg="Este dispositivo ya esta asociado a un usuario.<br>";
+		}
+	}else
+	{
+	
+		try
+		{
+	  	$usuarios=new SoapClient("".PATH_WS_OBVII."".WS_REGISTROUSUARIO."");
+    	$res= $usuarios->registrarUsuario($mail, $_REQUEST['nombre'], $_REQUEST['clave'],  '1', '0', '0', '1', '0', '0');
+    	
+    	if ($res==1) 
+    	{
+    		
+    		$eventos=new SoapClient("".PATH_WS_OBVII."".WS_LOGIN."");
+				$res= $eventos->validarUsuario($mail,trim($_REQUEST['clave']));
+		  	//if ($res==$_REQUEST['clave']) 
+    		if ($res >0) 
+    		{
+    			
+					$data=array();							
+					$data[]=$mail;
+					$data[]=CLI_DEMO;
+					$data[]=0;
+					$data[]=$_REQUEST['clave'];
+					$data[]=strtolower($_REQUEST['nombre']);
+					$data[]=$res;
+					$data[]=$_REQUEST['device'];
+					$data[]="false";
+					$data[]=$mail;
+					$data[]=$_REQUEST['empresa'];
+					addUsuario($data);
+					
+					$usuario_new=getUsuario(" and mail ilike '".$mail."' and estado=0");
+					
+					$data=array();
+					$data[]=$mail;
+					$data[]=$res;
+					$data[]=19;
+					addFavorito($data);
+					$msg="Usuario Registrado exitosamente";
+					
+				}else
+				{
+					$envio=false;
+					$msg="Se produjo un error. Por favor intentelo nuevamente<br>";
+				}
+			}else
+			{
+				$envio=false;
+				$msg="Ya se encuentra un usuario registrado con la cuenta mail ".$mail."<br>";
+			}
+		
+	}catch (Exception $e) 
+			{
+				$envio=false;
+				$msg="Se produjo un error. Por favor intentelo nuevamente<br>";
+			}
+	}
+	if(!$envio)
+	{
+			?>
+			<script>
+				//mensaje('<?=$msg?>','Alerta','myPopup_reg');
+				$("#msg_error_reg").html('<?=$msg?>');
+			</script>
+			<?php
 	}else
 	{
 		?>
-		<script>
-			
-			$.mobile.loading( 'hide');
-			mensaje("No hay marcaciones disponibles para enviar.",'MENSAJE','myPopup');
-			</Script>
-		<?php
+			<script>
+				//volver();
+				$("#mod_registro").dialog( "close" );
+				document.getElementById("mail_ses").value="<?=$mail?>";
+				setTimeout("$('#clave_ses').focus();",500);
+
+			</script>
+			<?php
+		
 	}
-	
-	
 }
-}else
-{
-	
-}
+
 ?>

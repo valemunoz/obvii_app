@@ -17,6 +17,7 @@ define("WS_MARCACION","obvii_eventos.wsdl");
 define("ENCRIPTACION","semilla");
 define("ENCRIPTACION2","manzana");
 define("DIF_HORA","3");
+define("CLI_DEMO","6");
 
 function inicioSesion($mail,$id_user_obvii,$id_cliente,$tipo_cli,$nick)
 {
@@ -27,10 +28,12 @@ function inicioSesion($mail,$id_user_obvii,$id_cliente,$tipo_cli,$nick)
 	$_SESSION["id_cliente"] = $id_cliente;
 	$_SESSION["id_usuario_obvii"] = $id_user_obvii;
 	$_SESSION['fecha']=getFecha();
+	
 	$_SESSION["mail_log"]=$mail;
   $_SESSION["tipo_cli"]=$tipo_cli;
   $cliente=getCliente(" and id_cliente=".$id_cliente."");
   $_SESSION["pais_cli"]=$cliente[0][4];
+  $_SESSION["demo_us"]=true;
   if(strtolower($_SESSION["pais_cli"])=="peru")
   {
   	define("DIF_HORA","4");
@@ -46,6 +49,7 @@ function cerrar_sesion()
 	unset($_SESSION['id_usuario_obvii']);
 	unset($_SESSION['id_cliente']);	
 	unset($_SESSION["tipo_cli"]);
+	unset($_SESSION["demo_us"]);
 	//session_destroy();
 }
 function estado_sesion()
@@ -533,9 +537,12 @@ function addUsuario($data)
 	
  $sql2 = "INSERT INTO obvii_usuario(
              mail, fecha_registro, estado, id_cliente, tipo_usuario, 
-            clave,nombre)
+            clave, nombre, id_usuario_obvii, id_device, web_device, nickname, 
+            empresa)
+            
     VALUES ('".$data[0]."', '".getFechaLibre(DIF_HORA)."', 0, '".$data[1]."', '".$data[2]."', 
-            '".$data[3]."','".$data[4]."');";		
+            '".$data[3]."','".$data[4]."','".$data[5]."','".$data[6]."','".$data[7]."','".$data[8]."','".$data[9]."');";		
+  
   
   $rs2 = pg_query($dbPg, $sql2);
 }
@@ -966,7 +973,7 @@ function senMailMarcacion($tipo,$lat,$lon,$tipo_marca,$nom,$fecha,$mail_post,$di
 		 		$html .="<br>Direccion ingresada: ".$direcLibre;
 		 	}
 		 	$html .="<br>Direccion aproximada de marcacion: ".$direc[0][1];
-		 	$html .="<br>Empresa Cercana a la marcaci&oacute;: ".$empresa[0][1].", ".$empresa[0][3]." #".$empresa[0][4].",".$empresa[0][5].". Distancia mts:".$empresa[0][2]."";
+		 	$html .="<br>Empresa Cercana a la marcaci&oacute;n: ".$empresa[0][1].", ".$empresa[0][3]." #".$empresa[0][4].",".$empresa[0][5].". Distancia mts:".$empresa[0][2]."";
 		 	sendMail($_SESSION["id_usuario"],$html,$titulo);
 		 	if($mail_post!="")
 		 	{
