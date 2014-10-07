@@ -16,8 +16,10 @@ define("WS_REGISTROUSUARIO","obvii_registro.wsdl");
 define("WS_MARCACION","obvii_eventos.wsdl");
 define("ENCRIPTACION","semilla");
 define("ENCRIPTACION2","manzana");
+define("CORREO_COORPORATIVO","contacto@architeq.cl");
+define("MSG_DEMO","Su tipo de usuario es DEMO, servicios y opciones del sistema son limitados para este tipo de usuario. Si quiere un upgrade de su cuenta comun&iacute;quese enviando un mail a ".CORREO_COORPORATIVO." o llamando al   (56-2) 225049693  -  225049694");
 define("DIF_HORA","3");
-define("CLI_DEMO","6");
+define("CLI_DEMO","7");
 
 function inicioSesion($mail,$id_user_obvii,$id_cliente,$tipo_cli,$nick)
 {
@@ -91,10 +93,14 @@ function sendMail($para,$msg,$titulo)
 	$cabeceras .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 	
 	// Cabeceras adicionales
-	$cabeceras .= 'From: contacto@architeq.cl' . "\r\n";
-	$cabeceras .= 'Reply-To: contacto@architeq.cl' . "\r\n";
+	$cabeceras .= 'From: '.CORREO_COORPORATIVO.'' . "\r\n";
+	$cabeceras .= 'Reply-To: '.CORREO_COORPORATIVO.'' . "\r\n";
 	
-	
+	if($_SESSION["demo_us"])
+	{
+		$msg .="<br><br><br>_______________<br><strong>".MSG_DEMO."</strong>";
+	}
+	$msg .="<br><br><br>Los tildes han sido omitidos intencionalmente.";
 	if(mail($para, $titulo, $msg, $cabeceras))
 	{
 		$envio=true;
@@ -958,22 +964,25 @@ function senMailMarcacion($tipo,$lat,$lon,$tipo_marca,$nom,$fecha,$mail_post,$di
 		 	}
 		 	$titulo="Marcacion en Obvii";
 		 	$html="Asistencia Obvii";
-		 	$html .="<br>Usuario: ".$user[7];
+		 	$html .="<br>Usuario: ".ucwords($user[7]);
 		 	$html .="<br>E-mail: ".$user[1];
 		 	$html .="<br>Fecha: ".$fecha;
-		 	$html .="<br>Lugar de marcacion: ".$nom;
-		 	$html .="<br>Tipo de marcacion: ".$marca;
+		 	$html .="<br>Lugar de marcacion: ".ucwords($nom);
+		 	$html .="<br>Tipo de marcacion: ".ucwords($marca);
 		 	if(trim($comentario)!="")
 		 	{
-		 		$html .="<br>Comentario: ".$comentario;	
+		 		$html .="<br>Comentario: ".ucwords($comentario);	
 		 	}
 		 	if($tipo==2)
 		 	{
 		 		$titulo="Marcacion en Obvii(Libre)";
-		 		$html .="<br>Direccion ingresada: ".$direcLibre;
+		 		$html .="<br>Direccion ingresada: ".ucwords($direcLibre);
 		 	}
-		 	$html .="<br>Direccion aproximada de marcacion: ".$direc[0][1];
-		 	$html .="<br>Empresa Cercana a la marcaci&oacute;n: ".$empresa[0][1].", ".$empresa[0][3]." #".$empresa[0][4].",".$empresa[0][5].". Distancia mts:".$empresa[0][2]."";
+		 	if(!$_SESSION["demo_us"])
+		 	{
+		 		$html .="<br>Direccion aproximada de marcacion: ".$direc[0][1];
+		 		$html .="<br>Empresa Cercana a la marcacion: ".ucwords($empresa[0][1]).", ".ucwords($empresa[0][3])." #".$empresa[0][4].",".ucwords($empresa[0][5]).". Distancia mts:".$empresa[0][2]."";
+		 	}
 		 	sendMail($_SESSION["id_usuario"],$html,$titulo);
 		 	if($mail_post!="")
 		 	{

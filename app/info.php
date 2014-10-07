@@ -1,3 +1,16 @@
+					<?php
+					include("funciones.php");
+					session_start();	
+					if($_SESSION["demo_us"])
+					{
+					?>
+						<div class="ui-bar ui-bar-a" style="text-align:center;">
+					 		<?=MSG_DEMO?>
+						</div>
+						<br><br>
+					<?php
+					}
+					?>
 					<div class="ui-bar ui-bar-a" id=barra_sup style="text-align:center;">
 					 Informaci&oacute;n
 					</div>
@@ -50,7 +63,7 @@
 					<p id="form_interior">
 						<span class=titulo_interior><img src="images/ticket-32.png" width=20px> Listado</span>
 						<br>
-						<span class=texto_interior>Una vez realizada la marcaci&oacute;n se listara  la asistencia o  procedimientos asociados a la marcaci&oacute;n. Esta opci&oacute;n solo est&aacute; disponible para para plan full. <br>Si quiere hacer upgrade de su cuenta contacte a contacto@architeq.cl</span>
+						<span class=texto_interior>Una vez realizada la marcaci&oacute;n se listara  la asistencia o  procedimientos asociados a la marcaci&oacute;n. Esta opci&oacute;n solo est&aacute; disponible para para plan full. <br>Si quiere hacer upgrade de su cuenta contacte a <?=CORREO_COORPORATIVO?></span>
 						<span class=texto_interior><br><br> Esta opci&oacute;n solo esta disponible cuando el dispositivo esta conectado a internet ya sea Wi-fi o datos moviles.</span>
 						
 					</p>   
@@ -59,7 +72,7 @@
 					</div>
     	    <p id="form_interior">					
 						
-						<span class=texto_interior>Cualquier inquietud comun&iacute;cate v&iacute;a contacto@architeq.cl<br>Todos los derechos reservados a Architeq.cl</span>
+						<span class=texto_interior>Cualquier inquietud comun&iacute;cate v&iacute;a <?=CORREO_COORPORATIVO?><br>Todos los derechos reservados a Architeq.cl</span>
 						
 					</p>          
 					<script>

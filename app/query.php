@@ -158,7 +158,7 @@ if(1==1)
     	}else{    	
     		?>
 				<script>
-					mensaje("Usuario o Clave incorrectas","ERROR","myPopup_ses");
+					mensaje(MSG_ERR_USER,"ERROR","myPopup_ses");
 				</script>
 				<?php
     	}
@@ -166,7 +166,7 @@ if(1==1)
 		{
 			?>
 			<script>
-				mensaje("Problemas de conexi&oacute;n, por favor int&eacute;ntelo nuevamente.","ERROR","myPopup_ses");
+				mensaje(MSG_ERR_CONEC,"ERROR","myPopup_ses");
 			</script>
 			<?php
 		}
@@ -283,7 +283,7 @@ if(1==1)
 		{
 			?>
 			<script>
-				mensaje("Problemas de conexi&oacute;n, por favor int&eacute;ntelo nuevamente.","ERROR","myPopup");
+				mensaje(MSG_ERR_CONEC,"ERROR","myPopup");
 			</script>
 			<?php
 		}
@@ -319,7 +319,7 @@ if(1==1)
 		{
 			?>
 			<script>
-				mensaje("Problemas de conexi&oacute;n, por favor int&eacute;ntelo nuevamente.","ERROR","myPopup_reg");
+				mensaje(MSG_ERR_CONEC,"ERROR","myPopup_reg");
 			</script>
 			<?php
 		}
@@ -353,7 +353,7 @@ if(1==1)
 		{
 			?>
 			<script>
-				mensaje("Problemas de conexi&oacute;n, por favor int&eacute;ntelo nuevamente.","ERROR","myPopup_reg");
+				mensaje(MSG_ERR_CONEC,"ERROR","myPopup_reg");
 			</script>
 			<?php
 		}
@@ -581,7 +581,7 @@ if(1==1)
 			<script>
 				$.mobile.loading( 'hide');
 				loadHome();
-				mensaje("Se produjo un error, por favor int&eacute;ntarlo nuevamente",'ERROR','myPopup');
+				mensaje(MSG_ERR_CONEC,'ERROR','myPopup');
 			</script>
 			<?php
 			}
@@ -698,7 +698,7 @@ if(1==1)
 		{
 			?>
 			<script>
-				mensaje("Problemas de conexi&oacute;n, por favor int&eacute;ntelo nuevamente.","ERROR","myPopup");
+				mensaje(MSG_ERR_CONEC,"ERROR","myPopup");
 			</script>
 			<?php
 		}
@@ -758,7 +758,7 @@ if(1==1)
 			{
 				?>
 			<script>
-				mensaje("Problemas de conexi&oacute;n, por favor int&eacute;ntelo nuevamente.","ERROR","myPopup_ses");
+				mensaje(MSG_ERR_CONEC,"ERROR","myPopup_ses");
 			</script>
 			<?php
 			}
@@ -767,7 +767,7 @@ if(1==1)
 		{
 			?>
 			<script>
-				mensaje("Problemas de conexi&oacute;n, por favor int&eacute;ntelo nuevamente.","ERROR","myPopup_ses");
+				mensaje(MSG_ERR_CONEC,"ERROR","myPopup_ses");
 			</script>
 			<?php
 		}

@@ -87,7 +87,7 @@ if($_REQUEST['tipo']==1) //check estado sesion
  	  	?>
  	  	<script>
  	  		USER_DEMO=true;
- 	  		mensaje('Su usuario es de tipo Demo, el uso del sistema sera limitado. Si desea un upgrade de su cuenta env&iacute;e un mail a contacto@architeq.cl','Demo','myPopup');
+ 	  		mensaje(MSG_DEMO,'Demo','myPopup');
  	  		</Script>
  	  	<?php
  	  	
@@ -498,7 +498,7 @@ if($lugares[0][13]=='t')
 						?>
 						<script>
 							sync_marca=false;
-							mensaje("Problemas de conexi&oacute;n, por favor int&eacute;ntelo nuevamente.","ERROR","myPopup_ses");
+							mensaje(MSG_ERR_CONEC,"ERROR","myPopup_ses");
 						</script>
 						<?php
 					}
@@ -514,7 +514,7 @@ if($lugares[0][13]=='t')
 			<script>
 				
 				$.mobile.loading( 'hide');
-				mensaje("Este servicio no esta disponible para su tipo de usuario.",'Alerta','myPopup');
+				mensaje(MSG_USER_DEMO,'Alerta','myPopup');
 				</Script>
 			<?php
 	}
@@ -532,7 +532,7 @@ if($lugares[0][13]=='t')
 			?>
 			<script>
 				$.mobile.loading( 'hide');
-				navigator.notification.beep(1);
+				
 				mensaje("Solicitud enviada.",'Mensaje','myPopup_ses');	
 				</script>
 			<?php
