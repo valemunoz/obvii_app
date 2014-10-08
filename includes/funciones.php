@@ -1040,4 +1040,20 @@ function createCsv($productos,$nom_file,$nom_campos)
 	fclose($out);
 	
 }
+function getRuta($id)//retorna distancia en metros
+{
+	$dbPg=pgSql_db();		
+	
+	$sql="select latitud,longitud from obvii_ruta where mail_usuario='".$id."' order by fecha_registro";
+	
+	$rsCalle = pg_query($dbPg, $sql);	
+	//echo $sql;
+	$data=array();
+	while ($rowCalle = pg_fetch_row($rsCalle))
+	{		
+		$data[]=$rowCalle[1].",".$rowCalle[0];			
+	}	
+	pg_close($dbPg);
+  return $data;
+}
 ?>

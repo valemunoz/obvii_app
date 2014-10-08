@@ -990,4 +990,15 @@ function senMailMarcacion($tipo,$lat,$lon,$tipo_marca,$nom,$fecha,$mail_post,$di
 		 	}
 		 	/*Fin mail*/
 }
+function addRuta($data)
+{
+	$dbPg=pgSql_db();
+	
+ $sql2 = "INSERT INTO obvii_ruta(
+            id_usuario, mail_usuario, latitud, longitud, geom, estado, 
+            fecha_registro, speed, presicion, heading, id_cliente)
+    VALUES ('".$data[0]."', '".$data[1]."', '".$data[2]."', '".$data[3]."',ST_GeomFromText('POINT(".$data[3]." ".$data[2].")',2276) , '".$data[4]."', 
+            '".getFechaLibre(DIF_HORA)."', '".$data[5]."', '".$data[6]."', '".$data[7]."', '".$data[8]."');";		
+  $rs2 = pg_query($dbPg, $sql2);
+}
 ?>

@@ -50,7 +50,16 @@ if(1==1)
 	 if($estado_sesion==0)
  {
  	  $usuar=getUsuario(" and mail ilike '".$_SESSION["id_usuario"]."'");
- 	  $id_device=$usuar[8];
+ 	  $id_device=trim($usuar[8]);
+ 	  ?>
+ 	  <script>
+ 	  	var device_com="<?=$id_device?>";
+ 	  	if(device_com!=uuid_user)
+ 	  	{
+ 	  		cerrarSesion();
+ 	  	}
+ 	  	</script>
+ 	  <?php
  	  if(trim($id_device)=="")
  	  {
  	  	cerrar_sesion();
@@ -126,7 +135,10 @@ if(1==1)
 							$("#ll_cerrar").show(); 	
 							$("#ll_dip").hide(); 
 							$("#list_mail_marca").show(); 
-							
+							if(watchEstado)
+							{
+								startWatchPosition();
+							}
 							//window.location.href="index.html";
 						</script>
 						<?php

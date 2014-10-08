@@ -60,6 +60,7 @@ if($_REQUEST['tipo']==1) //check estado sesion
 		<script>
 		//cambiar("mod_sesion");
 		$("#ll_dip").show(); 
+		stopWatchPosition();
 		inicio_ses();
 		</script>
 		<?php
@@ -68,6 +69,10 @@ if($_REQUEST['tipo']==1) //check estado sesion
 		?>
 		<script>
 			$("#ll_dip").hide(); 
+			if(watchEstado)
+			{
+				startWatchPosition();
+			}
 			loadMenu();	
 		loadFav();
 		
@@ -710,6 +715,32 @@ if($lugares[0][13]=='t')
 			<?php
 		
 	}
+}elseif($_REQUEST['tipo']==11) //watch position
+{
+	$lon=$_REQUEST['lon'];
+	$lat=$_REQUEST['lat'];
+	$precision=$_REQUEST['prec'];
+	$speed=$_REQUEST['speed'];
+	$heading=$_REQUEST['heading'];
+	if(!is_numeric($speed))
+	{
+		$speed=0;
+	}
+	if(!is_numeric($heading))
+	{
+		$heading=0;
+	}
+	$data=array();
+	$data[]=$_SESSION["id_usuario_obvii"];
+	$data[]=$_SESSION["id_usuario"];
+	$data[]=$lat;
+	$data[]=$lon;
+	$data[]=0;
+	$data[]=$speed;
+	$data[]=$precision;
+	$data[]=$heading;
+	$data[]=$_SESSION["id_cliente"];
+	addRuta($data);
 }
 
 ?>
