@@ -29,6 +29,9 @@ $disposs=getDispositivos(" and estado=1 and id_cliente=".$_SESSION['id_cliente_w
                <td >
                     <a href="javascript:window.location='dispositivos.php'"><img src="img/device.png" height=30px width=30px title="Dispositivos"></a>(<?=count($disposs)?>)  
                 </td>
+                 <td >
+                    <a href="javascript:window.location='mapa.php'"><img src="img/maps.png" height=30px width=30px title="Mapa Geolocalizacion"></a>  
+                </td>
                  
                 
 

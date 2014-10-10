@@ -781,3 +781,24 @@ function loadCsv(nom_file)
 							}
 	);
 }
+
+function loadMapaData()
+{
+	
+	opc_lin=$.trim(document.getElementById("em_estado").value);
+	nick=$.trim(document.getElementById("nom_em").value);
+	if(nick!="")
+	{
+		limpiarMapa();
+		$("#output").load("query.php", 
+						{tipo:10, tipo_lin:opc_lin, usuario:nick} 
+							,function(){
+								
+									
+							}
+		);
+	}else
+		{
+			alert("Debe ingresar un usuario");
+		}
+}

@@ -359,6 +359,31 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 		$data[]=$_REQUEST['order'];
 		
 		addLugarObvii($data);
+	}elseif($_REQUEST['tipo']==10 and $estado_sesion==0)
+	{
+		
+	//addLinea(CM_datos)
+	 $datos_ruta=getRuta(''.$_REQUEST['usuario'].'');
+	 if($_REQUEST['tipo_lin']==0)
+	 {
+	 	$data_geo=implode("|",$datos_ruta);
+		?>
+		<script>			
+			addLinea("<?=$data_geo?>");
+		</Script>
+		<?php
+		}elseif($_REQUEST['tipo_lin']==1)
+		{
+			foreach($datos_ruta as $ruta)
+			{
+				$dta=explode(",",$ruta);
+				?>
+				<script>					
+					addMarcador("img/point.png","20,20","<?=$dta[1]?>","<?=$dta[0]?>",'','');
+				</Script>
+				<?php
+			}
+		}
 	}
 }
 
