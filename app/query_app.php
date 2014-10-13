@@ -437,6 +437,14 @@ if($lugares[0][13]=='t')
 					 	$data[]=$fec[$i];
 					 	$data[]=$nube[$i];
 					 	$data[]=$local[$i];
+					 	?>
+					 	<script>
+					 	alert("'<?=$fec[$i]?>' - '<?=$nube[$i]?>' - '<?=$local[$i]?>'");
+					 	</Script>
+					 	<?php
+					 	//$data[]=getFechaLibre(DIF_HORA);
+					 	//$data[]=getFechaLibre(DIF_HORA);
+					 	//$data[]=getFechaLibre(DIF_HORA);
 					 	$data[]='true';
 					 	
 					 	

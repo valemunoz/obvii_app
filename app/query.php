@@ -24,7 +24,7 @@ $fech=getFechaLibre(DIF_HORA);
 ?>
 <script>
 	var dateNube = new Date('<?=substr($fech, 0,10)?> <?=substr($fech, 10)?>');
-	var ub="<?=$fech?>";
+	var ub="<?=$fech?>";	
 	updateNubeUser(ub);
 	</script>
 <?php  

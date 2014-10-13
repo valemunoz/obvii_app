@@ -279,3 +279,19 @@ table {
 {
 	background-color:#FF5959;
 }
+#titulo1
+{
+	font-size:12px;
+	color:#808080;
+	font-weight: bold;	
+	
+}
+#popup_CM3
+{
+	border-radius:10px !important;	
+	border:2px #8080FF solid !important;
+}
+.ui-datepicker
+{
+	z-index:999999 !important;
+}

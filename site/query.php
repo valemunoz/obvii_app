@@ -361,28 +361,71 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 		addLugarObvii($data);
 	}elseif($_REQUEST['tipo']==10 and $estado_sesion==0)
 	{
-		
+		$desde=$_REQUEST['desde'];
+		$hasta=$_REQUEST['hasta'];
+		$qr="";
+		if($desde !="")
+		{
+			$qr .="and fecha_registro >= '".$desde." 00:00:00'";
+		}
+		if($hasta !="")
+		{
+			$qr .="and fecha_registro <= '".$hasta." 23:59:59'";
+		}
 	//addLinea(CM_datos)
-	 $datos_ruta=getRuta(''.$_REQUEST['usuario'].'');
-	 if($_REQUEST['tipo_lin']==0)
+	 list($datos_ruta,$data_punto)=getRuta(''.$_REQUEST['usuario'].'',$qr);
+	 if(count($data_punto) > 100 and $_REQUEST['tipo_lin']==1)
+	 {
+	 	$_REQUEST['tipo_lin']=0;
+	 	?>
+	 	<script>
+	 		alert("Demasiados registros para el tipo Punto. Se desplegaran en linea");
+	 		</Script>
+	 	<?php
+	 }
+	 if($_REQUEST['tipo_lin']==0 and count($datos_ruta)>0)
 	 {
 	 	$data_geo=implode("|",$datos_ruta);
+	 	$dta=explode(",",$datos_ruta[0]);
+	 	$dta_fin=explode(",",$datos_ruta[count($datos_ruta)-1]);
+	 	
 		?>
 		<script>			
+			
 			addLinea("<?=$data_geo?>");
+			addMarcador("img/marker_ini.png","30,30","<?=$dta[1]?>","<?=$dta[0]?>",'','Inicio');
+			addMarcador("img/marker_fin.png","20,20","<?=$dta_fin[1]?>","<?=$dta_fin[0]?>",'','Termino');
+			markers.setZIndex(3000);
 		</Script>
 		<?php
-		}elseif($_REQUEST['tipo_lin']==1)
+		}elseif($_REQUEST['tipo_lin']==1 and count($datos_ruta)>0)
 		{
-			foreach($datos_ruta as $ruta)
+			foreach($datos_ruta as $i => $ruta)
 			{
 				$dta=explode(",",$ruta);
+				$titulo="<div id=titulo1>Fecha: ".$data_punto[$i][4];
+				$titulo .="<br>Precision GPS :".$data_punto[$i][5]."</div>";
 				?>
 				<script>					
-					addMarcador("img/point.png","20,20","<?=$dta[1]?>","<?=$dta[0]?>",'','');
+					addMarcador("img/circle.png","20,20","<?=$dta[1]?>","<?=$dta[0]?>",'','<?=$titulo?>');
 				</Script>
 				<?php
 			}
+			?>
+			<script>
+				markers.setZIndex(3000);
+				map.zoomToExtent(markers.getDataExtent(),false);
+				</script>
+			<?php
+			
+		}else
+		{
+			?>
+			<script>
+			alert("No hay registros disponibles.");
+			</script>
+			<?php
+			
 		}
 	}
 }

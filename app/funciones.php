@@ -306,7 +306,7 @@ function addMarcacion($data)
 	{
 		$fecha=trim($data[12]);
 	}
-  $sql="INSERT INTO obvii_marcacion(
+  echo $sql="INSERT INTO obvii_marcacion(
              id_usuario, id_usuario_obvii, fecha_registro, tipo, 
             id_lugar, lat, lon, presicion,comentario,tipo_marcacion,nombre_lugar,id_cliente,direccion_libre,fecha_nube,fecha_local,sync)
     VALUES ('".$data[0]."', '".$data[1]."','".$fecha."' , '".$data[2]."', 
@@ -369,7 +369,7 @@ function getFechaLibre($horas)
 {
 	$fecha=date("Y-m-d H:i:s");
 	$fecha_actual2 = strtotime ( '-'.$horas.' hours ' , strtotime ( $fecha ) ) ;
-	$fec = date ( 'Y-m-d H:i:s' , $fecha_actual2 );
+	$fec = date ( 'Y/m/d H:i:s' , $fecha_actual2 );
 	return $fec;
 }
 

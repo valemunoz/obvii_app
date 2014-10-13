@@ -1040,20 +1040,36 @@ function createCsv($productos,$nom_file,$nom_campos)
 	fclose($out);
 	
 }
-function getRuta($id)//retorna distancia en metros
+function getRuta($id,$qr)//retorna distancia en metros
 {
 	$dbPg=pgSql_db();		
+	if(trim($qr)=="")
+	{
+		$sql="select latitud,longitud,id_usuario,mail_usuario,geom,estado,fecha_registro,presicion from obvii_ruta where mail_usuario='".$id."' order by fecha_registro";	
+	}else
+	{
+		$sql="select latitud,longitud,id_usuario,mail_usuario,geom,estado,fecha_registro,presicion from obvii_ruta where mail_usuario='".$id."' ".$qr." order by fecha_registro";
+	}
 	
-	$sql="select latitud,longitud from obvii_ruta where mail_usuario='".$id."' order by fecha_registro";
 	
 	$rsCalle = pg_query($dbPg, $sql);	
 	//echo $sql;
-	$data=array();
+	$data_arr=array();
+	$data_latlon=array();
 	while ($rowCalle = pg_fetch_row($rsCalle))
 	{		
-		$data[]=$rowCalle[1].",".$rowCalle[0];			
+		$data=array();
+		$data_latlon[]=$rowCalle[1].",".$rowCalle[0];	
+		$data[]=$rowCalle[2];
+		$data[]=$rowCalle[3];
+		$data[]=$rowCalle[4];
+		$data[]=$rowCalle[5];
+		$data[]=$rowCalle[6];
+		$data[]=$rowCalle[7];
+		$data_arr[]=$data;
 	}	
 	pg_close($dbPg);
-  return $data;
+  return array($data_latlon,$data_arr);
 }
+
 ?>
