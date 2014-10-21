@@ -29,13 +29,14 @@ function inicioSesion($mail,$id_user_obvii,$id_cliente,$tipo_cli,$nick)
 	$_SESSION["nickname"] = $nick;
 	$_SESSION["id_cliente"] = $id_cliente;
 	$_SESSION["id_usuario_obvii"] = $id_user_obvii;
-	$_SESSION['fecha']=getFecha();
-	
+	$_SESSION['fecha']=getFecha();	
 	$_SESSION["mail_log"]=$mail;
   $_SESSION["tipo_cli"]=$tipo_cli;
   $cliente=getCliente(" and id_cliente=".$id_cliente."");
   $_SESSION["pais_cli"]=$cliente[0][4];
   $_SESSION["demo_us"]=true;
+  $_SESSION["gps"]=false;
+  $_SESSION["documento"]=$cliente[0][6];
   if(strtolower($_SESSION["pais_cli"])=="peru")
   {
   	define("DIF_HORA","4");
@@ -52,6 +53,8 @@ function cerrar_sesion()
 	unset($_SESSION['id_cliente']);	
 	unset($_SESSION["tipo_cli"]);
 	unset($_SESSION["demo_us"]);
+	unset($_SESSION["gps"]);
+	unset($_SESSION["documento"]);
 	//session_destroy();
 }
 function estado_sesion()
@@ -306,7 +309,7 @@ function addMarcacion($data)
 	{
 		$fecha=trim($data[12]);
 	}
-  echo $sql="INSERT INTO obvii_marcacion(
+  $sql="INSERT INTO obvii_marcacion(
              id_usuario, id_usuario_obvii, fecha_registro, tipo, 
             id_lugar, lat, lon, presicion,comentario,tipo_marcacion,nombre_lugar,id_cliente,direccion_libre,fecha_nube,fecha_local,sync)
     VALUES ('".$data[0]."', '".$data[1]."','".$fecha."' , '".$data[2]."', 
@@ -378,7 +381,7 @@ function getUsuario($qr)
 	
 	$dbPg=pgSql_db();
 	
-  $sql2 = "SELECT id_usuario,mail,fecha_registro,estado,id_cliente,tipo_usuario,clave,nombre,id_device,web_device,nickname from obvii_usuario where 1=1";		
+  $sql2 = "SELECT id_usuario,mail,fecha_registro,estado,id_cliente,tipo_usuario,clave,nombre,id_device,web_device,nickname,gps from obvii_usuario where 1=1";		
   if($qr!="")
   {
   	$sql2 .=$qr;
@@ -401,6 +404,7 @@ function getUsuario($qr)
 				$data[]=$row2[8];
 				$data[]=$row2[9];
 				$data[]=$row2[10];
+				$data[]=$row2[11];
 		}
 		return $data;
 }
@@ -663,7 +667,7 @@ function getCliente($qr)
 {
 	$dbPg=pgSql_db();
 	
-  $sql2 = "SELECT id_cliente, nombre,estado,mail,pais,tipo FROM obvii_cliente where 1=1";		
+  $sql2 = "SELECT id_cliente, nombre,estado,mail,pais,tipo,documento FROM obvii_cliente where 1=1";		
   if($qr!="")
   {
   	$sql2 .=$qr;
@@ -680,6 +684,7 @@ function getCliente($qr)
 				$data[]=$row2[3];
 				$data[]=$row2[4];
 				$data[]=$row2[5];
+				$data[]=$row2[6];
 				
 				
 				$datos[]=$data;
@@ -1000,5 +1005,15 @@ function addRuta($data)
     VALUES ('".$data[0]."', '".$data[1]."', '".$data[2]."', '".$data[3]."',ST_GeomFromText('POINT(".$data[3]." ".$data[2].")',2276) , '".$data[4]."', 
             '".getFechaLibre(DIF_HORA)."', '".$data[5]."', '".$data[6]."', '".$data[7]."', '".$data[8]."');";		
   $rs2 = pg_query($dbPg, $sql2);
+}
+function addImagen($data)
+{
+	$dbPg=pgSql_db();
+	$sql="INSERT INTO obvii_imagen(
+            nombre, id_lugar, id_usuario, estado, fecha_registro, 
+            id_marcacion)
+    VALUES ('".$data[0]."', '".$data[1]."', '".$data[2]."', '".$data[3]."', '".getFechaLibre(DIF_HORA)."', 
+            '".$data[4]."')";
+	$rs2 = pg_query($dbPg, $sql);            
 }
 ?>

@@ -78,11 +78,19 @@ if($_REQUEST['tipo']==1) //check estado sesion
 		
 	  	
 		$("#bienvenido_div").html("Bienvenido : <?=$_SESSION['id_usuario']?> <span id=id_sync_wel></span>");	
+		var gps="<?=$_SESSION['gps']?>";
 		
-  	$("#ll_mapa").show();
-		$("#ll_off").show(); 
-		$("#ll_cerrar").show(); 	
-		$("#list_mail_marca").show(); 	
+		
+		if(gps=="t" || gps=="true")
+		{
+			watchEstado=true;
+			document.getElementById("checkbox-2a").checked=true;
+		}else
+			{
+				watchEstado=false;
+				document.getElementById("checkbox-2a").checked=false;
+			}
+  	mostrarMenu();	
 		
 		
 		</script>
@@ -533,7 +541,7 @@ if($lugares[0][13]=='t')
 	}
 	}elseif($_REQUEST['tipo']==8) //dispositivos
 	{
-		$usuario=getUsuario(" and mail like '".trim(strtolower($_REQUEST['mail']))."' and estado=0");
+		$usuario=getUsuario(" and nickname ilike '".trim(strtolower($_REQUEST['mail']))."' and estado=0");
 		if(count($usuario)>0)
 		{
 			$data=array();
@@ -749,6 +757,12 @@ if($lugares[0][13]=='t')
 	$data[]=$heading;
 	$data[]=$_SESSION["id_cliente"];
 	addRuta($data);
+}elseif($_REQUEST['tipo']==12) //gps
+{
+	$_SESSION['gps']=$_REQUEST['gps'];
+	$usuario=getUsuario(" and nickname ilike '".$_SESSION["nickname"]."' and estado=0");
+	updateUsuario("gps='".$_REQUEST['gps']."'",$usuario[0]);
+	
 }
 
 ?>

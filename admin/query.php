@@ -114,6 +114,11 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_ADMIN))==PATH_SITE_ADMI
 			$sel_tip="selected";
 		else
 			$sel_tip2="selected";
+			
+		if($usuario[0][6]=="t")
+			$sel_doc="selected";
+		else
+			$sel_doc2="selected";	
 		?>
 		<table border=1 id="table_resul" class="bordered">
 			<tr><td>Nombre</td><td><input id="nom_ed" name="nom_ed" type="text" value="<?=$usuario[0][1]?>"></td></tr>				
@@ -127,6 +132,15 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_ADMIN))==PATH_SITE_ADMI
 								
 							</select>
 						</td></tr>						
+			<tr><td>Adjuntar Imagen?</td>
+						<td>
+							<select id="tipo_doc" name='tipo_doc'>
+								
+									<option value="true" <?=$sel_doc?>> SI</option>
+									<option value="false" <?=$sel_doc2?>>NO</option>
+								
+							</select>
+						</td></tr>												
 			<tr><td>Pais</td>
 						<td>
 							<select id="pais_ed" name='pais_ed'>
@@ -149,7 +163,7 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_ADMIN))==PATH_SITE_ADMI
 			<?php
 	}elseif($_REQUEST['tipo']==5 and $estado_sesion==0)//update cli
 	{
-		updateCli("tipo=".$_REQUEST['tipo_cli']." , pais='".$_REQUEST['pais']."', mail='".$_REQUEST['mail']."', nombre='".$_REQUEST['nom']."'",decrypt($_REQUEST['id'],ENCRIPTACION));
+		updateCli("documento='".$_REQUEST['doc']."', tipo=".$_REQUEST['tipo_cli']." , pais='".$_REQUEST['pais']."', mail='".$_REQUEST['mail']."', nombre='".$_REQUEST['nom']."'",decrypt($_REQUEST['id'],ENCRIPTACION));
 	}elseif($_REQUEST['tipo']==6 and $estado_sesion==0)//update cli estado
 	{
 		updateCli("estado='".$_REQUEST['estado']."'",decrypt($_REQUEST['id'],ENCRIPTACION));
@@ -168,7 +182,16 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_ADMIN))==PATH_SITE_ADMI
 									<option value=1>Asistencia + lista alumno</option>
 								
 							</select>
-						</td></tr>					
+						</td></tr>				
+						<tr><td>Adjuntar Imagen?</td>
+						<td>
+							<select id="tipo_docus" name='tipo_docus'>
+								
+									<option value="true" > SI</option>
+									<option value="false" selected>NO</option>
+								
+							</select>
+						</td></tr>							
 					<tr><td>Pais</td>
 						<td>
 							<select id="pais_us" name='pais_us'>
@@ -194,6 +217,7 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_ADMIN))==PATH_SITE_ADMI
 		$data[]=$_REQUEST['mail'];
 		$data[]=$_REQUEST['pais'];
 		$data[]=$_REQUEST['tipo_cli'];
+		$data[]=$_REQUEST['doc'];
 		addCliente($data);
 	}
 }

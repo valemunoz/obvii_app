@@ -104,6 +104,9 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 		}
 		$direc_aprox=getDireccionGoogleLATLON($marca[0][6],$marca[0][7]);
 		$lugar=getLugares(" and id_lugar=".$marca[0][5]."");
+		$imagenes=getImagen(" and id_lugar =".$marca[0][5]." and estado=0 order by fecha_registro");
+		
+		
 		$distancia_aprox=getDistancia($marca[0][6],$marca[0][7], $lugar[0][4],$lugar[0][5]);
 		?>
 		<table border=1 id="table_resul" class="bordered">
@@ -141,6 +144,20 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 			
 			</table>
 			<?php
+			
+			if(count($imagenes) >0)
+			{
+			?>
+			<br>
+			<h3>Documentos Adjuntos</h3>
+			<?php
+			foreach($imagenes as $img)
+			{
+				?>
+				<img class=img_doc src="<?=PATH_SITE?>/<?=PATH_IMG?>/<?=$img[1]?>">
+				<?php
+			}
+			}
 			if($_SESSION['tip_cli_web']==1)
 			{
 				$asistentes=getMarcaInt(" and estado=0 and id_marca_base=".$id."");

@@ -208,7 +208,7 @@ function saveCliente()
 	var mail=$.trim(document.getElementById("mail_us").value);
 	var pais=$.trim(document.getElementById("pais_us").value);
 	var tipo=$.trim(document.getElementById("tipo_us").value);
-	
+	var doc=$.trim(document.getElementById("tipo_docus").value); 
 		
 	var msg="";
 	var valida=true;
@@ -226,7 +226,7 @@ function saveCliente()
 	}else
 	{
 		$("#output").load("query.php", 
-							{tipo:8,nombre:nombre,mail:mail,pais:pais,tipo_cli:tipo} 
+							{tipo:8,nombre:nombre,mail:mail,pais:pais,tipo_cli:tipo, doc:doc} 
 								,function(){
 									CloseModalMapa();
 										filtrar_cli();
@@ -244,6 +244,7 @@ function updateCliente(id_usuario)
 	var pais=$.trim(document.getElementById("pais_ed").value);		
 		
 		var tipo=$.trim(document.getElementById("tipo_ed").value);
+		var doc=$.trim(document.getElementById("tipo_doc").value);
 	var msg="";
 	var valida=true;
   if(nombre=="" || (!validarEmail(mail) && mail!=""))
@@ -260,7 +261,7 @@ function updateCliente(id_usuario)
 	}else
 	{
 		$("#output").load("query.php", 
-							{tipo:5,nom:nombre,id:id_usuario,mail:mail,pais:pais,tipo_cli:tipo} 
+							{tipo:5,nom:nombre,id:id_usuario,mail:mail,pais:pais,tipo_cli:tipo,doc:doc} 
 								,function(){
 									CloseModalReg();
 										filtrar_cli();

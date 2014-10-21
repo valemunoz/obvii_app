@@ -87,6 +87,7 @@ if(1==1)
     		$dispo=getUsuario(" and id_device ilike '%".$_REQUEST["uuid"]."%'");
     		$uuid=trim($cliente[8]);
     		$nick=trim($cliente[10]);
+    		$gps=trim($cliente[11]);
     		$mail=$cliente[1];
     		if(count($dispo)>0 and $dispo[0]!=$cliente[0])
     		{
@@ -110,6 +111,7 @@ if(1==1)
 						}
 						
     				inicioSesion(strtolower($mail),$res,$id_cliente,$tipo_cli,$nick);
+    				$_SESSION["gps"]=$gps;
     				if($id_cliente!= CLI_DEMO)
     				{
     					$_SESSION["demo_us"]=false;
@@ -130,11 +132,9 @@ if(1==1)
 									loadMenu();	
 									loadFav();
 	  						loadLugaresON();
-	  						$("#ll_mapa").show();
-							$("#ll_off").show(); 
-							$("#ll_cerrar").show(); 	
-							$("#ll_dip").hide(); 
-							$("#list_mail_marca").show(); 
+	  						
+							
+							mostrarMenu();
 							if(watchEstado)
 							{
 								startWatchPosition();
@@ -564,7 +564,16 @@ if(1==1)
 		 	$data[]=$fecha;
 		 	$data[]='false';
 		 	addMarcacion($data);
-		 
+		 	
+		 	$marca=getMarcaciones(" and id_usuario like '".$_SESSION["id_usuario"]."' and fecha_registro='".$fecha."'");
+		 	$datImg=array();
+
+      $datImg[]=$_REQUEST['img'];
+      $datImg[]=$_REQUEST['id'];
+      $datImg[]=$_SESSION["id_usuario_obvii"];
+      $datImg[]=0;
+      $datImg[]=$marca[0][0];
+		  addImagen($datImg);
 		 	senMailMarcacion(1,$_REQUEST['lat'],$_REQUEST['lon'],$_REQUEST['tipo_marca'],$lugares[0][1],$fecha,$mail_post,"",$_REQUEST['coment']);
 		 
 		 	if($_SESSION["tipo_cli"]==1)
@@ -572,6 +581,7 @@ if(1==1)
 		 				 ?>
 			<script>
 				$.mobile.loading( 'hide');
+				
 				loadAsis();
 				mensaje("Marcaci&oacute;n realizada",'MENSAJE','myPopup');
 			</script>
@@ -582,6 +592,7 @@ if(1==1)
 			<script>
 				$.mobile.loading( 'hide');
 				//loadHome();
+				
 				mensaje("Marcaci&oacute;n realizada",'MENSAJE','myPopup');
 			</script>
 			<?php
@@ -592,6 +603,7 @@ if(1==1)
 				?>
 			<script>
 				$.mobile.loading( 'hide');
+				
 				loadHome();
 				mensaje(MSG_ERR_CONEC,'ERROR','myPopup');
 			</script>
@@ -694,6 +706,7 @@ if(1==1)
 					}
 				?>
 			  </ul>	
+			  
 				<?php
 			
 			}else

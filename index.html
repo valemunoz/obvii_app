@@ -122,6 +122,34 @@
     	</div>
     	  
  		</div>
+ 		    	  	 		 <div data-role="page" id="m_checkout2" data-theme="a">
+			<div data-role="header" >   			 
+      		<h1><span id="t_tit_empresa">Opciones de Marcaci&oacute;n</span> <span id="t_id_empresa"></span></h1>  
+      		
+   		</div>  
+				<div data-role="content" data-theme="b" id="cont_check">
+					
+					
+					<div data-role="popup" id="myPopup_check">
+							<p>This is a completely basic popup, no options set.						</p>
+					</div>
+				<h3>Opciones de Marcaci&oacute;n</h3>	
+				<form enctype="multipart/form-data" class="formulario">
+					<p>
+					<label for="file">File:</label>
+					<input type="file" name="i_file" id="i_file" value="">
+					
+					<label for="textarea"><h4>Comentario</h4></label>
+					<textarea cols="20" rows="15" maxlength=500 name="comentario_lug" id="comentario_lug"></textarea>
+					<div id="msg_error_check2" class="msg_error"></div>
+					<input type="button" id="but_check" onclick="marcarLugarCom();" value="Marcar">
+				</p>
+				</form>
+				
+    			  		
+				</div><!-- /content -->
+				
+ </div><!-- /page SESION -->
  		<div data-role="page" id="mod_sesion" data-theme="a">
 
    	<div data-role="header" >
@@ -133,7 +161,7 @@
    	  	<div data-role="popup" id="myPopup_ses">
 							<p>This is a completely basic popup, no options set.						</p>
 					</div>
-    	  	
+
 					<div class="ui-bar ui-bar-a" id=barra_sup style="text-align:center;">
 					 Login
 					</div>

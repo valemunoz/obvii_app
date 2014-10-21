@@ -238,3 +238,12 @@
 {
 	font-size:70% !important;
 }
+#cont_check
+{
+	padding:15px !important;
+	
+}
+#t_id_empresa
+{
+	display:none;
+}

@@ -22,7 +22,7 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 					$cliente=getCliente(" and id_cliente=".$usuario[4]."");
 					if($cliente[0][2]==0)
 					{
-						inicioSesion_web($usuario[1],$usuario[1],$usuario[4],$res,$cliente[0][4],$cliente[0][5]);
+						inicioSesion_web($usuario[1],$usuario[1],$usuario[4],$res,$cliente[0][4],$cliente[0][5],$cliente[0][6]);
 						$_SESSION['web_lugar']="";
 						$_SESSION['web_opcion']="";
 						

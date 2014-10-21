@@ -5,10 +5,42 @@ var PAIS_LON=-70.656235;
 var PAIS_LAT=-33.458943;
 var PAIS_ZOOM=10;
 var OBVII_PAIS="chile";
-
+var imagen_a=false;
+var fileImagen="";
 var path_query="includes/query.php";
 var path_query2="includes/query_app.php";
 var path_info="includes/info.php";
+var path_upload="includes/uploadb.php";
+var pasoFile=true;
+$(document).ready(function(){
+    $('#i_file').change(function()
+    {
+        //obtenemos un array con los datos del archivo
+        var file = $("#i_file")[0].files[0];
+        //obtenemos el nombre del archivo
+        var fileName = file.name;
+        //obtenemos la extensión del archivo
+        fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
+        //obtenemos el tamaño del archivo
+        var fileSize = file.size;
+        //obtenemos el tipo de archivo image/png ejemplo
+        var fileType = file.type;
+       
+        var ext=fileName.split(".");
+        
+        if(fileSize > 1000000 || !isImage(ext[1]))
+        {
+        	pasoFile=false;
+        	mensaje("Los archivos cargados son muy pesados(Max 1MB) o bien no es una imagen JPG",'error','myPopup_check');
+        }else
+        	{
+        		pasoFile=true;
+        	}
+        //mensaje con la información del archivo
+        //alert("<span class='info'>Archivo para subir: "+fileName+", peso total: "+fileSize+" bytes.</span>");
+        
+    });
+ });
  			function loadMenu()
  			{
  				$("#output").load(path_query2, 
@@ -558,7 +590,9 @@ function marcarLugar(id_lugar,comenta)
 	if(comenta=='t' || comenta==0)
 	{
 		$.mobile.loading( 'hide');
-		mensaje("<div id='coment_form' name='coment_form'><input type='text' id=comentario_lug name=comentario_lug class=input_coment><br><input type='button' onclick='marcarLugarCom("+id_lugar+");' class=bottom_coment value='Guardar'></div>",'Ingrese un comentario','myPopup');
+		$( "#t_id_empresa" ).html(id_lugar);
+		$.mobile.changePage('#m_checkout2', { role: 'dialog'});
+		//mensaje("<div id='coment_form' name='coment_form'><input type='text' id=comentario_lug name=comentario_lug class=input_coment><br><input type='button' onclick='marcarLugarCom("+id_lugar+");' class=bottom_coment value='Guardar'></div>",'Ingrese un comentario','myPopup');
 		
 	}else
 	{
@@ -607,8 +641,12 @@ function marcarLugar(id_lugar,comenta)
 	mensaje("Se produjo un error en la lectura de su posici&oacute;n.<br>Esto se puede suceder al no darle permisos al sistema para obtener su ubicacion actual.<br>Por favor revise su configuracion e intentelo nuevamente",'ERROR','myPopup');
 	
 }
-function marcarLugarCom(id_lugar)
+
+function marcarLugarCom()
 {
+if(pasoFile || typeof $("#i_file")[0].files[0] == "undefined")
+{
+	id_lugar=$("#t_id_empresa").html();
 	$("#myPopup").popup("close");
 	
 			$.mobile.loading( 'show', {
@@ -626,26 +664,44 @@ function marcarLugarCom(id_lugar)
   		OBVII_LON=lng;
   		OBVII_LAT=lat;
   		OBVII_ACCU=accu;
-  	
-			$.mobile.loading( 'hide');
+  		var coment=$.trim(document.getElementById("comentario_lug").value);
+  		$("#m_checkout2").dialog( "close" );
+  		fileImagen="";
+			if (typeof $("#i_file")[0].files[0] != "undefined")
+			{
+  		d = new Date();
+				fec=''+d.getFullYear()+''+d.getMonth()+''+d.getDate()+''+d.getHours()+''+d.getMinutes()+''+d.getSeconds()+'';
+				fileImagen=id_lugar+"_"+fec+".jpg";
+				//alert("nom_imagen:: "+fileImagen);
+			}
+				
+  	  setTimeout("sendImg(id_lugar);",500);			
+			
 			$.mobile.loading( 'show', {
 				text: 'Marcando...',
 				textVisible: true,
 				theme: 'a',
 				html: ""
 			});
-			var coment=$.trim(document.getElementById("comentario_lug").value);
+			
 			
 			$("#output").load(path_query, 
-			{tipo:8, id:id_lugar,coment:coment,lat:OBVII_LAT,lon:OBVII_LON,accu:OBVII_ACCU,tipo_marca:0} 
+			{tipo:8, id:id_lugar,coment:coment,lat:OBVII_LAT,lon:OBVII_LON,accu:OBVII_ACCU,tipo_marca:0, img:fileImagen} 
 				,function(){	
 					$.mobile.loading( 'hide');
+					
 				}
 		);
 		
 			
 			},noLocation,{timeout:6000});
-	
+}else
+	{
+		
+		document.getElementById("i_file").value="";
+		document.getElementById("comentario_lug").value="";
+		mensaje("Archivo seleccionado no es valido",'Error','myPopup_check');
+	}
 			
 }
 
@@ -846,4 +902,110 @@ function marcacionesMail(tipo_marca)
 					
 				}
 			);
+}
+
+function sendImg(id_lugar)
+{
+	
+	
+	        //información del formulario
+        var formData = new FormData($(".formulario")[0]);
+        var message = "";    
+       
+        if (typeof $("#i_file")[0].files[0] != "undefined")
+        {
+
+        	if(typeof $("#i_file")[0].files[0] != "undefined" )
+        	{
+        		
+						var file = $("#i_file")[0].files[0];
+        		//obtenemos el nombre del archivo
+        		var fileName = file.name;
+        		
+        		var ext=fileName.split(".");
+        		sizea=file.size;        		
+        		imagen_a=isImage(ext[1]);
+        		//imagen_a=true;
+        		registro=fileName.toLowerCase();
+        		
+        		
+        	}else
+        		{
+        			
+        			imagen_a=false;
+        			sizea=100000000;
+       			  ext="";
+       			  archivo1="";
+       			  registro="";
+        		}
+        		
+
+					//hacemos la petición ajax  
+				
+		
+				
+				
+			
+        	if(sizea <= 1000000  && imagen_a)
+        	{
+        		$.mobile.loading( 'hide');
+        		$.mobile.loading( 'show', {
+				text: 'Procesando imagen...',
+				textVisible: true,
+				theme: 'a',
+				html: ""
+			});
+        		$.ajax({
+        		    url: path_upload+'?names='+fileImagen+'',  
+        		    type: 'POST',
+        		    // Form data
+        		    //datos del formulario
+        		    data: formData,
+        		    //necesario para subir archivos via ajax
+        		    cache: false,
+        		    contentType: false,
+        		    processData: false,
+        		    //mientras enviamos el archivo
+        		    beforeSend: function(){
+        		           
+        		    },
+        		    //una vez finalizado correctamente
+        		    success: function(data){
+        		       
+        		       
+        		       $.mobile.loading( 'hide');
+        		       
+        		    },
+        		    //si ha ocurrido un error
+        		    error: function(){
+        		    	
+        		    	mensaje("Error al subir imagen",'error','myPopup');
+        		       $.mobile.loading( 'hide');
+        		    }
+        		});
+      		}else
+      			{
+      				mensaje("Los archivos cargados son muy pesados(Max 1MB) o bien no es una imagen JPG",'error','myPopup');
+      			}
+				}else
+				{
+							$.mobile.loading( 'hide');
+        		  
+				}
+				
+        
+   
+}
+function isImage(extension)
+{
+
+    switch(extension.toLowerCase()) 
+    {
+        case 'jpg': case 'jpeg':
+            return true;
+        break;
+        default:
+            return false;
+        break;
+    }
 }

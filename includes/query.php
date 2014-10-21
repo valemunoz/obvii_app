@@ -473,6 +473,19 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
 		 	$data[]=$fecha;
 		 	addMarcacion($data);
 		 	
+		 	if(trim($_REQUEST['img']) != "")
+		 	{
+		 		$marca=getMarcaciones(" and id_usuario like '".$_SESSION["id_usuario"]."' and fecha_registro='".$fecha."'");
+		 		
+		 		$datImg=array();
+      	
+      	$datImg[]=$_REQUEST['img'];
+      	$datImg[]=$_REQUEST['id'];
+      	$datImg[]=$_SESSION["id_usuario_obvii"];
+      	$datImg[]=0;
+      	$datImg[]=$marca[0][0];
+		  	addImagen($datImg);
+			}
 		 	senMailMarcacion(1,$_REQUEST['lat'],$_REQUEST['lon'],$_REQUEST['tipo_marca'],$lugares[0][1],$fecha,$mail_post,$_REQUEST['coment']);
 		 	if($_SESSION["tipo_cli"]==1)
 		 	{
@@ -487,6 +500,8 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
 		 	{
 		 				 ?>
 			<script>
+				document.getElementById("i_file").value="";
+				document.getElementById("comentario_lug").value="";
 				$.mobile.loading( 'hide');
 				loadHome();
 				mensaje("Marcaci&oacute;n realizada",'MENSAJE','myPopup');

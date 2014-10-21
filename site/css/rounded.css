@@ -295,3 +295,14 @@ table {
 {
 	z-index:999999 !important;
 }
+.img_doc
+{
+	width:150px;
+	height;100px;
+}
+#grilla_def
+{
+		height:450px !important;
+	overflow:auto !important;
+
+}

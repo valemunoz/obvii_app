@@ -16,7 +16,9 @@ define("WS_REGISTROUSUARIO","obvii_registro.wsdl");
 define("WS_MARCACION","obvii_eventos.wsdl");
 define("ENCRIPTACION","semilla");
 define("ENCRIPTACION2","manzana");
+define("PATH_IMG","includes/files");
 define("DIF_HORA","3");
+
 
 
 
@@ -481,7 +483,7 @@ function upFavoritos($qr,$id)
 
 }
 
-function inicioSesion_web($mail,$id_usuario,$cliente,$id_obvii,$pais,$tipo_cli)
+function inicioSesion_web($mail,$id_usuario,$cliente,$id_obvii,$pais,$tipo_cli,$opc)
 {
 	
 	session_start();
@@ -493,7 +495,9 @@ function inicioSesion_web($mail,$id_usuario,$cliente,$id_obvii,$pais,$tipo_cli)
 	$_SESSION["id_usuario_web_obvii"]=$id_obvii;
 	$_SESSION['id_cliente_web']=$cliente;
 	$_SESSION['pais_web']=$pais;
-	$_SESSION['tip_cli_web']=	$tipo_cli;
+	$_SESSION['tip_cli_web']=	$tipo_cli;	
+	$_SESSION['documento']=	$opc[0];
+	
 	
 	
 	
@@ -508,6 +512,7 @@ function cerrar_sesion_web()
 	unset($_SESSION['id_cliente_web']);
 	unset($_SESSION['pais_web']);
 	unset($_SESSION['tip_cli_web']);
+	unset($_SESSION['documento']);
 	//session_destroy();
 }
 function estado_sesion_web()
@@ -657,7 +662,7 @@ function getCliente($qr)
 {
 	$dbPg=pgSql_db();
 	
-  $sql2 = "SELECT id_cliente, nombre,estado,mail,pais,tipo FROM obvii_cliente where 1=1";		
+  $sql2 = "SELECT id_cliente, nombre,estado,mail,pais,tipo,documento FROM obvii_cliente where 1=1";		
   if($qr!="")
   {
   	$sql2 .=$qr;
@@ -674,6 +679,7 @@ function getCliente($qr)
 				$data[]=$row2[3];
 				$data[]=$row2[4];
 				$data[]=$row2[5];
+				$data[]=$row2[6];
 				
 				
 				$datos[]=$data;
@@ -695,8 +701,8 @@ function addCliente($data)
 	$dbPg=pgSql_db();
 	
   $sql2 = "INSERT INTO obvii_cliente(
-             nombre, estado,mail,pais,tipo)
-    VALUES ('".$data[0]."', 0,'".$data[1]."','".$data[2]."','".$data[3]."');";		
+             nombre, estado,mail,pais,tipo,documento)
+    VALUES ('".$data[0]."', 0,'".$data[1]."','".$data[2]."','".$data[3]."','".$data[4]."');";		
   
   $rs2 = pg_query($dbPg, $sql2);
 
@@ -1071,5 +1077,48 @@ function getRuta($id,$qr)//retorna distancia en metros
 	pg_close($dbPg);
   return array($data_latlon,$data_arr);
 }
-
+function addImagen($data)
+{
+	$dbPg=pgSql_db();
+	$sql="INSERT INTO obvii_imagen(
+            nombre, id_lugar, id_usuario, estado, fecha_registro, 
+            id_marcacion)
+    VALUES ('".$data[0]."', '".$data[1]."', '".$data[2]."', '".$data[3]."', '".getFechaLibre(DIF_HORA)."', 
+            '".$data[4]."')";
+	$rs2 = pg_query($dbPg, $sql);            
+}
+function getImagen($qr)
+{
+	$dbPg=pgSql_db();		
+	
+	$sql="SELECT id_imagen, nombre, id_lugar, id_usuario, estado, fecha_registro, 
+       id_marcacion
+  FROM obvii_imagen where 1=1";
+  if(trim($qr)!="")
+  {
+  	$sql .=$qr;
+  }
+	
+	$rsCalle = pg_query($dbPg, $sql);	
+	//echo $sql;
+	$data=array();
+	while ($rowCalle = pg_fetch_row($rsCalle))
+	{		
+	
+		$direc=Array();
+		$direc[]=$rowCalle[0];
+		$direc[]=$rowCalle[1];		
+		$direc[]=$rowCalle[2];
+		$direc[]=$rowCalle[3];		
+		$direc[]=$rowCalle[4];		
+		$direc[]=$rowCalle[5];		
+		$direc[]=$rowCalle[6];		
+		$data[]=$direc;
+		
+		
+	}	
+	pg_close($dbPg);
+  return $data;
+	        
+}
 ?>
