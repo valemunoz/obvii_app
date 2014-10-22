@@ -21,7 +21,7 @@ define("MSG_DEMO","Su tipo de usuario es DEMO, servicios y opciones del sistema 
 define("DIF_HORA","3");
 define("CLI_DEMO","7");
 
-function inicioSesion($mail,$id_user_obvii,$id_cliente,$tipo_cli,$nick)
+function inicioSesion($mail,$id_user_obvii,$id_cliente,$tipo_cli,$nick,$opc)
 {
 	session_start();	
 	//session_register('usuario');	
@@ -36,7 +36,7 @@ function inicioSesion($mail,$id_user_obvii,$id_cliente,$tipo_cli,$nick)
   $_SESSION["pais_cli"]=$cliente[0][4];
   $_SESSION["demo_us"]=true;
   $_SESSION["gps"]=false;
-  $_SESSION["documento"]=$cliente[0][6];
+  $_SESSION["documento"]=$opc[0];
   if(strtolower($_SESSION["pais_cli"])=="peru")
   {
   	define("DIF_HORA","4");

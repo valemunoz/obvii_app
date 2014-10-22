@@ -12,6 +12,7 @@ var path_query2="includes/query_app.php";
 var path_info="includes/info.php";
 var path_upload="includes/uploadb.php";
 var pasoFile=true;
+
 $(document).ready(function(){
     $('#i_file').change(function()
     {
@@ -533,6 +534,7 @@ function validaUpLugares(id_lugar)
 }
 function marcar(id_lugar,comenta,marca)
 {
+	
 	if(marca=='f')
 	{
 		marcarLugar(id_lugar,comenta);
@@ -590,8 +592,8 @@ function marcarLugar(id_lugar,comenta)
 	if(comenta=='t' || comenta==0)
 	{
 		$.mobile.loading( 'hide');
-		$( "#t_id_empresa" ).html(id_lugar);
-		$.mobile.changePage('#m_checkout2', { role: 'dialog'});
+		loadCheckout(id_lugar);
+		
 		//mensaje("<div id='coment_form' name='coment_form'><input type='text' id=comentario_lug name=comentario_lug class=input_coment><br><input type='button' onclick='marcarLugarCom("+id_lugar+");' class=bottom_coment value='Guardar'></div>",'Ingrese un comentario','myPopup');
 		
 	}else
@@ -642,69 +644,120 @@ function marcarLugar(id_lugar,comenta)
 	
 }
 
-function marcarLugarCom()
+function marcarLugarComDoc()
 {
-if(pasoFile || typeof $("#i_file")[0].files[0] == "undefined")
-{
-	id_lugar=$("#t_id_empresa").html();
-	$("#myPopup").popup("close");
 	
-			$.mobile.loading( 'show', {
-				text: 'Obteniendo Ubicacion...',
-				textVisible: true,
-				theme: 'a',
-				html: ""
-			});
-		navigator.geolocation.getCurrentPosition (function (pos)
-		{
-			var lat = pos.coords.latitude;
-  		var lng = pos.coords.longitude;
-  		var accu=pos.coords.accuracy.toFixed(2);
-  		
-  		OBVII_LON=lng;
-  		OBVII_LAT=lat;
-  		OBVII_ACCU=accu;
-  		var coment=$.trim(document.getElementById("comentario_lug").value);
-  		$("#m_checkout2").dialog( "close" );
-  		fileImagen="";
-			if (typeof $("#i_file")[0].files[0] != "undefined")
-			{
-  		d = new Date();
-				fec=''+d.getFullYear()+''+d.getMonth()+''+d.getDate()+''+d.getHours()+''+d.getMinutes()+''+d.getSeconds()+'';
-				fileImagen=id_lugar+"_"+fec+".jpg";
-				//alert("nom_imagen:: "+fileImagen);
-			}
-				
-  	  setTimeout("sendImg(id_lugar);",500);			
-			
-			$.mobile.loading( 'show', {
-				text: 'Marcando...',
-				textVisible: true,
-				theme: 'a',
-				html: ""
-			});
-			
-			
-			$("#output").load(path_query, 
-			{tipo:8, id:id_lugar,coment:coment,lat:OBVII_LAT,lon:OBVII_LON,accu:OBVII_ACCU,tipo_marca:0, img:fileImagen} 
-				,function(){	
-					$.mobile.loading( 'hide');
-					
-				}
-		);
-		
-			
-			},noLocation,{timeout:6000});
-}else
+
+	if(pasoFile || typeof $("#i_file")[0].files[0] == "undefined")
 	{
+		id_lugar=$("#t_id_empresa").html();
+		$("#myPopup").popup("close");
 		
-		document.getElementById("i_file").value="";
-		document.getElementById("comentario_lug").value="";
-		mensaje("Archivo seleccionado no es valido",'Error','myPopup_check');
-	}
+				$.mobile.loading( 'show', {
+					text: 'Obteniendo Ubicacion...',
+					textVisible: true,
+					theme: 'a',
+					html: ""
+				});
+			navigator.geolocation.getCurrentPosition (function (pos)
+			{
+				var lat = pos.coords.latitude;
+	  		var lng = pos.coords.longitude;
+	  		var accu=pos.coords.accuracy.toFixed(2);
+	  		
+	  		OBVII_LON=lng;
+	  		OBVII_LAT=lat;
+	  		OBVII_ACCU=accu;
+	  		var coment=$.trim(document.getElementById("comentario_lug").value);
+	  		$("#m_checkout2").dialog( "close" );
+	  		fileImagen="";
+	  		
+					if (typeof $("#i_file")[0].files[0] != "undefined")
+					{
+	  				d = new Date();
+						fec=''+d.getFullYear()+''+d.getMonth()+''+d.getDate()+''+d.getHours()+''+d.getMinutes()+''+d.getSeconds()+'';
+						fileImagen=id_lugar+"_"+fec+".jpg";
+						//alert("nom_imagen:: "+fileImagen);
+					}
+					
+	  	  	setTimeout("sendImg(id_lugar);",500);			
+				
+				$.mobile.loading( 'show', {
+					text: 'Marcando...',
+					textVisible: true,
+					theme: 'a',
+					html: ""
+				});
+				
+				
+				$("#output").load(path_query, 
+				{tipo:8, id:id_lugar,coment:coment,lat:OBVII_LAT,lon:OBVII_LON,accu:OBVII_ACCU,tipo_marca:0, img:fileImagen} 
+					,function(){	
+						$.mobile.loading( 'hide');
+						
+					}
+			);
+			
+				
+				},noLocation,{timeout:6000});
+	}else
+		{
+			
+			document.getElementById("i_file").value="";
+			document.getElementById("comentario_lug").value="";
+			mensaje("Archivo seleccionado no es valido",'Error','myPopup_check');
+		}
+
 			
 }
+function marcarLugarCom()
+{
 
+		id_lugar=$("#t_id_empresa").html();
+		$("#myPopup").popup("close");
+		
+				$.mobile.loading( 'show', {
+					text: 'Obteniendo Ubicacion...',
+					textVisible: true,
+					theme: 'a',
+					html: ""
+				});
+			navigator.geolocation.getCurrentPosition (function (pos)
+			{
+				var lat = pos.coords.latitude;
+	  		var lng = pos.coords.longitude;
+	  		var accu=pos.coords.accuracy.toFixed(2);
+	  		
+	  		OBVII_LON=lng;
+	  		OBVII_LAT=lat;
+	  		OBVII_ACCU=accu;
+	  		var coment=$.trim(document.getElementById("comentario_lug").value);
+	  		$("#m_checkout2").dialog( "close" );
+	  		fileImagen="";
+
+				
+				$.mobile.loading( 'show', {
+					text: 'Marcando...',
+					textVisible: true,
+					theme: 'a',
+					html: ""
+				});
+				
+				
+				$("#output").load(path_query, 
+				{tipo:8, id:id_lugar,coment:coment,lat:OBVII_LAT,lon:OBVII_LON,accu:OBVII_ACCU,tipo_marca:0, img:fileImagen} 
+					,function(){	
+						$.mobile.loading( 'hide');
+						
+					}
+			);
+			
+				
+				},noLocation,{timeout:6000});
+
+
+			
+}
 function deleteLugar(id_lugar)
 {
 	$.mobile.loading( 'show', {
@@ -1008,4 +1061,20 @@ function isImage(extension)
             return false;
         break;
     }
+}
+
+function loadCheckout(id_lugar)
+{
+	
+	$("#contenido_check").load(path_query, 
+				{tipo:19} 
+					,function(){
+						$('#cont_check').trigger('create');
+						 $( "#t_id_empresa" ).html(id_lugar);		
+							$.mobile.changePage('#m_checkout2', { role: 'dialog'});
+						
+						
+						
+					}
+				);
 }

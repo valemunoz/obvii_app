@@ -22,7 +22,7 @@ define("DIF_HORA","3");
 
 
 
-function inicioSesion($mail,$id_user_obvii,$id_cliente,$tipo_cli,$nick)
+function inicioSesion($mail,$id_user_obvii,$id_cliente,$tipo_cli,$nick,$opc)
 {
 	session_start();	
 	//session_register('usuario');	
@@ -35,7 +35,7 @@ function inicioSesion($mail,$id_user_obvii,$id_cliente,$tipo_cli,$nick)
   $_SESSION["tipo_cli"]=$tipo_cli;
   $cliente=getCliente(" and id_cliente=".$id_cliente."");
   $_SESSION["pais_cli"]=$cliente[0][4];
-  
+  $_SESSION['documento']=	$opc[0];
   if(strtolower($_SESSION["pais_cli"])=="peru")
   {
   	define("DIF_HORA","4");
@@ -51,6 +51,7 @@ function cerrar_sesion()
 	unset($_SESSION['id_cliente']);	
 	unset($_SESSION["tipo_cli"]);
 		unset($_SESSION["pais_cli"]);
+		unset($_SESSION["documento"]);
 	
 	//session_destroy();
 }

@@ -24,7 +24,7 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
 {
 if($_REQUEST['tipo']==1) //check estado sesion
 {
-	
+	session_start();
 	$estado_sesion=estado_sesion();
 	if($estado_sesion==1)
 	{
@@ -35,12 +35,15 @@ if($_REQUEST['tipo']==1) //check estado sesion
 		<?php
 	}else
 	{
+		$cliente=getCliente(" and id_cliente=".$_SESSION["id_cliente"]."");
+		$_SESSION['documento']=$cliente[0][6];
 		
 		?>
 		<script>
-		$("#bienvenido_div").html("Bienvenido : <?=$_SESSION['id_usuario']?>");
+			
+			$("#bienvenido_div").html("Bienvenido : <?=$_SESSION['id_usuario']?>");
 		
-		loadFav();
+			loadFav();
 		</script>
 		<?php
 		

@@ -66,6 +66,8 @@ if($_REQUEST['tipo']==1) //check estado sesion
 		<?php
 	}else
 	{
+		$cliente=getCliente(" and id_cliente=".$_SESSION["id_cliente"]."");
+		$_SESSION['documento']=$cliente[0][6];
 		?>
 		<script>
 			$("#ll_dip").hide(); 

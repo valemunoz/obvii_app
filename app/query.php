@@ -109,8 +109,10 @@ if(1==1)
 						{
 							updateUsuario("id_device='".$_REQUEST['uuid']."'",$id_us);
 						}
+						$opc=array();
+						$opc[]=$cliente[0][6];
 						
-    				inicioSesion(strtolower($mail),$res,$id_cliente,$tipo_cli,$nick);
+    				inicioSesion(strtolower($mail),$res,$id_cliente,$tipo_cli,$nick,$opc);
     				$_SESSION["gps"]=$gps;
     				if($id_cliente!= CLI_DEMO)
     				{
@@ -564,24 +566,25 @@ if(1==1)
 		 	$data[]=$fecha;
 		 	$data[]='false';
 		 	addMarcacion($data);
-		 	
-		 	$marca=getMarcaciones(" and id_usuario like '".$_SESSION["id_usuario"]."' and fecha_registro='".$fecha."'");
-		 	$datImg=array();
+		 	if(trim($_REQUEST['img'])!="")
+		 	{
+		 		$marca=getMarcaciones(" and id_usuario like '".$_SESSION["id_usuario"]."' and fecha_registro='".$fecha."'");
+		 		$datImg=array();
 
-      $datImg[]=$_REQUEST['img'];
-      $datImg[]=$_REQUEST['id'];
-      $datImg[]=$_SESSION["id_usuario_obvii"];
-      $datImg[]=0;
-      $datImg[]=$marca[0][0];
-		  addImagen($datImg);
+      	$datImg[]=$_REQUEST['img'];
+      	$datImg[]=$_REQUEST['id'];
+      	$datImg[]=$_SESSION["id_usuario_obvii"];
+      	$datImg[]=0;
+      	$datImg[]=$marca[0][0];
+		  	addImagen($datImg);
+		  }
 		 	senMailMarcacion(1,$_REQUEST['lat'],$_REQUEST['lon'],$_REQUEST['tipo_marca'],$lugares[0][1],$fecha,$mail_post,"",$_REQUEST['coment']);
 		 
 		 	if($_SESSION["tipo_cli"]==1)
 		 	{
 		 				 ?>
 			<script>
-				$.mobile.loading( 'hide');
-				
+				$.mobile.loading( 'hide');				
 				loadAsis();
 				mensaje("Marcaci&oacute;n realizada",'MENSAJE','myPopup');
 			</script>
@@ -626,9 +629,10 @@ if(1==1)
 		
 		
 					<div class="ui-bar ui-bar-a" id=barra_sup style="text-align:center;">
-					 Marcaciones Favoritas
+					 Marcaciones Favoritas 
 	</div>
 		<?php
+	
 		$fecha=date("Ymd");
 		try
 		{
@@ -977,6 +981,39 @@ if(1==1)
 		<div id="map">
 		</div>
 		<?php
+	}elseif($estado_sesion==0 and $_REQUEST['tipo']==19) //load checkout
+	{
+		?>
+			
+				
+					
+				<h3>Opciones de Marcaci&oacute;n</h3>	
+				<?php
+				if($_SESSION['documento']=='t')
+				{
+				?>
+				<p>
+					<input type="button" id="but_check" onclick="getImage();" value="Adjuntar Imagen">
+					<img src="" id="camera_image" name="camera_image">
+					<label for="textarea"><h4>Comentario</h4></label>
+					<textarea cols="20" rows="15" maxlength=500 name="comentario_lug" id="comentario_lug"></textarea>
+					<div id="msg_error_check2" class="msg_error"></div>
+					<input type="button" id="but_check" onclick="marcarLugarComDoc();" value="Marcar">
+				</p>
+				
+		<?php
+				}else
+				{
+					?>
+					<p>
+					
+					<label for="textarea"><h4>Comentario</h4></label>
+					<textarea cols="20" rows="15" maxlength=500 name="comentario_lug" id="comentario_lug"></textarea>
+					<div id="msg_error_check2" class="msg_error"></div>
+					<input type="button" id="but_check" onclick="marcarLugarCom();" value="Marcar">
+				</p>
+					<?php
+				}
 	}
 }
 ?>

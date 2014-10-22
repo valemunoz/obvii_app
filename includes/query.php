@@ -62,9 +62,12 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
     			$cliente=getCliente(" and id_cliente=".$id_cliente."");
 					if($cliente[0][2]==0 and $acceso_web=='t')
 					{				
-    				inicioSesion(strtolower($mail),$res,$id_cliente,$cliente[0][5],$nick);
+						$opc=array();
+						$opc[]=$cliente[0][6];
+    				inicioSesion(strtolower($mail),$res,$id_cliente,$cliente[0][5],$nick,$opc);
     				?>
 						<script>
+						 
 							window.location.href="index.html";
 						</script>
 						<?php
@@ -500,8 +503,14 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
 		 	{
 		 				 ?>
 			<script>
-				document.getElementById("i_file").value="";
-				document.getElementById("comentario_lug").value="";
+				try
+				{
+					document.getElementById("i_file").value="";
+					document.getElementById("comentario_lug").value="";
+				}catch(err)
+				{
+					//
+				}
 				$.mobile.loading( 'hide');
 				loadHome();
 				mensaje("Marcaci&oacute;n realizada",'MENSAJE','myPopup');
@@ -539,6 +548,7 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
 					 Marcaciones Favoritas
 					</div>
 		<?php
+			
 		$fecha=date("Ymd");
 		try
 		{
@@ -883,6 +893,41 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE))==PATH_SITE)
 		<div id="map">
 		</div>
 		<?php
+	}elseif($estado_sesion==0 and $_REQUEST['tipo']==19) //load checkout
+	{
+		?>
+			
+				<h3>Opciones de Marcaci&oacute;n</h3>	
+				<?php
+				if($_SESSION['documento']=='t')
+				{
+				?>
+				<form enctype="multipart/form-data" class="formulario">
+					<p>
+						
+								<label for="file">File:</label>
+								<input type="file" name="i_file" id="i_file" value="">
+						
+					<label for="textarea"><h4>Comentario</h4></label>
+					<textarea cols="20" rows="10" maxlength=500 name="comentario_lug" id="comentario_lug"></textarea>
+					<div id="msg_error_check2" class="msg_error"></div>
+					<input type="button" id="but_check" onclick="marcarLugarComDoc();" value="Marcar">
+				</p>
+				</form>
+				
+		<?php
+				}else
+				{
+					?>
+					<p>
+						<label for="textarea"><h4>Comentario</h4></label>
+					<textarea cols="20" rows="10" maxlength=500 name="comentario_lug" id="comentario_lug"></textarea>
+					<div id="msg_error_check2" class="msg_error"></div>
+					<input type="button" id="but_check" onclick="marcarLugarCom();" value="Marcar">
+					</p>
+					
+					<?php
+				}
 	}
 }
 ?>
