@@ -447,11 +447,7 @@ if($lugares[0][13]=='t')
 					 	$data[]=$fec[$i];
 					 	$data[]=$nube[$i];
 					 	$data[]=$local[$i];
-					 	?>
-					 	<script>
-					 	alert("'<?=$fec[$i]?>' - '<?=$nube[$i]?>' - '<?=$local[$i]?>'");
-					 	</Script>
-					 	<?php
+	
 					 	//$data[]=getFechaLibre(DIF_HORA);
 					 	//$data[]=getFechaLibre(DIF_HORA);
 					 	//$data[]=getFechaLibre(DIF_HORA);
@@ -764,6 +760,38 @@ if($lugares[0][13]=='t')
 	$_SESSION['gps']=$_REQUEST['gps'];
 	$usuario=getUsuario(" and nickname ilike '".$_SESSION["nickname"]."' and estado=0");
 	updateUsuario("gps='".$_REQUEST['gps']."'",$usuario[0]);
+	
+}elseif($_REQUEST['tipo']==13) //lugares cercanos al un punto
+{
+	$lon=$_REQUEST['lon'];
+	$lat=$_REQUEST['lat'];
+	
+	$empresas=getEmpresaRadio($lat,$lon,RADIO);
+	foreach($empresas as $emp)
+	{
+		$texto="<div class=titulo>".ucwords($emp[1])."</div>";
+		$texto .="<div class=titulo_pop>".ucwords($emp[3])." #".$emp[4]."</div>";
+		$texto .="<div class=titulo_pop>".ucwords($emp[5])."</div>";
+		$texto .="<div class=titulo_pop2>Distancia: ".ucwords($emp[2])."Mts</div>";
+		
+		$lug=getLugares(" and id_lugar=".$emp[0]."");
+		$comenta=0; //true
+		$marca=0;
+		if($lug[0][12]=='f')
+		   $comenta=1;
+		if($lug[0][13]=='f')
+		   $marca=1;
+		 /* marcar(<?=$lug[0][0]?>,<?=$comenta?>,<?=$marca?>); */
+		$texto .='<br><div align=center><input class=boton_pop type=button value=Marcar onclick=marcar('.$lug[0][0].','.$comenta.','.$marca.');></div><br>';
+		
+		
+		
+		?>
+		<script>
+			addMarcadores("<?=$emp[6]?>","<?=$emp[7]?>","<?=$texto?>","images/marker_ini.png",40,40);
+			</script>
+		<?php
+	}
 	
 }
 

@@ -16,6 +16,7 @@ define("WS_REGISTROUSUARIO","obvii_registro.wsdl");
 define("WS_MARCACION","obvii_eventos.wsdl");
 define("ENCRIPTACION","semilla");
 define("ENCRIPTACION2","manzana");
+define("RADIO","400");
 define("CORREO_COORPORATIVO","contacto@architeq.cl");
 define("MSG_DEMO","Su tipo de usuario es DEMO, servicios y opciones del sistema son limitados para este tipo de usuario. Si quiere un upgrade de su cuenta comun&iacute;quese enviando un mail a ".CORREO_COORPORATIVO." o llamando al   (56-2) 225049693  -  225049694");
 define("DIF_HORA","3");
@@ -932,7 +933,7 @@ function getEmpresaRadio($lat,$lon,$radio)//retorna distancia en metros
 	$sql="select id_lugar,nombre,ST_Distance(
   ST_GeographyFromText('POINT(".$lon." ".$lat.")'), 
   ST_GeographyFromText(st_AsText(geom))
-  ) as radio, calle, numero_municipal, comuna from obvii_lugares where id_cliente=".$_SESSION["id_cliente"]." and ST_Distance(
+  ) as radio, calle, numero_municipal, comuna,longitud,latitud from obvii_lugares where id_cliente=".$_SESSION["id_cliente"]." and ST_Distance(
   ST_GeographyFromText('POINT(".$lon." ".$lat.")'), 
   ST_GeographyFromText(st_AsText(geom))
   ) <= ".$radio." order by radio";
@@ -949,6 +950,8 @@ function getEmpresaRadio($lat,$lon,$radio)//retorna distancia en metros
 		$direc[]=$rowCalle[3];		
 		$direc[]=$rowCalle[4];		
 		$direc[]=$rowCalle[5];		
+		$direc[]=$rowCalle[6];		
+		$direc[]=$rowCalle[7];		
 		$direcciones[]=$direc;
 		
 		

@@ -953,7 +953,7 @@ function getEmpresaRadio($lat,$lon,$radio)//retorna distancia en metros
 	$sql="select id_lugar,nombre,ST_Distance(
   ST_GeographyFromText('POINT(".$lon." ".$lat.")'), 
   ST_GeographyFromText(st_AsText(geom))
-  ) as radio, calle, numero_municipal, comuna from obvii_lugares where id_cliente=".$_SESSION["id_cliente"]." and ST_Distance(
+  ) as radio, calle, numero_municipal, comuna,longitud,latitud from obvii_lugares where id_cliente=".$_SESSION["id_cliente"]." and ST_Distance(
   ST_GeographyFromText('POINT(".$lon." ".$lat.")'), 
   ST_GeographyFromText(st_AsText(geom))
   ) <= ".$radio." order by radio";
@@ -970,6 +970,8 @@ function getEmpresaRadio($lat,$lon,$radio)//retorna distancia en metros
 		$direc[]=$rowCalle[3];		
 		$direc[]=$rowCalle[4];		
 		$direc[]=$rowCalle[5];		
+		$direc[]=$rowCalle[6];	
+		$direc[]=$rowCalle[7];	
 		$direcciones[]=$direc;
 		
 		

@@ -568,6 +568,11 @@ if(1==1)
 		 	addMarcacion($data);
 		 	if(trim($_REQUEST['img'])!="")
 		 	{
+		 		?>
+		 		<script>
+		 			up_img=true;
+		 			</Script>
+		 		<?php
 		 		$marca=getMarcaciones(" and id_usuario like '".$_SESSION["id_usuario"]."' and fecha_registro='".$fecha."'");
 		 		$datImg=array();
 
@@ -577,6 +582,13 @@ if(1==1)
       	$datImg[]=0;
       	$datImg[]=$marca[0][0];
 		  	addImagen($datImg);
+		  }else
+		  {
+		  	?>
+		 		<script>
+		 			up_img=false;
+		 			</Script>
+		 		<?php
 		  }
 		 	senMailMarcacion(1,$_REQUEST['lat'],$_REQUEST['lon'],$_REQUEST['tipo_marca'],$lugares[0][1],$fecha,$mail_post,"",$_REQUEST['coment']);
 		 
@@ -584,19 +596,27 @@ if(1==1)
 		 	{
 		 				 ?>
 			<script>
-				$.mobile.loading( 'hide');				
-				loadAsis();
-				mensaje("Marcaci&oacute;n realizada",'MENSAJE','myPopup');
+				
+				if(up_img==false)				
+				{
+					$.mobile.loading( 'hide');
+					loadAsis();
+					mensaje("Marcaci&oacute;n realizada",'MENSAJE','myPopup');
+				}
+				
 			</script>
 			<?php
 		 	}else
 		 	{
 		 				 ?>
 			<script>
-				$.mobile.loading( 'hide');
-				//loadHome();
-				
-				mensaje("Marcaci&oacute;n realizada",'MENSAJE','myPopup');
+				if(up_img==false)				
+				{
+					$.mobile.loading( 'hide');
+					//loadHome();				
+					mensaje("Marcaci&oacute;n realizada",'MENSAJE','myPopup');
+					
+				}
 			</script>
 			<?php
 		 	}
@@ -976,8 +996,15 @@ if(1==1)
 			<?php
 		}
 		?>
-		<div id=info_pres class=msg_error></div>
+		<div data-role="navbar">
+    <ul>
+        <li><a data-theme="c" href="javascript:loadCentroMapa();"><img src="images/current.png" width=30px height=30px></a></li>
+        <li><a data-theme="c" href="javascript:loadEmpresasRadio(OBVII_LON,OBVII_LAT);"><img width=30px height=30px src="images/marker_nav.png"></a></li>
+    </ul>
+		</div><!-- /navbar -->
+		<div id=info_pres class=msg_error2></div>
 		<br>
+		
 		<div id="map">
 		</div>
 		<?php
@@ -993,10 +1020,11 @@ if(1==1)
 				{
 				?>
 				<p>
-					<input type="button" id="but_check" onclick="getImage();" value="Adjuntar Imagen">
-					<img src="" id="camera_image" name="camera_image">
+					
 					<label for="textarea"><h4>Comentario</h4></label>
 					<textarea cols="20" rows="15" maxlength=500 name="comentario_lug" id="comentario_lug"></textarea>
+					<input type="button" id="but_check" onclick="getImage();" value="Adjuntar Imagen">
+					<img src="" id="camera_image" name="camera_image">
 					<div id="msg_error_check2" class="msg_error"></div>
 					<input type="button" id="but_check" onclick="marcarLugarComDoc();" value="Marcar">
 				</p>
