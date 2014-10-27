@@ -793,6 +793,16 @@ if($lugares[0][13]=='t')
 		<?php
 	}
 	
+}elseif($_REQUEST['tipo']==14) //hora servidor
+{
+	$fech=getFechaLibre(DIF_HORA);
+	?>
+	<script>
+		$("#mypanel").panel( "close" );
+		mensaje("Fecha y hora actual del sistema: <?=$fech?>",'Mensaje','myPopup');
+	</script>
+		
+	<?php
 }
 
 ?>

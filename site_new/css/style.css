@@ -1,0 +1,35 @@
+#img_header
+{
+	width:100px !important;
+	height:25px !important;
+	margin-top:-12px !important;
+}
+
+	#mapa , #map
+				{
+					width:100% !important;
+					height:400px !important;
+					border:1px solid #C0C0C0;
+				
+				}
+#titulo1
+{
+	font-size:12px;
+	color:#808080;
+	font-weight: bold;	
+	
+}
+#popup_CM3
+{
+	border-radius:10px !important;	
+	border:2px #8080FF solid !important;
+}
+.ui-datepicker
+{
+	z-index:999999 !important;
+}
+.img_doc
+{
+	width:150px;
+	height;100px;
+}				
