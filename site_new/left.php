@@ -16,6 +16,23 @@
                                 <li><a href="us_nuevo.php">Nuevo</a></li>
                             </ul>
                         </li>
+                        
+                                       <?php
+               if($_SESSION['tip_cli_web']==1) //uuario+ lista asistencia alumno
+               {
+               	
+               	?>
+               	<li class="accordion">
+                            <a href="#"><i class="glyphicon glyphicon-user"></i><span> Usuarios  Lista</span></a>
+                            <ul class="nav nav-pills nav-stacked">
+                                <li><a href="us_buscar_int.php">Buscar</a></li>
+                                <li><a href="us_nuevo_int.php">Nuevo</a></li>
+                            </ul>
+                        </li>
+               	
+               	<?php
+               }
+               ?>
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-tags"></i><span> Lugares</span></a>
                             <ul class="nav nav-pills nav-stacked">

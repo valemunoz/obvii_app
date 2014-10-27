@@ -576,3 +576,261 @@ function loadMapaData()
 			alert("Debe ingresar un usuario");
 		}
 }
+
+/*usuarios internos*/
+
+function filtrar_usInterno(order)
+{
+	var mail=$.trim(document.getElementById("nom_em").value);
+	var estado=$.trim(document.getElementById("em_estado").value);
+	var nombre=$.trim(document.getElementById("nom_fil").value);
+	var lugar=$.trim(document.getElementById("lug_us").value);
+	$("#result2").html("<img src=img/load.gif>");
+	$("#result2").load("qr_usuariosinternos.php", 
+						{tipo:1, nombre:nombre,estado:estado,mail:mail,lugar:lugar,order:order} 
+							,function(){
+									
+							}
+	);
+}
+function nuevoUsuarioInterno()
+{
+
+	$("#grilla_mapa").load("qr_usuariosinternos.php", 
+						{tipo:4} 
+							,function(){
+									OpenModalMapa();
+							}
+	);
+	
+
+}
+function saveUsuarioInt()
+{
+	var estado=$.trim(document.getElementById("est_us").value);
+	var nombre=$.trim(document.getElementById("nom_us").value);		
+		var lugar=$.trim(document.getElementById("tipo_us").value);
+		var descripcion=$.trim(document.getElementById("descript").value);
+		var tipo_lista=1;
+		if(document.getElementById("lug2").checked)
+		{
+			tipo_lista=2;
+		}
+	var msg="";
+	var valida=true;
+
+
+	if($.trim(nombre)=="")
+	{		
+		valida=false;
+		msg +="<strong>Todos los campos son obligatorios</strong><br>";
+	}
+	if(!valida)
+	{
+		
+		$( "#msg_error_add" ).html(msg);
+	}else
+	{
+	/*Imagen*/
+	try{
+		 var fileExtension = "";
+		 //obtenemos un array con los datos del archivo
+        var file = $("#i_file")[0].files[0];
+        //obtenemos el nombre del archivo
+        var fileName = file.name;
+        //obtenemos la extensión del archivo
+        fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
+        //obtenemos el tamaño del archivo
+        var fileSize = (file.size/1024);
+        //obtenemos el tipo de archivo image/png ejemplo
+        var fileType = file.type;
+        //mensaje con la información del archivo
+        //alert("<span class='info'>Archivo para subir: "+fileName+", peso total: "+fileSize+" bytes.</span>");
+		/**/
+		valida=false;
+		if(fileSize <= 2048 && (fileExtension.toLowerCase()=='jpg' || fileExtension.toLowerCase()=='jpeg'))
+		{
+			valida=true;
+		}
+	}catch(err) 
+	{
+		
+	}
+		if(valida)
+		{
+						var formData = new FormData($(".formulario")[0]);
+						$.ajax({
+        		    url: 'qr_usuariosinternos.php?tipo=5&estado='+estado+'&lugar='+lugar+'&nombre='+nombre+'&tipo_lista='+tipo_lista+'&desc='+descripcion+'',  
+        		    type: 'POST',
+        		    // Form data
+        		    //datos del formulario
+        		    data: formData,
+        		    //necesario para subir archivos via ajax
+        		    cache: false,
+        		    contentType: false,
+        		    processData: false,
+        		    //mientras enviamos el archivo
+        		    beforeSend: function(){
+        		       //loadEspera("Subiendo..");
+        		       $("#msg_error_add").html("<img src=img/load.gif>");
+        		    },
+        		    //una vez finalizado correctamente
+        		    success: function(data){
+        		       CloseModalMapa();
+										filtrar_usInterno();
+        		      
+        		    },
+        		    //si ha ocurrido un error
+        		    error: function(){
+        		       alert("Error al subir la imagen, por favor intentelo nuevamente");
+        		       
+        		    }
+        		});
+        		
+			
+			/*$("#output").load("qr_usuariosinternos.php", 
+								{tipo:5, estado:estado,lugar:lugar,nombre:nombre,tipo_lista:tipo_lista,desc:descripcion} 
+									,function(){
+										CloseModalMapa();
+										filtrar_usInterno();
+									}
+			);*/
+		}else
+			{
+				$( "#msg_error_add" ).html("La im&aacute;gen no puede superar 2 Megas<br> La im&aacute;gen debe ser de formato JPG");
+			}
+	}
+	
+}
+function loadUsuarioInt(id_usuario)
+{
+	$("#cont_modal").load("qr_usuariosinternos.php", 
+							{tipo:2, usuario:id_usuario} 
+								,function(){
+						openModal();
+								}
+		);
+}
+function updateUsuarioInt(id_usuario)
+{	
+	var estado=$.trim(document.getElementById("est_us").value);
+	var nombre=$.trim(document.getElementById("nom_us").value);		
+		
+		var lugar=$.trim(document.getElementById("tipo_us").value);
+		
+		var descripcion=$.trim(document.getElementById("descript").value);
+		var tipo_lista=1;
+		if(document.getElementById("lug2").checked)
+		{
+			tipo_lista=2;
+		}
+		
+	var msg="";
+	var valida=true;
+
+	if($.trim(nombre)=="")
+	{		
+		valida=false;
+		msg="<strong>Todos los campos son obligatorios.</strong><br>";
+	}
+	
+	if(!valida)
+	{
+		
+		$( "#msg_error_add" ).html(msg);
+	}else
+	{
+		
+		/*$("#output").load("qr_usuariosinternos.php", 
+							{tipo:3, estado:estado,lugar:lugar,nom:nombre,id:id_usuario,tipo_lista:tipo_lista,desc:descripcion} 
+								,function(){
+									CloseModalReg();
+										filtrar_usInterno();
+								}
+		);*/
+		/*Imagen*/
+	try{
+		 var fileExtension = "";
+		 //obtenemos un array con los datos del archivo
+        var file = $("#i_file2")[0].files[0];
+        
+        //obtenemos el nombre del archivo
+        var fileName = file.name;
+        //obtenemos la extensión del archivo
+        fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
+        //obtenemos el tamaño del archivo
+        var fileSize = (file.size/1024);
+        //obtenemos el tipo de archivo image/png ejemplo
+        var fileType = file.type;
+        //mensaje con la información del archivo
+        //alert("<span class='info'>Archivo para subir: "+fileName+", peso total: "+fileSize+" bytes.</span>");
+		/**/
+		valida=false;
+		if(fileSize <= 2048 && (fileExtension.toLowerCase()=='jpg' || fileExtension.toLowerCase()=='jpeg'))
+		{
+			valida=true;
+		}
+	}catch(err) 
+	{
+		
+	}
+		if(valida)
+		{
+						var formData = new FormData($(".formulario2")[0]);
+						$.ajax({
+							
+        		    url: 'qr_usuariosinternos.php?tipo=3&estado='+estado+'&lugar='+lugar+'&nom='+nombre+'&tipo_lista='+tipo_lista+'&desc='+descripcion+'&id='+id_usuario+'',  
+        		    type: 'POST',
+        		    // Form data
+        		    //datos del formulario
+        		    data: formData,
+        		    //necesario para subir archivos via ajax
+        		    cache: false,
+        		    contentType: false,
+        		    processData: false,
+        		    //mientras enviamos el archivo
+        		    beforeSend: function(){
+        		       //loadEspera("Subiendo..");
+        		       $("#msg_error_add").html("<img src=img/load.gif>");
+        		    },
+        		    //una vez finalizado correctamente
+        		    success: function(data){
+        		      closeModal();
+										filtrar_usInterno();
+        		      
+        		    },
+        		    //si ha ocurrido un error
+        		    error: function(){
+        		       alert("Error al subir la imagen, por favor intentelo nuevamente");
+        		       
+        		    }
+        		});
+        		
+			
+			/*$("#output").load("qr_usuariosinternos.php", 
+								{tipo:5, estado:estado,lugar:lugar,nombre:nombre,tipo_lista:tipo_lista,desc:descripcion} 
+									,function(){
+										CloseModalMapa();
+										filtrar_usInterno();
+									}
+			);*/
+		}else
+			{
+				$( "#msg_error_add" ).html("La im&aacute;gen no puede superar 2 Megas<br> La im&aacute;gen debe ser de formato JPG");
+			}
+	}
+	
+}
+function upUsuarioEstInt(estado,id_usuario)
+{
+
+		$("#output").load("qr_usuariosinternos.php", 
+							{tipo:6, estado:estado,id:id_usuario} 
+								,function(){
+									//CloseModalReg();
+										filtrar_usInterno();
+								}
+		);
+	
+}
+/**/
