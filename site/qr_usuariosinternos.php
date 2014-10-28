@@ -362,6 +362,16 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 	}elseif($_REQUEST['tipo']==6 and $estado_sesion==0)//update estado usuario
 	{
 		updateUsuarioInt("estado=".$_REQUEST['estado']."",decrypt($_REQUEST['id'],ENCRIPTACION));
+	}elseif($_REQUEST['tipo']==7 and $estado_sesion==0)
+	{
+		$data=array();
+		$data[]=$_REQUEST['nombre'];
+		$data[]=$_REQUEST['estado'];		
+		$data[]=$_REQUEST['lugar'];		
+		$data[]=$_REQUEST["tipo_lista"];
+		$data[]=$_REQUEST["desc"];
+		$data[]="";
+		addUsuarioInt($data);
 	}
 }
 

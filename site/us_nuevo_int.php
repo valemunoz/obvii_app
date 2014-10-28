@@ -12,6 +12,17 @@ if($estado_web!=0)
 	
 }
 $lugares=getLugares(" and id_cliente=".$_SESSION['id_cliente_web']." order by nombre");
+						
+						
+		$checB="";
+		$checA="";
+		if($_SESSION['web_opcion']==2)
+		{
+			$checB="checked";	
+		}else
+		{
+			$checA="checked";	
+		}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -78,7 +89,7 @@ $lugares=getLugares(" and id_cliente=".$_SESSION['id_cliente_web']." order by no
             <a href="index.php">Inicio</a>
         </li>
         <li>
-            <a href="marcaciones.php">Marcaciones</a>
+            <a href="us_buscar.php">Nuevo Usuario</a>
         </li>
     </ul>
 </div>
@@ -87,103 +98,89 @@ $lugares=getLugares(" and id_cliente=".$_SESSION['id_cliente_web']." order by no
     <div class="box col-md-12">
         <div class="box-inner">
             <div class="box-header well" data-original-title="">
-                <h2><i class="glyphicon glyphicon-edit"></i> Filtros de busqueda</h2>
+                <h2><i class="glyphicon glyphicon-list-alt"></i> Formulario Registro</h2>
 
                 <div class="box-icon">
                    
-                    <a href="#" class="btn btn-minimize btn-round btn-default"><i
-                            class="glyphicon glyphicon-chevron-up"></i></a>
+                   
                     
                 </div>
             </div>
+            <form enctype="multipart/form-data" class="formulario">
             <div class="box-content">
+                
+
+                <div class="input-group col-md-4">
+                    <label class="control-label" for="inputSuccess1">Nombre</label>
+                    <input type="text" class="form-control" id="nom_us" name="nom_us">
+                </div>
                 <div class="control-group">
-                    <label class="control-label" for="selectError">Lugar</label>
+                    <label class="control-label" for="selectError">Estado</label>
 
                     <div class="controls">
-                        <select id="lug_us" name="lug_us" data-rel="chosen">
-                           <option value=0 selected>Todos</option>
-						
-						<?php
-						foreach($lugares as $lug)
-						{
-							?>
-							<option value="<?=$lug[0]?>"><?=ucwords(substr($lug[1],0,15))?></option>
-							<?php
-						}
-						?>
+                        <select id=est_us name=est_us data-rel="chosen">
+                            <option value=0 selected>Activo</option>
+                            <option value=1>Inactivo</option>
+                            
                             
                         </select>
                     </div>
                     
                 </div>
-
-                
                 <div class="input-group col-md-4">
-                    <label class="control-label" for="inputSuccess1">Mail</label>
-                    <input type="text" class="form-control" id="nom_em" name="nom_em">
+                    <label class="control-label" for="inputSuccess1">Tipo Lista</label>
+                    <input type="radio"  id="lug" name="group2" checked><img src="img/student-64.png" width=20px> <input type="radio"  id="lug2" name="group2"><img src="img/ticket.png" width=20px>
                 </div> 
-                <div class="input-group col-md-4">
-                    <label class="control-label" for="inputSuccess1">Desde</label>
-                    <input type="text" class="form-control" id="desde" name="desde">
+                
+                 <div class="control-group">
+                    <label class="control-label" for="selectError">Lugar</label>
+
+                    <div class="controls">
+                    	<select id=tipo_us name=tipo_us data-rel="chosen">
+							<?php
+							foreach($lugares as $lug)
+							{
+								$check="";
+								
+								if($_SESSION['web_lugar']==$lug[0])
+								{
+									$check="selected";
+								}
+								?>
+								<option value='<?=$lug[0]?>' <?=$check?>><?=ucwords($lug[1])?></option>
+								<?php
+							}
+							?>
+						</select>		
+                    </div>
+                    
                 </div>
-                <div class="input-group col-md-4">
-                    <label class="control-label" for="inputSuccess1">Hasta</label>
-                    <input type="text" class="form-control" id="hasta" name="hasta">
+                <div class="input-group col-md-4" >
+                    <label class="control-label" for="inputSuccess1">Imagen</label>
+                    <input type="file" name="i_file" id="i_file" value="" class="form-control">
                 </div>
+                                
+                <div class="input-group col-md-4">
+                    <label class="control-label" for="inputSuccess1">Descripci&oacute;n</label>
+                    <textarea name="descript" id="descript" rows="4" cols="50" class=form-control></textarea>
+                </div> 
+               
+                
+               
                 <br>
+                <div id="msg_error_add" class="msg_error"></div>
                 <div class="input-group col-md-4">
-                	<button type="submit" class="btn btn-default" onclick="filtrar_marcaciones();">Filtrar</button>
+                	<input type="button" onclick="saveUsuarioInt();" value="Registrar">
                    
                 </div>
             </div>
+          </form>
         </div>
     </div>
     <!--/span-->
 
 </div><!--/row-->
-  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
 
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3>Obvii</h3>
-                </div>
-                <div class="modal-body" id="cont_modal">
-                    <p>Here settings can be configured...</p>
-                </div>
-                <div class="modal-footer">
-                    <a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
-                    <!--a href="#" class="btn btn-primary" data-dismiss="modal">Save changes</a-->
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-    <div class="box col-md-12">
-    <div class="box-inner">
-    <div class="box-header well" data-original-title="">
-        <h2><i class="glyphicon glyphicon-map-marker"></i> Resultados</h2>
-
-        <div class="box-icon">
-            
-            <a href="#" class="btn btn-minimize btn-round btn-default"><i
-                    class="glyphicon glyphicon-chevron-up"></i></a>
-            
-        </div>
-    </div>
-    <div class="box-content" id="result2" name="result2">
-    	
-    
-
-    </div>
-    </div>
-    </div>
-    <!--/span-->
-
-    </div><!--/row-->
 
     <!-- content ends -->
     </div><!--/#content.col-md-0-->
@@ -235,23 +232,11 @@ $lugares=getLugares(" and id_cliente=".$_SESSION['id_cliente_web']." order by no
 <script src="js/jquery.history.js"></script>
 <!-- application script for Charisma demo -->
 <script src="js/charisma.js"></script>
-<link rel="stylesheet" type="text/css" href="../css/jquery.datetimepicker.css"/ >
-<link rel="stylesheet" type="text/css" href="css/style.css"/ >
-
-<script src="../js/jquery.datetimepicker.js"></script>
 <script src="js/funciones.js"></script>
-
+<div id="output"></div>
 <script>
-	 $(function() {
-    		$( "#desde" ).datetimepicker({timepicker:false,format:'Y-m-d',lang:'es'});
-  			});	
-
-		 $(function() {
-    		$( "#hasta" ).datetimepicker({timepicker:false,format:'Y-m-d',lang:'es'});
-  			});	
-  			
-  			filtrar_marcaciones();
- </script>
+	limpiarNewUSInt();
+	</script>
 </body>
 </html>
 

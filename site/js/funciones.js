@@ -632,10 +632,13 @@ function saveUsuarioInt()
 	}else
 	{
 	/*Imagen*/
+	valida=false;
+	
 	try{
 		 var fileExtension = "";
 		 //obtenemos un array con los datos del archivo
         var file = $("#i_file")[0].files[0];
+        
         //obtenemos el nombre del archivo
         var fileName = file.name;
         //obtenemos la extensión del archivo
@@ -676,8 +679,10 @@ function saveUsuarioInt()
         		    },
         		    //una vez finalizado correctamente
         		    success: function(data){
-        		       CloseModalMapa();
-										filtrar_usInterno();
+        		       //CloseModalMapa();
+										//filtrar_usInterno();
+										limpiarNewUSInt();
+										alert("Lista registrada exitosamente");
         		      
         		    },
         		    //si ha ocurrido un error
@@ -697,7 +702,23 @@ function saveUsuarioInt()
 			);*/
 		}else
 			{
-				$( "#msg_error_add" ).html("La im&aacute;gen no puede superar 2 Megas<br> La im&aacute;gen debe ser de formato JPG");
+				img_data=$("#i_file")[0].files[0];
+				if(img_data=="undefined" || typeof img_data == "undefined")
+				{
+					//alert("no viene imagen");
+					$("#output").load("qr_usuariosinternos.php", 
+								{tipo:7, estado:estado,lugar:lugar,nombre:nombre,tipo_lista:tipo_lista,desc:descripcion} 
+									,function(){
+										limpiarNewUSInt();
+										alert("Lista registrada exitosamente");
+										//CloseModalMapa();
+										//filtrar_usInterno();
+									}
+			);
+				}else
+				{
+					$( "#msg_error_add" ).html("La im&aacute;gen no puede superar 2 Megas<br> La im&aacute;gen debe ser de formato JPG");
+				}
 			}
 	}
 	
@@ -833,4 +854,30 @@ function upUsuarioEstInt(estado,id_usuario)
 		);
 	
 }
+
+function limpiarNewUSInt()
+{
+	document.getElementById("nom_us").value="";
+document.getElementById("i_file").value="";
+document.getElementById("descript").value="";
+$( "#msg_error_add" ).html("");
+}
 /**/
+function loadCsv(nom_file)
+{
+	var mail=$.trim(document.getElementById("nom_em").value);
+	
+	
+	var lugar=$.trim(document.getElementById("lug_us").value);
+	var desde=$.trim(document.getElementById("desde").value);
+	var hasta=$.trim(document.getElementById("hasta").value);
+	$("#result2").html("<img src=img/load.gif>");
+	$("#result2").load("qr_marcas.php", 
+						{tipo:4,mail:mail,lugar:lugar,fec_ini:desde,fec_ter:hasta,nomfile:nom_file} 
+							,function(){
+								filtrar_marcaciones();
+								window.open('csv/'+nom_file,'','width=600,height=400,left=50,top=50,toolbar=yes');
+									
+							}
+	);
+}
