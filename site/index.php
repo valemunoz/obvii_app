@@ -120,7 +120,7 @@ if($estado_web!=0)
         <a data-toggle="tooltip" title="<?=count($marcas_hoy)?> Marcaciones hoy" class="well top-block" href="marcaciones.php">
             <i class="glyphicon glyphicon-tags yellow"></i>
 
-            <div>Lugares/Marcas</div>
+            <div>Marcaciones</div>
             <div><?=count($marcas)?></div>
             <span class="notification yellow"><?=count($marcas_hoy)?></span>
             

@@ -1,3 +1,18 @@
+<?php
+include("../includes/funciones.php");
+
+$estado_web=estado_sesion_web();
+if($estado_web!=0)
+{
+	?>
+	<script>
+		window.location="login.php";
+	</script>
+	<?php 
+	
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

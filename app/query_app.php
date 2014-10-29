@@ -156,8 +156,8 @@ if($_REQUEST['tipo']==1) //check estado sesion
 
 }elseif($_REQUEST['tipo']==3) //historial
 {
-	$fecha=getFechaLibre(744); // 31 dias
-	$marcaciones=getMarcaciones(" and fecha_registro >= '".$fecha."' and id_usuario ilike '%".$_SESSION["id_usuario"]."%' and id_usuario_obvii=".$_SESSION["id_usuario_obvii"]." order by fecha_registro desc");
+	$fecha=getFechaLibre(168); // 31 dias
+	$marcaciones=getMarcaciones(" and fecha_registro >= '".$fecha."' and id_usuario ilike '%".$_SESSION["id_usuario"]."%' order by fecha_registro desc");
 	//print_R($marcaciones);
 	?>
 	

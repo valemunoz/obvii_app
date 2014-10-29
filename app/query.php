@@ -120,6 +120,11 @@ if(1==1)
     				
     				?>
 						<script>
+							MAIL_USER2 = "<?=$mail?>";
+							if(MAIL_USER.toLowerCase() != MAIL_USER2.toLowerCase())
+							{
+								cleanMarcaBD();
+							}
 							NOMBRE_USER = "<?=$nick?>";
         			MAIL_USER = "<?=$mail?>";
         			ID_USER = "<?=$cliente[0]?>";
@@ -238,7 +243,7 @@ if(1==1)
 							$clase="txt_mini4";
 						}
 						$nombre=$lug[1];
-						$largo=10;
+						$largo=15;
 						 if($deviceType=="computer")
 						 {
 						 	$largo=100;
@@ -687,7 +692,7 @@ if(1==1)
 							$clase="txt_mini4";
 						}
 					$nombre=$lug[0][1];
-					$largo=10;
+					$largo=15;
 					 if($deviceType=="computer")
 					 {
 					 	$largo=100;
@@ -824,7 +829,7 @@ if(1==1)
 	}elseif($estado_sesion==0 and $_REQUEST['tipo']==14) //asistencia listado clase
 	{
 		$fecha=date("Ymd");
-		$marcacion=getMarcaciones(" and id_usuario ilike '".$_SESSION["id_usuario"]."' and fecha_registro >= '".date("Y-m-d")."' and tipo_marcacion=0 order by fecha_registro desc limit 1");
+		$marcacion=getMarcaciones(" and id_usuario ilike '".$_SESSION["id_usuario"]."' and fecha_registro >= '".date("Y-m-d")."' order by fecha_registro desc limit 1");
 		$usuarios=getUsuariosInterno(" and estado=0 and id_lugar=".$marcacion[0][5]." order by nombre");
 		?>
 		
@@ -839,10 +844,10 @@ if(1==1)
 	   	?>
 	   	<span class=texto_interior>No disponible para esta marcaci&oacute;n</span>
 	   	<?php
-	   }elseif(count($marcacion)==0)
+	   }elseif(count($marcacion)==0 or $marcacion[0][10]==1)
 	   {
 	   	?>
-	   	<span class=texto_interior>Para ver listado de asistencia debe realizar una marcaci&oacute;n</span>
+	   	<span class=texto_interior><br>Para ver listado de asistencia debe realizar una marcaci&oacute;n</span>
 	   	<?php
 	  	}elseif(count($usuarios)>0)
 	   {

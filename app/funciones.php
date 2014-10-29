@@ -1019,4 +1019,38 @@ function addImagen($data)
             '".$data[4]."')";
 	$rs2 = pg_query($dbPg, $sql);            
 }
+function getImagen($qr)
+{
+	$dbPg=pgSql_db();		
+	
+	$sql="SELECT id_imagen, nombre, id_lugar, id_usuario, estado, fecha_registro, 
+       id_marcacion
+  FROM obvii_imagen where 1=1";
+  if(trim($qr)!="")
+  {
+  	$sql .=$qr;
+  }
+	
+	$rsCalle = pg_query($dbPg, $sql);	
+	//echo $sql;
+	$data=array();
+	while ($rowCalle = pg_fetch_row($rsCalle))
+	{		
+	
+		$direc=Array();
+		$direc[]=$rowCalle[0];
+		$direc[]=$rowCalle[1];		
+		$direc[]=$rowCalle[2];
+		$direc[]=$rowCalle[3];		
+		$direc[]=$rowCalle[4];		
+		$direc[]=$rowCalle[5];		
+		$direc[]=$rowCalle[6];		
+		$data[]=$direc;
+		
+		
+	}	
+	pg_close($dbPg);
+  return $data;
+	        
+}
 ?>

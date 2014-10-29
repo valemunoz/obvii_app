@@ -1,3 +1,18 @@
+<?php
+include("../includes/funciones.php");
+
+$estado_web=estado_sesion_web();
+if($estado_web!=0)
+{
+	?>
+	<script>
+		window.location="login.php";
+	</script>
+	<?php 
+	
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -105,9 +120,9 @@
 
                     <div class="controls">
                         <select id="em_estado" name="em_estado" data-rel="chosen">
-                            <option value="10"selected>Todos</option>
+                            <option value="10">Todos</option>
                             <option value="0">Activos</option>
-                            <option value="1">Inactivos</option>
+                            <option value="1" selected>Pendientes</option>
                             
                         </select>
                     </div>

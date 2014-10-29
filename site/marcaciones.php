@@ -125,7 +125,7 @@ $lugares=getLugares(" and id_cliente=".$_SESSION['id_cliente_web']." order by no
                 </div> 
                 <div class="input-group col-md-4">
                     <label class="control-label" for="inputSuccess1">Desde</label>
-                    <input type="text" class="form-control" id="desde" name="desde">
+                    <input type="text" class="form-control" id="desde" name="desde" value="<?=date("Y-m-d")?>">
                 </div>
                 <div class="input-group col-md-4">
                     <label class="control-label" for="inputSuccess1">Hasta</label>
