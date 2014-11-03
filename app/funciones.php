@@ -1004,9 +1004,9 @@ function addRuta($data)
 	
  $sql2 = "INSERT INTO obvii_ruta(
             id_usuario, mail_usuario, latitud, longitud, geom, estado, 
-            fecha_registro, speed, presicion, heading, id_cliente)
+            fecha_registro, speed, presicion, heading, id_cliente,nickname)
     VALUES ('".$data[0]."', '".$data[1]."', '".$data[2]."', '".$data[3]."',ST_GeomFromText('POINT(".$data[3]." ".$data[2].")',2276) , '".$data[4]."', 
-            '".getFechaLibre(DIF_HORA)."', '".$data[5]."', '".$data[6]."', '".$data[7]."', '".$data[8]."');";		
+            '".getFechaLibre(DIF_HORA)."', '".$data[5]."', '".$data[6]."', '".$data[7]."', '".$data[8]."' , '".$data[9]."');";		
   $rs2 = pg_query($dbPg, $sql2);
 }
 function addImagen($data)
@@ -1018,39 +1018,5 @@ function addImagen($data)
     VALUES ('".$data[0]."', '".$data[1]."', '".$data[2]."', '".$data[3]."', '".getFechaLibre(DIF_HORA)."', 
             '".$data[4]."')";
 	$rs2 = pg_query($dbPg, $sql);            
-}
-function getImagen($qr)
-{
-	$dbPg=pgSql_db();		
-	
-	$sql="SELECT id_imagen, nombre, id_lugar, id_usuario, estado, fecha_registro, 
-       id_marcacion
-  FROM obvii_imagen where 1=1";
-  if(trim($qr)!="")
-  {
-  	$sql .=$qr;
-  }
-	
-	$rsCalle = pg_query($dbPg, $sql);	
-	//echo $sql;
-	$data=array();
-	while ($rowCalle = pg_fetch_row($rsCalle))
-	{		
-	
-		$direc=Array();
-		$direc[]=$rowCalle[0];
-		$direc[]=$rowCalle[1];		
-		$direc[]=$rowCalle[2];
-		$direc[]=$rowCalle[3];		
-		$direc[]=$rowCalle[4];		
-		$direc[]=$rowCalle[5];		
-		$direc[]=$rowCalle[6];		
-		$data[]=$direc;
-		
-		
-	}	
-	pg_close($dbPg);
-  return $data;
-	        
 }
 ?>

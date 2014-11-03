@@ -335,7 +335,7 @@ if($lugares[0][13]=='t')
 							}
 							
 							$html="<div class=titulo>".ucwords($lugares[0][1])."</div>";
-							$html .="<div class=titulo_pop>".ucwords($lugares[0][6])." #".$lugares[0][7].", ".ucwords($lugares[0][8])." </div>";
+							$html .="<div class=titulo_pop>".ucwords($lugares[0][6])." #".$lugares[0][7].", ".ucwords($lugares[0][8])."</div>";
 							?>
 							<input type="button" onclick="verMapa(<?=$lugares[0][5]?>,<?=$lugares[0][4]?>,'<?=$html?>');" value="Ver en el Mapa">
 							
@@ -761,6 +761,7 @@ if($lugares[0][13]=='t')
 	$data[]=$precision;
 	$data[]=$heading;
 	$data[]=$_SESSION["id_cliente"];
+	$data[]=$_SESSION["nickname"];
 	addRuta($data);
 }elseif($_REQUEST['tipo']==12) //gps
 {
