@@ -333,6 +333,13 @@ if($lugares[0][13]=='t')
 								<input type="button" onclick="addFav(<?=$_REQUEST['id']?>)" value="Agregar Favoritos">
 								<?php
 							}
+							
+							$html="<div class=titulo>".ucwords($lugares[0][1])."</div>";
+							$html .="<div class=titulo_pop>".ucwords($lugares[0][6])." #".$lugares[0][7].", ".ucwords($lugares[0][8])." </div>";
+							?>
+							<input type="button" onclick="verMapa(<?=$lugares[0][5]?>,<?=$lugares[0][4]?>,'<?=$html?>');" value="Ver en el Mapa">
+							
+							<?php
 						}else
 						{
 							$favorito=getFavoritos(" and id_usuario ilike '".$_SESSION["id_usuario"]."' and estado=0 and id_lugar=".$_REQUEST['id']."");

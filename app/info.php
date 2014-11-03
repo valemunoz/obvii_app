@@ -17,7 +17,7 @@
     	    <p id="form_interior">
 						<span class=titulo_interior>Asistencia Remota</span>
 						<br>
-						<span class=texto_interior>Te permite registrar asistencia en cualquier lugar, siempre y cuando tengas conexi&oacute;n a Internet, mediante 3G o Wifi.</span>
+						<span class=texto_interior>Te permite registrar asistencia en cualquier lugar.</span>
 						
 					</p>      
 					
