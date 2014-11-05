@@ -38,3 +38,11 @@
 	height:600px !important;
 	overflow-y:auto;
 }
+.alert_hora
+{
+	background-color:#FF8040 !important;
+}
+.alert_libre
+{
+	background-color:#FFFF80 !important;
+}

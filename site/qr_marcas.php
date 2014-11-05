@@ -60,17 +60,15 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 			  	$entSal="Salida";
 			  }
 			  $color="";
-			  if($us[4]==1)//libre marcacion
-			  {
-			  	$color="#A6D2FF";
-			  }
+			  
 			  
 			  if($us[3] < $us[14] or $us[3] < $us[13])
 			  {
-			  	$color="#FFFF00";
+			  	$color="alert_hora";
+			  	
 			  }
 				?>
-    <tr>
+    <tr class=<?=$color?>>
     	
         <td><?=ucwords($user[7])?></td>
         <td class="center"><?=ucwords($us[11])?></td>
