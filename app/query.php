@@ -57,6 +57,7 @@ if(1==1)
  	  	if(device_com!=uuid_user)
  	  	{
  	  		cerrarSesion();
+ 	  		
  	  	}
  	  	</script>
  	  <?php
@@ -312,7 +313,13 @@ if(1==1)
  
 	}elseif( $_REQUEST['tipo']==3)
 	{
+		?>
+		<script>
+			userOff();
+			</script>
+		<?php
 		cerrar_sesion();
+		
 	}elseif($_REQUEST['tipo']==4)
 	{
 		try
@@ -549,7 +556,13 @@ if(1==1)
 	   	$cliente=getCliente(" and id_cliente=".$_SESSION["id_cliente"]."");
 	   	$mail_post=$cliente[0][3];
 	   }
-		 $res= $registros->registrarEvento($_SESSION['id_usuario_obvii'], ''.date("Ymd").'', ''.date("His").'', ''.$_REQUEST['lat'].'',''.$_REQUEST['lon'].'',''.$_REQUEST['accu'].'',''.$lugares[0][1].'','9988776644','478000012',''.$_REQUEST['coment'].'','8888999922',''.$mail_post.'');
+	   if(!$_SESSION["demo_us"])
+	   {
+		 	$res= $registros->registrarEvento($_SESSION['id_usuario_obvii'], ''.date("Ymd").'', ''.date("His").'', ''.$_REQUEST['lat'].'',''.$_REQUEST['lon'].'',''.$_REQUEST['accu'].'',''.$lugares[0][1].'','9988776644','478000012',''.$_REQUEST['coment'].'','8888999922',''.$mail_post.'');
+		 }else
+		 {
+		 	$res=1;
+			}
 		 if($res>0)
 		 {
 		 	$data=array();
@@ -596,7 +609,7 @@ if(1==1)
 		 		<?php
 		  }
 		 	senMailMarcacion(1,$_REQUEST['lat'],$_REQUEST['lon'],$_REQUEST['tipo_marca'],$lugares[0][1],$fecha,$mail_post,"",$_REQUEST['coment']);
-		 
+		  
 		 	if($_SESSION["tipo_cli"]==1)
 		 	{
 		 				 ?>
@@ -692,7 +705,7 @@ if(1==1)
 							$clase="txt_mini4";
 						}
 					$nombre=$lug[0][1];
-					$largo=15;
+					$largo=17;
 					 if($deviceType=="computer")
 					 {
 					 	$largo=100;
@@ -1004,7 +1017,19 @@ if(1==1)
 		<div data-role="navbar">
     <ul>
         <li><a data-theme="c" href="javascript:loadCentroMapa();"><img src="images/current.png" width=30px height=30px></a></li>
-        <li><a data-theme="c" href="javascript:loadEmpresasRadio(OBVII_LON,OBVII_LAT);"><img width=30px height=30px src="images/marker_nav.png"></a></li>
+        <?php
+        if(!$_SESSION["demo_us"])
+        {
+        ?>
+        	<li><a data-theme="c" href="javascript:loadEmpresasRadio(OBVII_LON,OBVII_LAT);"><img width=30px height=30px src="images/marker_nav.png"></a></li>
+        <?php
+        }else
+        {
+        	?>
+        		<li><a data-theme="c" href="javascript:errorMapa('<?=MSG_DEMO?>');"><img width=30px height=30px src="images/marker_nav.png"></a></li>
+        <?php
+        }
+        ?>
     </ul>
 		</div><!-- /navbar -->
 		<div id=info_pres class=msg_error2></div>
@@ -1020,7 +1045,17 @@ if(1==1)
 				
 					
 				<h3>Opciones de Marcaci&oacute;n</h3>	
-				<?php
+					<?php
+					if($_SESSION["demo_us"])
+					{
+					?>
+						<div class="ui-bar ui-bar-a" style="text-align:center;">
+					 		<?=MSG_DEMO?>
+						</div>
+						<br>
+					<?php
+					}
+
 				if($_SESSION['documento']=='t')
 				{
 				?>

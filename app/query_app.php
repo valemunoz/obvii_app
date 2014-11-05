@@ -463,7 +463,7 @@ if($lugares[0][13]=='t')
 					 	
 					 	addMarcacion($data);
 					 	
-		 				senMailMarcacion(1,$lat[$i],$lon[$i],$tipo[$i],$lug[0][1],$fec[$i],$mail_envio,"",$descrip[$i]);
+		 				senMailMarcacion(1,$lat[$i],$lon[$i],$tipo[$i],$lug[0][1],$fec[$i],$mail_envio,"",$descrip[$i]."[Marcacion sincronizada]");
 		 
 	      	
 					 	}else
@@ -682,13 +682,17 @@ if($lugares[0][13]=='t')
 					$data[]=0;
 					$data[]=$_REQUEST['clave'];
 					$data[]=strtolower($_REQUEST['nombre']);
-					$data[]=$res;
+					$data[]=0;
 					$data[]=$_REQUEST['device'];
 					$data[]="false";
 					$data[]=$mail;
 					$data[]=$_REQUEST['empresa'];
+					$data[]=$_REQUEST['mail_emp'];
 					addUsuario($data);
-					
+					$html=MSG_BIENVENIDA_OBVII;
+					$html=str_replace("_MAIL_",$mail,$html);
+					$html=str_replace("_CLAVE_",$_REQUEST['clave'],$html);
+					sendMail($mail,$html,MSG_TITULO_OBVII);
 					$usuario_new=getUsuario(" and mail ilike '".$mail."' and estado=0");
 					
 					$data=array();

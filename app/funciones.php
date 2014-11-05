@@ -1,11 +1,11 @@
 <?php
 include("connec.php");
-define("PATH_SITE","http://localhost/github/obvii_app");
-define("PATH_SITE_WEB","http://localhost/github/obvii_app/site");
-define("PATH_SITE_ADMIN","http://localhost/github/obvii_app/admin");
-//define("PATH_SITE","http://locate.chilemap.cl/obvii");
-//define("PATH_SITE_WEB","http://locate.chilemap.cl/obvii/site");
-//define("PATH_SITE_ADMIN","http://locate.chilemap.cl/obvii/admin");
+//define("PATH_SITE","http://localhost/github/obvii_app");
+//define("PATH_SITE_WEB","http://localhost/github/obvii_app/site");
+//define("PATH_SITE_ADMIN","http://localhost/github/obvii_app/admin");
+define("PATH_SITE","http://locate.chilemap.cl/obvii");
+define("PATH_SITE_WEB","http://locate.chilemap.cl/obvii/site");
+define("PATH_SITE_ADMIN","http://locate.chilemap.cl/obvii/admin");
 
 //define("PATH_WS_OBVII","http://www.totalaccess.cl/server/");
 define("PATH_WS_OBVII","http://93.92.170.66:8080/server/");
@@ -21,6 +21,8 @@ define("CORREO_COORPORATIVO","contacto@architeq.cl");
 define("MSG_DEMO","Su tipo de usuario es DEMO, servicios y opciones del sistema son limitados para este tipo de usuario. Si quiere un upgrade de su cuenta comun&iacute;quese enviando un mail a ".CORREO_COORPORATIVO." o llamando al   (56-2) 225049693  -  225049694");
 define("DIF_HORA","3");
 define("CLI_DEMO","7");
+define("MSG_TITULO_OBVII","Bienvenido a la comunidad Obvii");
+define("MSG_BIENVENIDA_OBVII","Bienvenido a Obvii<br>Te haz registrado existosamente. A continuacion algunos datos que pueden servirte:<br>Nombre usuario:_MAIL_ <br> clave: _CLAVE_ <br><br>Equipo Obvii");
 
 function inicioSesion($mail,$id_user_obvii,$id_cliente,$tipo_cli,$nick,$opc)
 {
@@ -382,7 +384,7 @@ function getUsuario($qr)
 	
 	$dbPg=pgSql_db();
 	
-  $sql2 = "SELECT id_usuario,mail,fecha_registro,estado,id_cliente,tipo_usuario,clave,nombre,id_device,web_device,nickname,gps from obvii_usuario where 1=1";		
+  $sql2 = "SELECT id_usuario,mail,fecha_registro,estado,id_cliente,tipo_usuario,clave,nombre,id_device,web_device,nickname,gps,mail_demo_empresa from obvii_usuario where 1=1";		
   if($qr!="")
   {
   	$sql2 .=$qr;
@@ -406,6 +408,7 @@ function getUsuario($qr)
 				$data[]=$row2[9];
 				$data[]=$row2[10];
 				$data[]=$row2[11];
+				$data[]=$row2[12];
 		}
 		return $data;
 }
@@ -414,7 +417,7 @@ function getUsuarios($qr)
 	
 	$dbPg=pgSql_db();
 	
-  $sql2 = "SELECT id_usuario,mail,fecha_registro,estado,id_cliente,tipo_usuario,clave,nombre,id_device,web_device,nickname from obvii_usuario where 1=1";		
+  $sql2 = "SELECT id_usuario,mail,fecha_registro,estado,id_cliente,tipo_usuario,clave,nombre,id_device,web_device,nickname,mail_demo_empresa from obvii_usuario where 1=1";		
   if($qr!="")
   {
   	$sql2 .=$qr;
@@ -436,6 +439,7 @@ function getUsuarios($qr)
 				$data[]=$row2[8];
 				$data[]=$row2[9];
 				$data[]=$row2[10];
+				$data[]=$row2[11];
 				$datos[]=$data;
 		}
 		return $datos;
@@ -549,10 +553,10 @@ function addUsuario($data)
  $sql2 = "INSERT INTO obvii_usuario(
              mail, fecha_registro, estado, id_cliente, tipo_usuario, 
             clave, nombre, id_usuario_obvii, id_device, web_device, nickname, 
-            empresa)
+            empresa,mail_demo_empresa)
             
     VALUES ('".$data[0]."', '".getFechaLibre(DIF_HORA)."', 0, '".$data[1]."', '".$data[2]."', 
-            '".$data[3]."','".$data[4]."','".$data[5]."','".$data[6]."','".$data[7]."','".$data[8]."','".$data[9]."');";		
+            '".$data[3]."','".$data[4]."','".$data[5]."','".$data[6]."','".$data[7]."','".$data[8]."','".$data[9]."','".$data[10]."');";		
   
   
   $rs2 = pg_query($dbPg, $sql2);
@@ -986,10 +990,15 @@ function senMailMarcacion($tipo,$lat,$lon,$tipo_marca,$nom,$fecha,$mail_post,$di
 		 		$titulo="Marcacion en Obvii(Libre)";
 		 		$html .="<br>Direccion ingresada: ".ucwords($direcLibre);
 		 	}
-		 	if(!$_SESSION["demo_us"])
-		 	{
+		 	
 		 		$html .="<br>Direccion aproximada de marcacion: ".$direc[0][1];
+			if(!$_SESSION["demo_us"])
+		 	{		
+		 		
 		 		$html .="<br>Empresa Cercana a la marcacion: ".ucwords($empresa[0][1]).", ".ucwords($empresa[0][3])." #".$empresa[0][4].",".ucwords($empresa[0][5]).". Distancia mts:".$empresa[0][2]."";
+		 	}else
+		 	{
+		 		$mail_post=$user[12];
 		 	}
 		 	sendMail($_SESSION["id_usuario"],$html,$titulo);
 		 	if($mail_post!="")
