@@ -166,7 +166,7 @@ $lugares=getLugares(" and id_cliente=".$_SESSION['id_cliente_web']." order by no
     <div class="box col-md-12">
     <div class="box-inner">
     <div class="box-header well" data-original-title="">
-        <h2><i class="glyphicon glyphicon-map-marker"></i> Resultados</h2>
+        <h2><i class="glyphicon glyphicon-map-marker"></i> Resultados <div class=square_color_hora>Alerta Hora</div> <div class=square_color_libre>Marca Libre</div> <div class=square_color_sync>Marca Sync</div></h2>
 
         <div class="box-icon">
             
@@ -253,6 +253,7 @@ $lugares=getLugares(" and id_cliente=".$_SESSION['id_cliente_web']." order by no
   			
   			filtrar_marcaciones();
  </script>
+ <div id="output"></div>
 </body>
 </html>
 

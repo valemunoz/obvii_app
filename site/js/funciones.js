@@ -504,7 +504,7 @@ function mailLista(id_lista)
 	$("#output").load("qr_marcas.php", 
 							{tipo:3, marca:id_lista} 
 								,function(){
-										OpenModalReg();
+										alert("Mail Enviado.");
 								}
 		);
 }

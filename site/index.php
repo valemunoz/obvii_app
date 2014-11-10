@@ -134,7 +134,7 @@ if($estado_web!=0)
     <div class="box col-md-12">
         <div class="box-inner">
             <div class="box-header well">
-                <h2><i class="glyphicon glyphicon-info-sign"></i> Introduction</h2>
+                <h2><i class="glyphicon glyphicon-info-sign"></i> Administrador Obvii</h2>
 
                 <div class="box-icon">
                     
@@ -147,11 +147,10 @@ if($estado_web!=0)
             <div class="box-content row">
                 <div class="col-lg-7 col-md-12">
                     <h1>Obvii <br>
-                        <small>free, premium quality, responsive, multiple skin admin template.</small>
+                        <small>Marcaci&oacute;n de asistencia en terreno</small>
                     </h1>
-                    <p>Its a live demo of the template. I have created Charisma to ease the repeat work I have to do on my
-                        projects. Now I re-use Charisma as a base for my admin panel work and I am sharing it with you
-                        :)</p>
+                    <p>Optimiza a tu equipo de trabajo en terreno con esta APP y su version Web</p>
+                    <p>Tienes alguna consulta o problema? Contactate con nosotros enviando un mail a <a href="mailto:'contacto@architeq.cl'">contacto@architeq.cl</a></p>
 
                     
                 </div>
@@ -170,7 +169,7 @@ if($estado_web!=0)
     <div class="box col-md-4">
         <div class="box-inner">
             <div class="box-header well" data-original-title="">
-                <h2><i class="glyphicon glyphicon-user"></i> Actividad de Usuarios</h2>
+                <h2><i class="glyphicon glyphicon-user"></i> Ultimas Marcaciones</h2>
 
                 <div class="box-icon">
                     <a href="#" class="btn btn-minimize btn-round btn-default"><i
@@ -185,12 +184,14 @@ if($estado_web!=0)
                         	<?php
                     	foreach($marcas as $i => $marc)
                     	{
+                    		$usuario=getUsuario(" and mail='".$marc[1]."'");
                     	?>
-                        <li>
-                            <a href="#">
+                        <li class=list_index>
+                            
                                 
-                            <strong>Name:</strong> <a href="#"><?=$marc[1]?>
-                            </a><br>
+                            <span class=tit_list_index><?=strtoupper($usuario[10])?></span>
+                            <br>
+                            <strong>Lugar:</strong> <?=ucwords($marc[11])?><br>
                             <strong>Fecha:</strong> <?=$marc[3]?><br>
                             <?php
                             if($marc[10]==0)
@@ -235,8 +236,9 @@ if($estado_web!=0)
                 </div>
             </div>
             <div class="box-content">
+            	 <div class="box-content">
                 <h3>banner/img 320x300</h3>
-                
+              </div>
 
             </div>
         </div>

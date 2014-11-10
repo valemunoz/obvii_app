@@ -61,8 +61,17 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 			  }
 			  $color="";
 			  
-			  
-			  if($us[3] < $us[14] or $us[3] < $us[13])
+			  $tiempo= segundos($us[3],$us[14]);
+			  $tiempo2= segundos($us[3],$us[13]);
+			  if($us[15]=='t')
+			  {
+			  	$color="alert_sync";
+			  }
+			  if($us[4]=='1')
+			  {
+			  	$color="alert_libre";
+			  }
+			  if(($us[3] < $us[14] or $us[3] < $us[13]) and ($tiempo > 600 or $tiempo2 > 600))
 			  {
 			  	$color="alert_hora";
 			  	
