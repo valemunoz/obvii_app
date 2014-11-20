@@ -1,11 +1,11 @@
 <?php
 include("connec.php");
-//define("PATH_SITE","http://localhost/github/obvii_app");
-//define("PATH_SITE_WEB","http://localhost/github/obvii_app/site");
-//define("PATH_SITE_ADMIN","http://localhost/github/obvii_app/admin");
-define("PATH_SITE","http://locate.chilemap.cl/obvii");
-define("PATH_SITE_WEB","http://locate.chilemap.cl/obvii/site");
-define("PATH_SITE_ADMIN","http://locate.chilemap.cl/obvii/admin");
+define("PATH_SITE","http://localhost/github/obvii_app");
+define("PATH_SITE_WEB","http://localhost/github/obvii_app/site");
+define("PATH_SITE_ADMIN","http://localhost/github/obvii_app/admin");
+//define("PATH_SITE","http://locate.chilemap.cl/obvii");
+//define("PATH_SITE_WEB","http://locate.chilemap.cl/obvii/site");
+//define("PATH_SITE_ADMIN","http://locate.chilemap.cl/obvii/admin");
 
 //define("PATH_WS_OBVII","http://www.totalaccess.cl/server/");
 define("PATH_WS_OBVII","http://93.92.170.66:8080/server/");
@@ -23,6 +23,7 @@ define("DIF_HORA","3");
 define("CLI_DEMO","7");
 define("MSG_TITULO_OBVII","Bienvenido a la comunidad Obvii");
 define("MSG_BIENVENIDA_OBVII","Bienvenido a Obvii<br>Te haz registrado existosamente. A continuacion algunos datos que pueden servirte:<br>Nombre usuario:_MAIL_ <br> clave: _CLAVE_ <br><br>Equipo Obvii");
+define("PATH_CHILEMAP","http://www.chilemap.cl/index_mapa.php?lat=_LAT_&lon=_LON_");
 
 function inicioSesion($mail,$id_user_obvii,$id_cliente,$tipo_cli,$nick,$opc)
 {
@@ -980,6 +981,7 @@ function senMailMarcacion($tipo,$lat,$lon,$tipo_marca,$nom,$fecha,$mail_post,$di
 		 	$html .="<br>E-mail: ".$user[1];
 		 	$html .="<br>Fecha: ".$fecha;
 		 	$html .="<br>Lugar de marcacion: ".ucwords($nom);
+		 	$html .="<br>Coordenadas de marcacion: ".$lat.", ".$lon."";
 		 	$html .="<br>Tipo de marcacion: ".ucwords($marca);
 		 	if(trim($comentario)!="")
 		 	{

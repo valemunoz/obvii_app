@@ -617,8 +617,9 @@ if(1==1)
 				
 				if(up_img==false)				
 				{
-					$.mobile.loading( 'hide');
+					
 					loadAsis();
+					$.mobile.loading( 'hide');
 					mensaje("Marcaci&oacute;n realizada",'MENSAJE','myPopup');
 				}
 				

@@ -156,14 +156,16 @@ if($_REQUEST['tipo']==1) //check estado sesion
 
 }elseif($_REQUEST['tipo']==3) //historial
 {
-	$fecha=getFechaLibre(168); // 31 dias
+	$fecha=getFechaLibre(336); // 31 dias
 	$marcaciones=getMarcaciones(" and fecha_registro >= '".$fecha."' and id_usuario ilike '%".$_SESSION["id_usuario"]."%' order by fecha_registro desc");
+	//echo " and fecha_registro >= '".$fecha."' and id_usuario ilike '%".$_SESSION["id_usuario"]."%' order by fecha_registro desc";
 	//print_R($marcaciones);
 	?>
 	
 	<div class="ui-bar ui-bar-a" id=barra_sup style="text-align:center;">
 					 Historial de Asistencia
 	</div>
+	<span class=texto_interior>Los registros desplegados corresponden a los ultimos 14 d&iacute;as</span>
 	<ul data-role="listview"  data-theme="b"  data-filter="true" data-filter-placeholder="Buscar" data-inset="false" id="list_registros">	
 				
 	
@@ -777,30 +779,36 @@ if($lugares[0][13]=='t')
 {
 	$lon=$_REQUEST['lon'];
 	$lat=$_REQUEST['lat'];
-	
-	$empresas=getEmpresaRadio($lat,$lon,RADIO);
+	$favorito=getFavoritos(" and id_usuario ilike 'valemunoz@gmail.com' and estado=0"); 
+	$favo=array();
+	foreach($favorito as $fav)
+	{
+		$favo[]=$fav[3];
+	}
+	$empresas=getLugares(" and id_lugar in(".implode(',',$favo).")");
+	//$empresas=getEmpresaRadio($lat,$lon,RADIO);
 	foreach($empresas as $emp)
 	{
 		$texto="<div class=titulo>".ucwords($emp[1])."</div>";
-		$texto .="<div class=titulo_pop>".ucwords($emp[3])." #".$emp[4]."</div>";
-		$texto .="<div class=titulo_pop>".ucwords($emp[5])."</div>";
-		$texto .="<div class=titulo_pop2>Distancia: ".ucwords($emp[2])."Mts</div>";
+		$texto .="<div class=titulo_pop>".ucwords($emp[6])." #".$emp[7]."</div>";
+		$texto .="<div class=titulo_pop>".ucwords($emp[8])."</div>";
+		//$texto .="<div class=titulo_pop2>Distancia: ".ucwords($emp[2])."Mts</div>";
 		
-		$lug=getLugares(" and id_lugar=".$emp[0]."");
+		//$lug=getLugares(" and id_lugar=".$emp[0]."");
 		$comenta=0; //true
 		$marca=0;
-		if($lug[0][12]=='f')
+		if($emp[12]=='f')
 		   $comenta=1;
-		if($lug[0][13]=='f')
+		if($emp[13]=='f')
 		   $marca=1;
 		 /* marcar(<?=$lug[0][0]?>,<?=$comenta?>,<?=$marca?>); */
-		$texto .='<br><div align=center><input class=boton_pop type=button value=Marcar onclick=marcar('.$lug[0][0].','.$comenta.','.$marca.');></div><br>';
+		$texto .='<br><div align=center><input class=boton_pop type=button value=Marcar onclick=marcar('.$emp[0].','.$comenta.','.$marca.');></div><br>';
 		
 		
 		
 		?>
 		<script>
-			addMarcadores("<?=$emp[6]?>","<?=$emp[7]?>","<?=$texto?>","images/marker_ini.png",40,40);
+			addMarcadores("<?=$emp[5]?>","<?=$emp[4]?>","<?=$texto?>","images/marker_ini.png",40,40);
 			</script>
 		<?php
 	}
@@ -815,6 +823,38 @@ if($lugares[0][13]=='t')
 	</script>
 		
 	<?php
+}elseif($_REQUEST['tipo']==15) //ubicacion actual
+{
+	if(isset($_REQUEST['mail']))
+	{
+		sendMail($_REQUEST['mail'],$_SESSION['mail_pop'],"Ubicacion Obvii");
+		
+	}else
+	{
+		$direc=getDireccionGoogleLATLON($_REQUEST['lat'],$_REQUEST['lon']);
+		$texto_mail ="El usuario ".$_SESSION['nickname']." le ha enviado su ubicacion actual <br><br>";
+		$texto_mail .="Cerca de: ".trim($direc[0][3])." #".trim($direc[0][2]).", ".trim($direc[0][4])."<br>";
+		$texto_mail .="Coordenadas: ".$_REQUEST['lat'].",".$_REQUEST['lon']."<br>";
+		$link=str_replace("_LON_",$_REQUEST['lon'],PATH_CHILEMAP);
+		$link=str_replace("_LAT_",$_REQUEST['lat'],$link);
+		$texto_mail .="Link al mapa: ".$link;
+		$_SESSION['mail_pop']=$texto_mail;
+		
+		
+		$texto="<div class=titulo>Ubicaci&oacute;n Actual</div>";
+		$texto .="<div class=titulo_pop>".$direc[0][3]." #".$direc[0][2]."</div>";
+		$texto .="<div class=titulo_pop>".$direc[0][4]."</div>";
+		$texto .="<div class=titulo_pop2>".$_REQUEST['lat'].",".$_REQUEST['lon']."</div>";
+		$texto .="<div class=titulo>Enviar por correo</div>";
+		$texto .="<div class=titulo_pop><input placeholder='e-mail' type=text class=boton_pop2 id=mail_pop name=mail_pop></div>";
+		$texto .="<div class=titulo_pop><input type=button class=boton_pop value='Enviar' onclick=enviarMailPop();></div>";
+		
+		?>
+		<script>
+			addMarcadores(<?=$_REQUEST['lon']?>,<?=$_REQUEST['lat']?>,"<?=$texto?>","images/point.png",40,40);
+			</script>
+		<?php
+	}
 }
 
 ?>
