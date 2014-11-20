@@ -837,7 +837,8 @@ if($lugares[0][13]=='t')
 		$texto_mail .="Coordenadas: ".$_REQUEST['lat'].",".$_REQUEST['lon']."<br>";
 		$link=str_replace("_LON_",$_REQUEST['lon'],PATH_CHILEMAP);
 		$link=str_replace("_LAT_",$_REQUEST['lat'],$link);
-		$texto_mail .="Link al mapa: ".$link;
+		$texto_mail .="<a href='".trim($link)."'>Ver ubicacion</a>";
+		unset($_SESSION['mail_pop']);
 		$_SESSION['mail_pop']=$texto_mail;
 		
 		
