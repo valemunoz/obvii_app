@@ -143,6 +143,31 @@ $lugares=getLugares(" and id_cliente=".$_SESSION['id_cliente_web']." order by no
     <!--/span-->
 
 </div><!--/row-->
+
+<div class="row" id="datos_esta">
+    <div class="box col-md-12">
+        <div class="box-inner">
+            <div class="box-header well">
+                <h2><i class="glyphicon glyphicon-align-justify"></i> Datos Estadisticos</h2>
+
+                <div class="box-icon">
+              
+                    <a href="#" class="btn btn-minimize btn-round btn-default"><i
+                            class="glyphicon glyphicon-chevron-up"></i></a>
+                                          
+                    
+                </div>
+            </div>
+            <div class="box-content row" >
+
+								<div class="col-lg-7 col-md-12" id="contenido_data_est">
+                    
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
   <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
 

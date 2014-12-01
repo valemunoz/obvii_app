@@ -779,7 +779,7 @@ if($lugares[0][13]=='t')
 {
 	$lon=$_REQUEST['lon'];
 	$lat=$_REQUEST['lat'];
-	$favorito=getFavoritos(" and id_usuario ilike 'valemunoz@gmail.com' and estado=0"); 
+	$favorito=getFavoritos(" and id_usuario ilike '".$_SESSION["id_usuario"]."' and estado=0"); 
 	$favo=array();
 	foreach($favorito as $fav)
 	{

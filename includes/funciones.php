@@ -1122,4 +1122,42 @@ function getImagen($qr)
   return $data;
 	        
 }
+function getMarcacionesGrupo($qr,$qr2)
+{
+	$dbPg=pgSql_db();
+	
+  $sql2 = "SELECT ".$qr2." FROM obvii_marcacion where 1=1";		
+  if($qr!="")
+  {
+  	$sql2 .=$qr;
+  }
+  //echo $sql2;
+  $rs2 = pg_query($dbPg, $sql2);
+
+	while ($row2 = pg_fetch_row($rs2))
+		{
+			$data=array();
+			$data[]=$row2[0];
+			$data[]=$row2[1];
+			$data[]=$row2[2];
+			$data[]=$row2[3];
+			$data[]=$row2[4];
+			$data[]=$row2[5];
+			$data[]=$row2[6];
+			$data[]=$row2[7];
+			$data[]=$row2[8];
+			$data[]=$row2[9];
+			$data[]=$row2[10];
+			$data[]=$row2[11];
+			$data[]=$row2[12];
+			$data[]=$row2[13];
+			$data[]=$row2[14];
+			$data[]=$row2[15];
+
+			$datos[]=$data;
+		}
+		pg_close($dbPg);
+		
+		return $datos;
+}
 ?>

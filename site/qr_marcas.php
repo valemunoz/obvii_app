@@ -326,7 +326,84 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 			createCsv($data_csv_arr,$_REQUEST['nomfile'],$campos);
 			
 			
+	}elseif($_REQUEST['tipo']==5)//graficos pizza
+{
+	include_once "libchart/classes/libchart.php";
+	$cliente=$_SESSION['id_cliente_web'];
+		
+		$mail=$_REQUEST['mail'];
+		
+		$lugar=$_REQUEST['lugar'];
+		
+		$fecha_inicio=$_REQUEST['fec_ini'];
+		$fecha_termino=$_REQUEST['fec_ter'];
+
+    $query = " and id_cliente=".$cliente."";
+    if(trim($fecha_inicio) !="")
+    {
+    	$query .=" and fecha_registro >= '".$fecha_inicio."'"	;
+    }
+    if(trim($fecha_termino) !="")
+    {
+    	$query .=" and fecha_registro <= '".$fecha_termino." 23:59:59'"	;
+    }
+		if(trim($mail)!="")
+		{
+			$query .=" and id_usuario ilike '%".$mail."%'"	;
+		}	
+		
+		if(trim($lugar)>0)
+		{
+			$query .=" and id_lugar = ".$lugar.""	;
+		}	
+		$query .=" group by nombre_lugar order by nombre_lugar desc";
+		
+		$marcas=getMarcacionesGrupo($query,"nombre_lugar, count(*)");
+		//print_R($marcas);
+	$chart = new PieChart();
+	$date=date("YmdHms");
+	$dataSet = new XYDataSet();	
+	
+	
+	
+	$chart2 = new VerticalBarChart(); //400, 500
+	$chart->getPlot()->getPalette()->setPieColor(array(
+		new Color(0, 0, 255),
+		new Color(0, 255,64),
+		new Color(255, 255,0),
+		new Color(255, 128, 255),
+		new Color(128, 255, 255),
+		new Color(255, 36, 146),
+		new Color(213, 255, 213),
+		new Color(128, 64, 64),
+		new Color(224, 193, 255),
+		new Color(0, 202, 101),
+		new Color(0, 128, 64),
+		new Color(255, 128, 0)
+	));
+  $valor=130;
+  if(count($marcas)>0)
+  {
+	foreach($marcas as $char)
+	{
+			$dataSet->addPoint(new Point(ucwords(substr($char[0],0,10)), $char[1]));
+		
 	}
+			$chart->setDataSet($dataSet);
+			$chart->setTitle("Grafico de Marcaciones");
+			$chart->render("graficos/pie_chart_color_".$_SESSION["usuario_web"].".png");
+			?>
+		<img alt="Grafico estadisticas"  src="graficos/pie_chart_color_<?=$_SESSION["usuario_web"]?>.png" style="border: 1px solid gray;"/></br></br>
+		<?php
+		$chart2->setDataSet($dataSet);
+		$chart2->setTitle("Grafico de Marcaciones");
+		$chart2->render("graficos/pie_chart_color_v_".$_SESSION["usuario_web"].".png");
+			?>
+			<img alt="Grafico estadisticas"  src="graficos/pie_chart_color_v_<?=$_SESSION["usuario_web"]?>.png" style="border: 1px solid gray;"/>
+		<?php
+	}
+	
+}
 }
 
 ?>

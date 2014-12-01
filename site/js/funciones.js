@@ -483,9 +483,22 @@ function filtrar_marcaciones()
 	$("#result2").load("qr_marcas.php", 
 						{tipo:1,mail:mail,lugar:lugar,fec_ini:desde,fec_ter:hasta} 
 							,function(){
+								
+								
 									
 							}
 	);
+	$("#contenido_data_est").load("qr_marcas.php", 
+								{tipo:5,mail:mail,lugar:lugar,fec_ini:desde,fec_ter:hasta} 
+									,function(){
+										
+										$("#datos_esta").show();
+											
+									}
+								);
+	
+	
+								
 }
 function loadDetMarca(id_marca)
 {
@@ -881,3 +894,5 @@ function loadCsv(nom_file)
 							}
 	);
 }
+
+
