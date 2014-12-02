@@ -1,0 +1,98 @@
+#img_header
+{
+	width:103px !important;
+	height:37px !important;
+	margin-top:-12px !important;
+}
+
+	#mapa , #map
+				{
+					width:100% !important;
+					height:400px !important;
+					border:1px solid #C0C0C0;
+				
+				}
+#titulo1
+{
+	font-size:12px;
+	color:#808080;
+	font-weight: bold;	
+	
+}
+#popup_CM3
+{
+	border-radius:10px !important;	
+	border:2px #8080FF solid !important;
+}
+.ui-datepicker
+{
+	z-index:999999 !important;
+}
+.img_doc
+{
+	width:150px;
+	height;100px;
+}				
+#result2
+{
+	height:600px !important;
+	overflow-y:auto;
+}
+.alert_hora
+{
+	background-color:#FF8040 !important;
+}
+.alert_libre
+{
+	background-color:#FFFF80 !important;
+}
+.alert_sync
+{
+	background-color:#FFC1C1 !important;
+}
+.list_index
+{
+	color:#808080;
+	
+}
+.tit_list_index
+{
+	color:#317EAC;
+	font-weight: bold;
+	
+}
+.square_color_hora
+{
+ padding:2px;
+	background-color:#FF8040;
+	margin-top:-26px;
+	margin-left:125px;
+	color:white;
+	position:absolute;
+	font-size:10px;
+	
+}
+.square_color_libre
+{
+	padding:2px;
+	background-color:#FFFF80;
+	margin-top:-26px;
+	margin-left:191px;
+	color:white;
+	position:absolute;
+	font-size:10px;
+}
+.square_color_sync
+{
+	padding:2px;
+		background-color:#FFC1C1;
+	margin-top:-26px;
+	margin-left:260px;
+	color:white;
+	position:absolute;
+	font-size:10px;
+}
+.mano
+{
+	cursor:pointer;
+}
