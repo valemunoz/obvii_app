@@ -480,6 +480,7 @@ function filtrar_marcaciones()
 	var desde=$.trim(document.getElementById("desde").value);
 	var hasta=$.trim(document.getElementById("hasta").value);
 	$("#result2").html("<img src=img/load.gif>");
+	
 	$("#result2").load("qr_marcas.php", 
 						{tipo:1,mail:mail,lugar:lugar,fec_ini:desde,fec_ter:hasta} 
 							,function(){
@@ -488,6 +489,7 @@ function filtrar_marcaciones()
 									
 							}
 	);
+	$("#contenido_data_est").html("<img src=img/load.gif>");
 	$("#contenido_data_est").load("qr_marcas.php", 
 								{tipo:5,mail:mail,lugar:lugar,fec_ini:desde,fec_ter:hasta} 
 									,function(){
