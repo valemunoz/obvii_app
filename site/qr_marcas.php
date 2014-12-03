@@ -391,15 +391,17 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 	}
 			$chart->setDataSet($dataSet);
 			$chart->setTitle("Grafico de Marcaciones");
-			$chart->render("graficos/pie_chart_color_".$_SESSION["usuario_web"].".png");
+			$num=rand(0,9);
+			$chart->render("graficos/pie_chart_color_".$num.".png");
+			
 			?>
-		<img alt="Grafico estadisticas"  src="graficos/pie_chart_color_<?=$_SESSION["usuario_web"]?>.png" style="border: 1px solid gray;"/></br></br>
+		<img alt="Grafico estadisticas"  src="graficos/pie_chart_color_<?=$num?>.png" style="border: 1px solid gray;"/></br></br>
 		<?php
 		$chart2->setDataSet($dataSet);
 		$chart2->setTitle("Grafico de Marcaciones");
-		$chart2->render("graficos/pie_chart_color_v_".$_SESSION["usuario_web"].".png");
+		$chart2->render("graficos/pie_chart_color_v_".$num.".png");
 			?>
-			<img alt="Grafico estadisticas"  src="graficos/pie_chart_color_v_<?=$_SESSION["usuario_web"]?>.png" style="border: 1px solid gray;"/>
+			<img alt="Grafico estadisticas"  src="graficos/pie_chart_color_v_<?=$num?>.png" style="border: 1px solid gray;"/>
 		<?php
 	}
 	

@@ -324,6 +324,9 @@ if($lugares[0][13]=='t')
 						{
 					
 							$favorito=getFavoritos(" and id_usuario ilike '".$_SESSION["id_usuario"]."' and estado=0 and id_lugar=".$_REQUEST['id']."");
+							?>
+								<input type="button" onclick="marcar(<?=$lugares[0][0]?>,'<?=$lugares[0][12]?>','<?=$lugares[0][13]?>');" value="Marcar">
+							<?php
 							if(count($favorito)> 0)
 							{
 								?>
@@ -802,7 +805,7 @@ if($lugares[0][13]=='t')
 		if($emp[13]=='f')
 		   $marca=1;
 		 /* marcar(<?=$lug[0][0]?>,<?=$comenta?>,<?=$marca?>); */
-		$texto .='<br><div align=center><input class=boton_pop type=button value=Marcar onclick=marcar('.$emp[0].','.$comenta.','.$marca.');></div><br>';
+		$texto .='<br><div align=center><input class=boton_pop type=button value=Marcar onclick=marcar('.$emp[0].','.$comenta.','.$marca.');><br><input class=boton_pop type=button value=Zoom onclick=moverCentro('.$emp[4].','.$emp[5].',16);></div><br>';
 		
 		
 		

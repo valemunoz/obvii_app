@@ -276,7 +276,7 @@ if(1==1)
 					 	$nombre=$nombre_final;
 					}
 					?>
-						<li><a  href="javascript:marcar(<?=$lug[0]?>,'<?=$lug[12]?>','<?=$lug[13]?>');"><span class=titulo2><?=ucwords($nombre)?></span> <p class="ui-li-aside"><span class=<?=$clase?>><?=$txt_hora?></span></p></a>					
+						<li><a  href="javascript:loadEditar(<?=$lug[0]?>);"><span class=titulo2><?=ucwords($nombre)?></span> <p class="ui-li-aside"><span class=<?=$clase?>><?=$txt_hora?></span></p></a>					
 							<a href="javascript:loadEditar(<?=$lug[0]?>);" data-rel="popup" data-position-to="window" data-transition="pop" data-icon="search">Editar</a>
 							
 						</li>
@@ -632,7 +632,7 @@ if(1==1)
 				if(up_img==false)				
 				{
 					$.mobile.loading( 'hide');
-					//loadHome();				
+					loadFav();				
 					mensaje("Marcaci&oacute;n realizada",'MENSAJE','myPopup');
 					
 				}
@@ -644,9 +644,8 @@ if(1==1)
 		{
 				?>
 			<script>
-				$.mobile.loading( 'hide');
-				
-				loadHome();
+				$.mobile.loading( 'hide');				
+				loadFav();
 				mensaje(MSG_ERR_CONEC,'ERROR','myPopup');
 			</script>
 			<?php
@@ -818,7 +817,7 @@ if(1==1)
 		 	?>
 		 	<script>
 				$.mobile.loading( 'hide');
-				//loadHome();
+				loadFav();
 				mensaje("Marcaci&oacute;n Realizada",'MENSAJE','myPopup');
 			</script>
 			<?php

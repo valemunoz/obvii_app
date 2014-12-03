@@ -16,20 +16,7 @@ if($estado_web!=0)
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!--
-        ===
-        This comment should NOT be removed.
 
-        Charisma v2.0.0
-
-        Copyright 2012-2014 Muhammad Usman
-        Licensed under the Apache License v2.0
-        http://www.apache.org/licenses/LICENSE-2.0
-
-        http://usman.it
-        http://twitter.com/halalit_usman
-        ===
-    -->
     <meta charset="utf-8">
     <title>Obvii</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -137,13 +124,19 @@ if($estado_web!=0)
                 </div>
                 <div class="input-group col-md-4">
                     <label class="control-label" for="inputSuccess1">Desde</label>
-                    <input type="text" class="form-control" id="desde" name="desde">
+                    <input type="text" class="form-control" id="desde" name="desde" value="<?=date("Y-m-d")?>">
                 </div> 
                 <div class="input-group col-md-4">
                     <label class="control-label" for="inputSuccess1">Hasta</label>
                     <input type="text" class="form-control" id="hasta" name="hasta">
                 </div> 
                 <br>
+                <div class="input-group col-md-4">
+                    <label class="control-label" for="inputSuccess1">B&uacute;squeda</label><br>
+                    <input type="radio"  id="opc_1" name="group2" checked>Ruta  <input type="radio"  id="opc_2" name="group2">Marcaciones  <input type="radio"  id="opc_3" name="group2">Ultimas Marcaciones
+                  
+                </div> 
+                </br>
                 <div class="input-group col-md-4">
                 	<button type="submit" class="btn btn-default" onclick="loadMapaData();">Generar</button>
                    

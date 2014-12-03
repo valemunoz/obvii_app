@@ -386,6 +386,7 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 		addLugarObvii($data);
 	}elseif($_REQUEST['tipo']==10 and $estado_sesion==0)
 	{
+		$tipo=$_REQUEST['selec'];
 		$desde=$_REQUEST['desde'];
 		$hasta=$_REQUEST['hasta'];
 		$qr="";
@@ -398,61 +399,127 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 			$qr .="and fecha_registro <= '".$hasta."'";
 		}
 	//addLinea(CM_datos)
-	
-	 list($datos_ruta,$data_punto)=getRuta(''.$_REQUEST['usuario'].'',$qr);
-	 if(count($data_punto) > 400 and $_REQUEST['tipo_lin']==1)
+	 if($tipo==1)
 	 {
-	 	$_REQUEST['tipo_lin']=0;
-	 	?>
-	 	<script>
-	 		alert("Demasiados registros para el tipo Punto. Se desplegaran en linea");
-	 		</Script>
-	 	<?php
-	 }
-	 if($_REQUEST['tipo_lin']==0 and count($datos_ruta)>0)
-	 {
-	 	$data_geo=implode("|",$datos_ruta);
-	 	$dta=explode(",",$datos_ruta[0]);
-	 	$dta_fin=explode(",",$datos_ruta[count($datos_ruta)-1]);
-	 	
-		?>
-		<script>			
-			
-			addLinea("<?=$data_geo?>");
-			addMarcador("img/marker_ini.png","30,30","<?=$dta[1]?>","<?=$dta[0]?>",'','Inicio');
-			addMarcador("img/marker_fin.png","20,20","<?=$dta_fin[1]?>","<?=$dta_fin[0]?>",'','Termino');
-			markers.setZIndex(3000);
-		</Script>
-		<?php
-		}elseif($_REQUEST['tipo_lin']==1 and count($datos_ruta)>0)
-		{
-			foreach($datos_ruta as $i => $ruta)
-			{
-				$dta=explode(",",$ruta);
-				$titulo="<div id=titulo1>Fecha: ".$data_punto[$i][4];
-				$titulo .="<br>Precision GPS :".$data_punto[$i][5]."</div>";
-				?>
-				<script>					
-					addMarcador("img/circle.png","20,20","<?=$dta[1]?>","<?=$dta[0]?>",'','<?=$titulo?>');
-				</Script>
-				<?php
-			}
+		 list($datos_ruta,$data_punto)=getRuta(''.$_REQUEST['usuario'].'',$qr);
+		 if(count($data_punto) > 400 and $_REQUEST['tipo_lin']==1)
+		 {
+		 	$_REQUEST['tipo_lin']=0;
+		 	?>
+		 	<script>
+		 		alert("Demasiados registros para el tipo Punto. Se desplegaran en linea");
+		 		</Script>
+		 	<?php
+		 }
+		 if($_REQUEST['tipo_lin']==0 and count($datos_ruta)>0)
+		 {
+		 	$data_geo=implode("|",$datos_ruta);
+		 	$dta=explode(",",$datos_ruta[0]);
+		 	$dta_fin=explode(",",$datos_ruta[count($datos_ruta)-1]);
+		 	
 			?>
-			<script>
+			<script>			
+				
+				addLinea("<?=$data_geo?>");
+				addMarcador("img/marker_ini.png","30,30","<?=$dta[1]?>","<?=$dta[0]?>",'','Inicio');
+				addMarcador("img/marker_fin.png","20,20","<?=$dta_fin[1]?>","<?=$dta_fin[0]?>",'','Termino');
 				markers.setZIndex(3000);
-				map.zoomToExtent(markers.getDataExtent(),false);
-				</script>
+			</Script>
 			<?php
+			}elseif($_REQUEST['tipo_lin']==1 and count($datos_ruta)>0)
+			{
+				foreach($datos_ruta as $i => $ruta)
+				{
+					$dta=explode(",",$ruta);
+					$titulo="<div id=titulo1>Fecha: ".$data_punto[$i][4];
+					$titulo .="<br>Precision GPS :".$data_punto[$i][5]."</div>";
+					?>
+					<script>					
+						addMarcador("img/circle.png","20,20","<?=$dta[1]?>","<?=$dta[0]?>",'','<?=$titulo?>');
+					</Script>
+					<?php
+				}
+				?>
+				<script>
+					markers.setZIndex(3000);
+					map.zoomToExtent(markers.getDataExtent(),false);
+					</script>
+				<?php
+				
+			}else
+			{
+				?>
+				<script>
+				alert("No hay registros disponibles.");
+				</script>
+				<?php
+				
+			}
+	 }elseif($tipo==2)
+	 {
+	 	$qr .=" and id_usuario ilike '%".$_REQUEST['usuario']."%' and id_cliente=".$_SESSION['id_cliente_web']."";
+	 	$marcas=getMarcaciones($qr);
+	 	//print_r($marcas); 
+	 	if(count($marcas)>0)
+	 	{
+	 	foreach($marcas as $marca)
+	 	{
+	 		$titulo="<div id=titulo1>Lugar: ".trim($marca[11]);	 		
+			$titulo .="<br>Usuario :".$marca[1];
+			$titulo .="<br>Fecha :".$marca[3];
 			
+			$titulo .="</div>";
+					?>
+					<script>					
+						addMarcador("img/marker_ini.png","35,35","<?=$marca[6]?>",'<?=$marca[7]?>','','<?=$titulo?>');
+					</Script>
+					<?php
+	 	}
+	 	?>
+				<script>
+					markers.setZIndex(3000);
+					map.zoomToExtent(markers.getDataExtent(),false);
+					</script>
+				<?php
 		}else
 		{
-			?>
-			<script>
-			alert("No hay registros disponibles.");
-			</script>
-			<?php
 			
 		}
+	 }elseif($tipo==3)
+	 {
+	 	$qr =" and nickname ilike '%".$_REQUEST['usuario']."%' and id_cliente=".$_SESSION['id_cliente_web']."";
+	 	$usuarios=getUsuarios($qr);
+	 	
+	 	if(count($usuarios)>0)
+	 	{
+	 	foreach($usuarios as $us)
+	 	{
+	 		$marcas=getMarcaciones(" and id_usuario='".$us[1]."' and id_cliente =".$_SESSION['id_cliente_web']." order by fecha_registro desc limit 1");
+	 		foreach($marcas as $marca)
+	 		{
+	 		  $titulo="<div id=titulo1>Usuario: ".trim(ucwords($us[7]));	 		
+			  $titulo .="<br>Lugar :".$marca[11];
+			  $titulo .="<br>Fecha :".$marca[3];
+			  
+			  $titulo .="</div>";
+			  		?>
+			  		<script>					
+			  			addMarcador("img/marker_ini.png","35,35","<?=$marca[6]?>",'<?=$marca[7]?>','','<?=$titulo?>');
+			  		</Script>
+			  		<?php
+			}
+	 	}
+	 	?>
+				<script>
+					markers.setZIndex(3000);
+					map.zoomToExtent(markers.getDataExtent(),false);
+					</script>
+				<?php
+		}else
+		{
+			
+		}
+	 }
 	}
 }
 

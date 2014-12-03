@@ -293,10 +293,10 @@ function saveEmpresa()
 	{
 		if(document.getElementById("opc_1").checked)
 		{
-			order=document.getElementById("opc_1").value;
+			order="id_usuario_interno";
 		}else
 		{
-			order=document.getElementById("opc_2").value;
+			order="nombre";
 		}
 	}catch(e){}
 	try
@@ -413,10 +413,10 @@ function updateEmpresa(empresa)
 	{
 		if(document.getElementById("opc_1").checked)
 		{
-			order=document.getElementById("opc_1").value;
+			order="id_usuario_interno";
 		}else
 		{
-			order=document.getElementById("opc_2").value;
+		order="nombre";
 		}
 	}catch(e){}
 
@@ -576,11 +576,24 @@ function loadMapaData()
 	nick=$.trim(document.getElementById("nom_em").value);
  desde=$.trim(document.getElementById("desde").value);
  hasta=$.trim(document.getElementById("hasta").value);
-	if(nick!="")
+ var seleccion=1;
+ if(document.getElementById("opc_1").checked)
+ {
+ 	seleccion=1;
+ }
+ if(document.getElementById("opc_2").checked)
+ {
+ 	seleccion=2;
+ }
+ if(document.getElementById("opc_3").checked)
+ {
+ 	seleccion=3;
+ }
+	if(nick!="" || seleccion==2 || seleccion==3)
 	{
 		limpiarMapa();
 		$("#output").load("query.php", 
-						{tipo:10, tipo_lin:opc_lin, usuario:nick, desde:desde, hasta:hasta} 
+						{tipo:10, tipo_lin:opc_lin, usuario:nick, desde:desde, hasta:hasta, selec:seleccion} 
 							,function(){
 								
 									

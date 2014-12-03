@@ -54,13 +54,19 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
         	?>
             <span class="label-success label label-default"><?=ucwords($entSal)?></span>
             <?php
-          }else
+          }elseif($us[3]==1)
           {
           	?>
           	<span class="label-warning label label-default"><?=ucwords($entSal)?></span>
           	<?php
+          }else
+          {
+          	?>
+          	<span class="label-warning label label-default">Omitido</span>
+          	<?php
           }
             ?>
+            
         </td>
         
        
@@ -75,12 +81,16 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
                 <i class="glyphicon glyphicon-zoom-in icon-white"></i>
                 Activar
             </a>
+            <a class="btn btn-danger" href='javascript:activarDispo(<?=$us[0]?>,2);'>
+                <i class="glyphicon glyphicon-zoom-in icon-white"></i>
+                Omitir
+            </a>
                    <a class="btn btn-info" href="javascript:detDispo('<?=$us[1]?>');">
                 <i class="glyphicon glyphicon-edit icon-white"></i>
                 Detalle
             </a>
 						<?PHP
-						}else
+						}elseif($us[3]==0)
 						{
 							?>
 							
@@ -135,7 +145,7 @@ if(substr(strtolower($data_server[0]),0,strlen(PATH_SITE_WEB))==PATH_SITE_WEB)
 				}
 				
 				updateUsuario("id_device='".$id_device."'",$dispo[0][4]);
-			}else
+			}elseif($_REQUEST['estado']==1)
 			{
 							
 					updateUsuario("id_device=''",$dispo[0][4]);
